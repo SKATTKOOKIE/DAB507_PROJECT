@@ -7,27 +7,28 @@ public enum StudentType
     INTERNATIONAL("International"),
     DA("DA");
 
-    private final String displayName;
+    private final String value;
 
-    StudentType(String displayName)
+    StudentType(String value)
     {
-        this.displayName = displayName;
-    }
-
-    public String getDisplayName()
-    {
-        return displayName;
+        this.value = value;
     }
 
     public static StudentType fromString(String text)
     {
         for (StudentType type : StudentType.values())
         {
-            if (type.displayName.equalsIgnoreCase(text.trim()))
+            if (type.value.equalsIgnoreCase(text))
             {
                 return type;
             }
         }
-        throw new IllegalArgumentException("No student type found for: " + text);
+        throw new IllegalArgumentException("No constant with text " + text + " found");
+    }
+
+    @Override
+    public String toString()
+    {
+        return value;
     }
 }

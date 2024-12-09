@@ -12,7 +12,7 @@ import java.io.IOException;
  * Handles both JSON arrays and objects at the root level.
  * This class is final to prevent further inheritance.
  */
-public final class JsonProcessor extends FileProcessor
+public class JsonProcessor extends FileProcessor
 {
     private JsonArray jsonArray;
     private JsonObject jsonObject;

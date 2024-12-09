@@ -16,4 +16,9 @@ public abstract class Staff extends User
         this.maxModules = maxModules;
         this.avatar = avatar;
     }
+
+    public int getWeeklyHours()
+    {
+        return weeklyHours;
+    }
 }

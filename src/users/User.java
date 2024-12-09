@@ -22,4 +22,35 @@ public abstract class User
     }
 
     public abstract String getUserType();
+
+    // Getter methods for base properties
+    public int getId()
+    {
+        return id;
+    }
+
+    public String getFirstName()
+    {
+        return firstName;
+    }
+
+    public String getLastName()
+    {
+        return lastName;
+    }
+
+    public String getEmail()
+    {
+        return email;
+    }
+
+    public Department getDepartment()
+    {
+        return department;
+    }
+
+    public UUID getGuid()
+    {
+        return guid;
+    }
 }
