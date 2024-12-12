@@ -1,43 +1,58 @@
 [
   {
-    "name": "Engineering"
+    "name": "Engineering",
+    "dep_id": "ENG"
   },
   {
-    "name": "Childhood"
+    "name": "Childhood",
+    "dep_id": "CHI"
   },
   {
-    "name": "Dance"
+    "name": "Dance",
+    "dep_id": "DAN"
   },
   {
-    "name": "Creative"},
-  {
-    "name": "Engineering Computing and Design"
+    "name": "Creative",
+    "dep_id": "CRE"
   },
   {
-    "name": "Fine Art"
+    "name": "Engineering Computing and Design",
+    "dep_id": "ECD"
   },
   {
-    "name": "Humanities"
+    "name": "Fine Art",
+    "dep_id": "FIA"
   },
   {
-    "name": "Law"
+    "name": "Humanities",
+    "dep_id": "HUM"
   },
   {
-    "name": "Nursing"
+    "name": "Law",
+    "dep_id": "LAW"
   },
   {
-    "name": "Outdoor Adventure Education"
+    "name": "Nursing",
+    "dep_id": "NUR"
   },
   {
-    "name": "Physiotherapy"
+    "name": "Outdoor Adventure Education",
+    "dep_id": "OAE"
   },
   {
-    "name": "School of Music"
+    "name": "Physiotherapy",
+    "dep_id": "PHY"
   },
   {
-    "name": "Social Work"
+    "name": "School of Music",
+    "dep_id": "SOM"
   },
   {
-    "name": "Theatre"
+    "name": "Social Work",
+    "dep_id": "SOW"
+  },
+  {
+    "name": "Theatre",
+    "dep_id": "THE"
   }
 ]

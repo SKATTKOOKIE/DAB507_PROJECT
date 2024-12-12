@@ -3,6 +3,7 @@ package business;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -12,18 +13,21 @@ import java.util.stream.Collectors;
  * Represents a module in the system.
  * Contains all module-related data and operations.
  */
-public class Module {
+public class Module
+{
     private final String name;
     private final String code;
     private final String acYear;
 
     /**
      * Constructs a Module with the specified parameters.
-     * @param name Module name
-     * @param code Module code
+     *
+     * @param name   Module name
+     * @param code   Module code
      * @param acYear Academic year
      */
-    public Module(String name, String code, String acYear) {
+    public Module(String name, String code, String acYear)
+    {
         this.name = name != null ? name.trim() : "";
         this.code = code != null ? code.trim() : "";
         this.acYear = acYear != null ? acYear.trim() : "";
@@ -31,6 +35,7 @@ public class Module {
 
     /**
      * Creates a list of Modules from a JsonArray.
+     *
      * @param jsonArray JsonArray containing module data
      * @return List of Module objects
      */
@@ -47,7 +52,8 @@ public class Module {
             String acYear = moduleObj.get("ac_year").getAsString();
 
             Module module = new Module(name, code, acYear);
-            if (module.isValid()) {
+            if (module.isValid())
+            {
                 modules.add(module);
             }
         }
@@ -120,7 +126,8 @@ public class Module {
     /**
      * Checks if the module has valid data.
      */
-    public boolean isValid() {
+    public boolean isValid()
+    {
         return name != null && !name.trim().isEmpty() &&
                 code != null && !code.trim().isEmpty() &&
                 acYear != null && !acYear.trim().isEmpty();
@@ -135,8 +142,14 @@ public class Module {
     @Override
     public boolean equals(Object o)
     {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+        {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass())
+        {
+            return false;
+        }
         Module module = (Module) o;
         return Objects.equals(name, module.name) &&
                 Objects.equals(code, module.code) &&
