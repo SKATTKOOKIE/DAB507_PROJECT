@@ -1,24 +1,67 @@
 package users;
-import business.Department;
-import java.util.UUID;
 
-public abstract class Staff extends User
+import com.google.gson.annotations.SerializedName;
+import users.User;
+
+/**
+ * Represents a staff member in the system.
+ * Extends User class with staff-specific attributes.
+ */
+public class Staff extends User
 {
-    protected int weeklyHours;
-    protected int maxModules;
-    protected String avatar;
+    private String guid;
+    @SerializedName("weekly_hours")
+    private int weeklyHours;
+    @SerializedName("max_modules")
+    private int maxModules;
+    private String avatar;
 
-    public Staff(int id, String firstName, String lastName, String email, Department department,
-                 UUID guid, int weeklyHours, int maxModules, String avatar)
+    // Getters and setters for staff-specific fields
+    public String getGuid()
     {
-        super(id, firstName, lastName, email, department, guid);
-        this.weeklyHours = weeklyHours;
-        this.maxModules = maxModules;
-        this.avatar = avatar;
+        return guid;
+    }
+
+    public void setGuid(String guid)
+    {
+        this.guid = guid;
     }
 
     public int getWeeklyHours()
     {
         return weeklyHours;
+    }
+
+    public void setWeeklyHours(int weeklyHours)
+    {
+        this.weeklyHours = weeklyHours;
+    }
+
+    public int getMaxModules()
+    {
+        return maxModules;
+    }
+
+    public void setMaxModules(int maxModules)
+    {
+        this.maxModules = maxModules;
+    }
+
+    public String getAvatar()
+    {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar)
+    {
+        this.avatar = avatar;
+    }
+
+    @Override
+    public String toString()
+    {
+        return super.toString() + String.format(
+                ", GUID: %s, Weekly Hours: %d, Max Modules: %d",
+                guid, weeklyHours, maxModules);
     }
 }

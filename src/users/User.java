@@ -1,32 +1,30 @@
 package users;
-import business.Department;
-import java.util.UUID;
 
+import com.google.gson.annotations.SerializedName;
+
+/**
+ * Base class representing a user in the system.
+ * Contains common attributes shared by all user types.
+ */
 public abstract class User
 {
-    protected int id;
-    protected String firstName;
-    protected String lastName;
-    protected String email;
-    protected Department department;
-    protected UUID guid;
+    private int id;
+    @SerializedName("first_name")
+    private String firstName;
+    @SerializedName("last_name")
+    private String lastName;
+    private String email;
+    private String department;
 
-    public User(int id, String firstName, String lastName, String email, Department department, UUID guid)
-    {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.department = department;
-        this.guid = guid;
-    }
-
-    public abstract String getUserType();
-
-    // Getter methods for base properties
+    // Getters and setters
     public int getId()
     {
         return id;
+    }
+
+    public void setId(int id)
+    {
+        this.id = id;
     }
 
     public String getFirstName()
@@ -34,9 +32,19 @@ public abstract class User
         return firstName;
     }
 
+    public void setFirstName(String firstName)
+    {
+        this.firstName = firstName;
+    }
+
     public String getLastName()
     {
         return lastName;
+    }
+
+    public void setLastName(String lastName)
+    {
+        this.lastName = lastName;
     }
 
     public String getEmail()
@@ -44,13 +52,25 @@ public abstract class User
         return email;
     }
 
-    public Department getDepartment()
+    public void setEmail(String email)
+    {
+        this.email = email;
+    }
+
+    public String getDepartment()
     {
         return department;
     }
 
-    public UUID getGuid()
+    public void setDepartment(String department)
     {
-        return guid;
+        this.department = department;
+    }
+
+    @Override
+    public String toString()
+    {
+        return String.format("ID: %d, Name: %s %s, Email: %s, Department: %s",
+                id, firstName, lastName, email, department);
     }
 }

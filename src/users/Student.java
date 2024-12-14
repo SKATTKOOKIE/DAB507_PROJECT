@@ -1,17 +1,41 @@
 package users;
-import business.Department;
-import java.util.UUID;
 
-public abstract class Student extends User
+import users.User;
+
+/**
+ * Represents a student user in the system.
+ * Extends User class with student-specific attributes.
+ */
+public class Student extends User
 {
-    protected String gender;
-    protected StudentType type;
+    private String gender;
+    private String type;
 
-    public Student(int id, String firstName, String lastName, String email, Department department,
-                   UUID guid, String gender, StudentType type)
+    // Getters and setters for student-specific fields
+    public String getGender()
     {
-        super(id, firstName, lastName, email, department, guid);
+        return gender;
+    }
+
+    public void setGender(String gender)
+    {
         this.gender = gender;
+    }
+
+    public String getType()
+    {
+        return type;
+    }
+
+    public void setType(String type)
+    {
         this.type = type;
+    }
+
+    @Override
+    public String toString()
+    {
+        return super.toString() + String.format(", Gender: %s, Type: %s",
+                gender, type);
     }
 }
