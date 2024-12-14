@@ -9,14 +9,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Main
-{
-    public static void main(String[] args)
-    {
-        try
-        {
+public class Main {
+    public static void main(String[] args) {
+        try {
             // Create department
-            Department theatreDept = new Department("Theatre", "THE");
+            Department theatreDept = new Department("Theatre", "THE001");
 
             // Get filtered users for Theatre department
             List<Student> theatreStudents = getStudentsByDepartment("Theatre");
@@ -28,22 +25,18 @@ public class Main
             // Print summary
             printDepartmentSummary(theatreDept, theatreStudents.size(), theatreStaff.size());
 
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             System.err.println("Error processing JSON files: " + e.getMessage());
         }
     }
 
     /**
      * Gets students filtered by department
-     *
      * @param departmentName Name of the department to filter by
      * @return List of filtered students
      * @throws IOException if file processing fails
      */
-    private static List<Student> getStudentsByDepartment(String departmentName) throws IOException
-    {
+    private static List<Student> getStudentsByDepartment(String departmentName) throws IOException {
         JsonProcessor studentProcessor = new JsonProcessor("data/students.json");
         studentProcessor.processFile();
         Student[] allStudents = new Gson().fromJson(
@@ -58,13 +51,11 @@ public class Main
 
     /**
      * Gets staff filtered by department
-     *
      * @param departmentName Name of the department to filter by
      * @return List of filtered staff
      * @throws IOException if file processing fails
      */
-    private static List<Staff> getStaffByDepartment(String departmentName) throws IOException
-    {
+    private static List<Staff> getStaffByDepartment(String departmentName) throws IOException {
         JsonProcessor staffProcessor = new JsonProcessor("data/staff.json");
         staffProcessor.processFile();
         Staff[] allStaff = new Gson().fromJson(
@@ -79,13 +70,11 @@ public class Main
 
     /**
      * Prints summary information for a department
-     *
-     * @param department   Department object
+     * @param department Department object
      * @param studentCount Number of students
-     * @param staffCount   Number of staff
+     * @param staffCount Number of staff
      */
-    private static void printDepartmentSummary(Department department, int studentCount, int staffCount)
-    {
+    private static void printDepartmentSummary(Department department, int studentCount, int staffCount) {
         System.out.println("\nDepartment Summary:");
         System.out.println("==================");
         System.out.println("Department: " + department.getName() + " [" + department.getDepartmentId() + "]");
@@ -95,20 +84,17 @@ public class Main
 
     /**
      * Helper method to print detailed user information
-     *
-     * @param students   List of students to print
-     * @param staff      List of staff to print
+     * @param students List of students to print
+     * @param staff List of staff to print
      * @param department Department name
      */
-    private static void printDetailedDepartmentInfo(List<Student> students, List<Staff> staff, String department)
-    {
+    private static void printDetailedDepartmentInfo(List<Student> students, List<Staff> staff, String department) {
         System.out.println("\nDetailed " + department + " Department Information");
         System.out.println("=".repeat(department.length() + 30));
 
         // Print student details
         System.out.println("\nStudents:");
-        students.forEach(student ->
-        {
+        students.forEach(student -> {
             System.out.printf("- %s %s (ID: %d)\n",
                     student.getFirstName(),
                     student.getLastName(),
@@ -120,8 +106,7 @@ public class Main
 
         // Print staff details
         System.out.println("Staff:");
-        staff.forEach(staffMember ->
-        {
+        staff.forEach(staffMember -> {
             System.out.printf("- %s %s (ID: %d)\n",
                     staffMember.getFirstName(),
                     staffMember.getLastName(),
