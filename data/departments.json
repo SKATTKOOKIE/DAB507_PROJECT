@@ -1,66 +1,44 @@
 [
   {
-    "name": "Engineering",
-    "dep_id": "ENG"
+    "name": "Engineering"
   },
   {
-    "name": "Childhood",
-    "dep_id": "CHI"
+    "name": "Childhood"
   },
   {
-    "name": "Dance",
-<<<<<<< HEAD
-    "dep_id": "ENG"
-=======
-    "dep_id": "DAN"
->>>>>>> 32dafc942ac3a4fa1d6b6115aa8ac41faf18694f
+    "name": "Dance"
   },
   {
-    "name": "Creative",
-    "dep_id": "CRE"
+    "name": "Creative"
   },
   {
-    "name": "Engineering Computing and Design",
-    "dep_id": "ECD"
+    "name": "Engineering Computing and Design"
   },
   {
-    "name": "Fine Art",
-    "dep_id": "FIA"
+    "name": "Fine Art"
   },
   {
-    "name": "Humanities",
-    "dep_id": "HUM"
+    "name": "Humanities"
   },
   {
-    "name": "Law",
-    "dep_id": "LAW"
+    "name": "Law"
   },
   {
-    "name": "Nursing",
-    "dep_id": "NUR"
+    "name": "Nursing"
   },
   {
-    "name": "Outdoor Adventure Education",
-    "dep_id": "OAE"
+    "name": "Outdoor Adventure Education"
   },
   {
-    "name": "Physiotherapy",
-<<<<<<< HEAD
-    "dep_id": "PSI"
-=======
-    "dep_id": "PHY"
->>>>>>> 32dafc942ac3a4fa1d6b6115aa8ac41faf18694f
+    "name": "Physiotherapy"
   },
   {
-    "name": "School of Music",
-    "dep_id": "SOM"
+    "name": "School of Music"
   },
   {
-    "name": "Social Work",
-    "dep_id": "SOW"
+    "name": "Social Work"
   },
   {
-    "name": "Theatre",
-    "dep_id": "THE"
+    "name": "Theatre"
   }
 ]
