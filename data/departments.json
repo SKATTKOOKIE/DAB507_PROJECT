@@ -9,7 +9,11 @@
   },
   {
     "name": "Dance",
+<<<<<<< HEAD
     "dep_id": "ENG"
+=======
+    "dep_id": "DAN"
+>>>>>>> 32dafc942ac3a4fa1d6b6115aa8ac41faf18694f
   },
   {
     "name": "Creative",
@@ -41,7 +45,11 @@
   },
   {
     "name": "Physiotherapy",
+<<<<<<< HEAD
     "dep_id": "PSI"
+=======
+    "dep_id": "PHY"
+>>>>>>> 32dafc942ac3a4fa1d6b6115aa8ac41faf18694f
   },
   {
     "name": "School of Music",

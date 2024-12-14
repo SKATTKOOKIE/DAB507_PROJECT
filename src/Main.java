@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import business.Department;
 import com.google.gson.Gson;
 import file_handling.JsonProcessor;
@@ -28,6 +29,24 @@ public class Main {
         } catch (IOException e) {
             System.err.println("Error processing JSON files: " + e.getMessage());
         }
+=======
+import java.io.IOException;
+import business.Department;
+
+public class Main
+{
+    public static void main(String[] args)
+    {
+        String filePath = "data/departments.json";
+
+        System.out.println("All Departments:");
+        Department.displayAll(filePath);
+
+        System.out.println("\nLooking for specific department:");
+        Department.displayById(filePath, "ENG");
+
+
+>>>>>>> 32dafc942ac3a4fa1d6b6115aa8ac41faf18694f
     }
 
     /**
