@@ -5,6 +5,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import users.Student;
+import users.Staff;
+import business.Course;
+
 /**
  * Represents a department in the system.
  * Contains all department-related data and operations.
@@ -150,4 +154,43 @@ public class Department
                 .filter(d -> d.getName().toLowerCase().contains(searchTerm.toLowerCase()))
                 .collect(Collectors.toList());
     }
+
+    public void printSummary(int studentCount, int staffCount)
+    {
+        System.out.println("\nDepartment Summary:");
+        System.out.println("==================");
+        System.out.println("Department: " + name + " [" + departmentId + "]");
+        System.out.println("Total Students: " + studentCount);
+        System.out.println("Total Staff: " + staffCount);
+    }
+
+    public void printDetailedInfo(List<Student> students, List<Staff> staff)
+    {
+        System.out.println("\nDetailed " + name + " Department Information");
+        System.out.println("=".repeat(name.length() + 30));
+
+        // Print student details
+        System.out.println("\nStudents:");
+        students.forEach(Student::printDetailedInfo);
+
+        // Print staff details
+        System.out.println("Staff:");
+        staff.forEach(Staff::printDetailedInfo);
+    }
+
+    public List<Course> filterCoursesByDepartment(List<Course> allCourses)
+    {
+        return allCourses.stream()
+                .filter(course -> this.departmentId.equals(course.getDepartmentId()))
+                .collect(Collectors.toList());
+    }
+
+    public void printCourseInfo(List<Course> courses)
+    {
+        System.out.println("\nCourses for " + name + " Department:");
+        System.out.println("========");
+        courses.forEach(Course::printInfo);
+        System.out.println();
+    }
+
 }

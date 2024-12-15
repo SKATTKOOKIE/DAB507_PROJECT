@@ -13,7 +13,7 @@ class DepartmentMatcher
     {
         // Initialize keywords for each department
         DEPARTMENT_KEYWORDS.put(DepartmentId.THE, Arrays.asList(
-                "theatre", "musical", "drama", "stage", "performance"
+                "theatre", "musical", "drama", "stage"
         ));
         DEPARTMENT_KEYWORDS.put(DepartmentId.CHI, Arrays.asList(
                 "childhood", "early childhood", "early years"
@@ -24,6 +24,12 @@ class DepartmentMatcher
         ));
         DEPARTMENT_KEYWORDS.put(DepartmentId.ECD, Arrays.asList(
                 "computing", "computer", "design"
+        ));
+        DEPARTMENT_KEYWORDS.put(DepartmentId.DAN, Arrays.asList(
+                "dance", "performance"
+        ));
+        DEPARTMENT_KEYWORDS.put(DepartmentId.CRE, Arrays.asList(
+                "creative", "writing", "screenwriting"
         ));
         // Can easily add more departments following the same pattern
     }
