@@ -2,6 +2,7 @@ import business.CourseDeserializer;
 import business.Department;
 import business.Course;
 import business.DepartmentId;
+import business.Module;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -52,6 +53,15 @@ public class Main
             catch (IOException e)
             {
                 System.err.println("Error displaying courses: " + e.getMessage());
+            }
+
+            try
+            {
+                Module.displayAllModules();
+            }
+            catch (IOException e)
+            {
+                System.err.println("Error displaying modules: " + e.getMessage());
             }
         }
         catch (IOException e)

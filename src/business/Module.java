@@ -4,6 +4,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import file_handling.JsonProcessor;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -161,4 +164,45 @@ public class Module
     {
         return Objects.hash(name, code, acYear);
     }
+
+    /**
+     * Displays all modules in a formatted table.
+     * Shows module name, code and academic year with separators.
+     */
+    public static void displayAllModules() throws IOException {
+        // Create JsonProcessor instance
+        JsonProcessor processor = new JsonProcessor("data/modules.json");
+        processor.processFile();
+
+        // Get modules from JSON as JsonArray
+        JsonArray modulesJson = (JsonArray) processor.getJsonContent();
+        List<Module> modules = Module.fromJsonArray(modulesJson);
+
+        // Define the separator line
+        String separator = "----------------------------------------";
+
+        // Print header
+        System.out.println(separator);
+        System.out.printf("%-40s %-10s %-6s%n", "Module Name", "Code", "Year");
+        System.out.println(separator);
+
+        // Print each module
+        for (Module module : modules) {
+            // Truncate name if longer than 40 characters
+            String displayName = module.getName();
+            if (displayName.length() > 37) {
+                displayName = displayName.substring(0, 34) + "...";
+            }
+
+            System.out.printf("%-40s %-10s %-6s%n",
+                    displayName,
+                    module.getCode(),
+                    module.getAcYear());
+        }
+
+        // Print footer separator
+        System.out.println(separator);
+        System.out.printf("Total Modules: %d%n", modules.size());
+    }
+
 }
