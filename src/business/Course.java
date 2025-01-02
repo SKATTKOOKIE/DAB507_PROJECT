@@ -8,6 +8,7 @@ import file_handling.CsvProcessor;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Course
@@ -130,5 +131,39 @@ public class Course
                 .filter(course -> course.getCourseId() != null)
                 .filter(course -> course.getCourseId().toUpperCase().startsWith(prefix.toUpperCase()))
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * Displays all courses from the CSV file in a formatted list.
+     * This method retrieves all courses and prints their information in a readable format.
+     *
+     * @throws IOException if there is an error reading the CSV file
+     */
+    public static void displayAllCourses() throws IOException
+    {
+        List<Course> courses = getAll();
+
+        if (courses.isEmpty())
+        {
+            System.out.println("No courses found.");
+            return;
+        }
+
+        System.out.println("\nCourse List:");
+        System.out.println("============");
+
+        // Group courses by department for better organisation
+        Map<DepartmentId, List<Course>> coursesByDepartment = courses.stream()
+                .collect(Collectors.groupingBy(Course::getDepartmentId));
+
+        coursesByDepartment.forEach((departmentId, departmentCourses) ->
+        {
+            System.out.printf("\n%s Department:%n", departmentId);
+            System.out.println("-".repeat(20));
+
+            departmentCourses.forEach(Course::printInfo);
+        });
+
+        System.out.printf("\nTotal Courses: %d%n", courses.size());
     }
 }

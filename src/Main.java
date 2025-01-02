@@ -43,6 +43,16 @@ public class Main
 
             // Print summary
             theatreDept.printSummary(theatreStudents.size(), theatreStaff.size());
+
+            // Display list of courses
+            try
+            {
+                Course.displayAllCourses();
+            }
+            catch (IOException e)
+            {
+                System.err.println("Error displaying courses: " + e.getMessage());
+            }
         }
         catch (IOException e)
         {
