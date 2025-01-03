@@ -166,4 +166,13 @@ public class Course
 
         System.out.printf("\nTotal Courses: %d%n", courses.size());
     }
+
+    public static String getAllCoursesInfo() throws IOException {
+        List<Course> courses = getAll();
+        StringBuilder info = new StringBuilder("All University Courses:\n");
+        for (Course course : courses) {
+            info.append("- ").append(course.toString()).append("\n");
+        }
+        return info.toString();
+    }
 }

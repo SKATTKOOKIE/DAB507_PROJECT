@@ -169,7 +169,8 @@ public class Module
      * Displays all modules in a formatted table.
      * Shows module name, code and academic year with separators.
      */
-    public static void displayAllModules() throws IOException {
+    public static void displayAllModules() throws IOException
+    {
         // Create JsonProcessor instance
         JsonProcessor processor = new JsonProcessor("data/modules.json");
         processor.processFile();
@@ -187,10 +188,12 @@ public class Module
         System.out.println(separator);
 
         // Print each module
-        for (Module module : modules) {
+        for (Module module : modules)
+        {
             // Truncate name if longer than 40 characters
             String displayName = module.getName();
-            if (displayName.length() > 37) {
+            if (displayName.length() > 37)
+            {
                 displayName = displayName.substring(0, 34) + "...";
             }
 
@@ -203,6 +206,62 @@ public class Module
         // Print footer separator
         System.out.println(separator);
         System.out.printf("Total Modules: %d%n", modules.size());
+    }
+
+    /**
+     * Returns a list of all modules from the JSON file.
+     *
+     * @return List of all modules
+     * @throws IOException if there's an error reading the file
+     */
+    public static List<Module> getAll() throws IOException
+    {
+        // Create JsonProcessor instance
+        JsonProcessor processor = new JsonProcessor("data/modules.json");
+        processor.processFile();
+
+        // Get modules from JSON as JsonArray
+        JsonArray modulesJson = (JsonArray) processor.getJsonContent();
+        return Module.fromJsonArray(modulesJson);
+    }
+
+    /**
+     * Returns a formatted string containing information about all modules.
+     *
+     * @return Formatted string with module information
+     * @throws IOException if there's an error reading the file
+     */
+    public static String getAllModulesInfo() throws IOException
+    {
+        List<Module> modules = getAll();
+        StringBuilder info = new StringBuilder();
+
+        // Add header
+        info.append("All University Modules:\n");
+        info.append("----------------------------------------\n");
+        info.append(String.format("%-40s %-10s %-6s%n", "Module Name", "Code", "Year"));
+        info.append("----------------------------------------\n");
+
+        // Add each module
+        for (Module module : modules)
+        {
+            String displayName = module.getName();
+            if (displayName.length() > 37)
+            {
+                displayName = displayName.substring(0, 34) + "...";
+            }
+
+            info.append(String.format("%-40s %-10s %-6s%n",
+                    displayName,
+                    module.getCode(),
+                    module.getAcYear()));
+        }
+
+        // Add footer
+        info.append("----------------------------------------\n");
+        info.append(String.format("Total Modules: %d%n", modules.size()));
+
+        return info.toString();
     }
 
 }

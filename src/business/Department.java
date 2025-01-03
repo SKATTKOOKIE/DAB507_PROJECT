@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 
 import users.Student;
 import users.Staff;
-import business.Course;
 
 /**
  * Represents a department in the system.
@@ -185,12 +184,47 @@ public class Department
                 .collect(Collectors.toList());
     }
 
-    public void printCourseInfo(List<Course> courses)
+    public String printCourseInfo(List<Course> courses)
     {
         System.out.println("\nCourses for " + name + " Department:");
         System.out.println("========");
         courses.forEach(Course::printInfo);
         System.out.println();
+        return null;
+    }
+
+    public String getDetailedInfo(List<Student> students, List<Staff> staff) {
+        StringBuilder info = new StringBuilder();
+        info.append("Department: ").append(name).append("\n");
+        info.append("Department ID: ").append(departmentId).append("\n\n");
+
+        info.append("Students:\n");
+        for (Student student : students) {
+            info.append("- ").append(student.toString()).append("\n");
+        }
+
+        info.append("\nStaff:\n");
+        for (Staff staffMember : staff) {
+            info.append("- ").append(staffMember.toString()).append("\n");
+        }
+
+        return info.toString();
+    }
+
+    public String getSummary(int studentCount, int staffCount) {
+        return String.format("Department Summary for %s (%s):\n" +
+                        "Total Students: %d\n" +
+                        "Total Staff: %d\n",
+                name, departmentId, studentCount, staffCount);
+    }
+
+    public String getCourseInfo(List<Course> courses) {
+        StringBuilder info = new StringBuilder();
+        info.append("Courses for ").append(name).append(" Department:\n");
+        for (Course course : courses) {
+            info.append("- ").append(course.toString()).append("\n");
+        }
+        return info.toString();
     }
 
 }
