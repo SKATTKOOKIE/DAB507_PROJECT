@@ -1,0 +1,1559 @@
+{
+  "courses": [
+    {
+      "name": "Postgraduate Diploma in Social Work",
+      "code": "L502",
+      "department": "Social Work"
+    },
+    {
+      "name": "Masters in Social Work",
+      "code": "L501",
+      "department": "Social Work"
+    },
+    {
+      "name": "BA (Hons) 3D Animation & Visual Effects",
+      "code": "W615",
+      "department": null
+    },
+    {
+      "name": "BA (Hons) Accounting and Finance",
+      "code": "NN43",
+      "department": null
+    },
+    {
+      "name": "BA (Hons) Finance & Accounting International Route",
+      "code": "NQ34",
+      "department": null
+    },
+    {
+      "name": "BA (Hons) Acting",
+      "code": "W401",
+      "department": "Theatre"
+    },
+    {
+      "name": "BA (Hons) Acting for Film",
+      "code": "W420",
+      "department": "Creative"
+    },
+    {
+      "name": "BA (Hons) Audio Production and Music Technologies",
+      "code": "P350",
+      "department": "Creative"
+    },
+    {
+      "name": "BA (Hons) Business Management and Finance",
+      "code": "NN13",
+      "department": null
+    },
+    {
+      "name": "BA (Hons) Business and Event Management",
+      "code": "NN1V",
+      "department": null
+    },
+    {
+      "name": "BA (Hons) Business and Human Resource Management",
+      "code": "NN16",
+      "department": null
+    },
+    {
+      "name": "BA (Hons) Business and IT Management",
+      "code": "NG15",
+      "department": null
+    },
+    {
+      "name": "BA (Hons) Business Management and Marketing",
+      "code": "NN15",
+      "department": null
+    },
+    {
+      "name": "BA (Hons) Business English (International Route)",
+      "code": "NQ31",
+      "department": "Humanities"
+    },
+    {
+      "name": "BA (Hons) Business and Management (International)",
+      "code": "V1TC",
+      "department": null
+    },
+    {
+      "name": "BA (Hons) Business Management (Top Up)",
+      "code": "N110",
+      "department": null
+    },
+    {
+      "name": "BA (Hons) Business Management",
+      "code": "N101",
+      "department": null
+    },
+    {
+      "name": "BA (Hons) Early Childhood (Top Up)",
+      "code": "X314",
+      "department": "Childhood"
+    },
+    {
+      "name": "BA (Hons) Early Childhood Studies",
+      "code": "X310",
+      "department": "Childhood"
+    },
+    {
+      "name": "BA (Hons) Charity Development",
+      "code": "N900",
+      "department": null
+    },
+    {
+      "name": "BA (Hons) Commercial Music",
+      "code": "W340",
+      "department": "School of Music"
+    },
+    {
+      "name": "BA (Hons) Creative Writing and History",
+      "code": "VW18",
+      "department": "Creative"
+    },
+    {
+      "name": "BA (Hons) Creative Writing and Philosophy & Ethics",
+      "code": "WV85",
+      "department": "Creative"
+    },
+    {
+      "name": "BA (Hons) Creative Writing & Screenwriting",
+      "code": "WP88",
+      "department": "Creative"
+    },
+    {
+      "name": "BA (Hons) Creative Writing and Theology",
+      "code": "VW68",
+      "department": "Creative"
+    },
+    {
+      "name": "BA (Hons) Creative Writing",
+      "code": "W801",
+      "department": "Creative"
+    },
+    {
+      "name": "BA (Hons) Creative Writing and English",
+      "code": "W800",
+      "department": "Creative"
+    },
+    {
+      "name": "BA (Hons) Dance Performance",
+      "code": "W505",
+      "department": "Dance"
+    },
+    {
+      "name": "BA (Hons) Dance Studies (Top Up)",
+      "code": "W501",
+      "department": "Dance"
+    },
+    {
+      "name": "BA (Hons) Dance",
+      "code": "W500",
+      "department": "Dance"
+    },
+    {
+      "name": "BA (Hons) Dance, Aerial and Physical Theatre",
+      "code": "W520",
+      "department": "Dance"
+    },
+    {
+      "name": "BA (Hons) Dance Education and Teaching",
+      "code": "W5X1",
+      "department": "Dance"
+    },
+    {
+      "name": "BA (Hons) Digital Film Production & Screenwriting",
+      "code": "P313",
+      "department": "Creative"
+    },
+    {
+      "name": "BA (Hons) Digital Film Production",
+      "code": "P310",
+      "department": "Creative"
+    },
+    {
+      "name": "BA (Hons) Drama, Theatre and Directing",
+      "code": "WQ43",
+      "department": "Theatre"
+    },
+    {
+      "name": "BA (Hons) Early Childhood Studies with IFY",
+      "code": "X316",
+      "department": "Childhood"
+    },
+    {
+      "name": "BA (Hons) Education and Mathematics",
+      "code": "GX13",
+      "department": null
+    },
+    {
+      "name": "BA (Hons) Physical Education in the Primary Years",
+      "code": "6T30",
+      "department": null
+    },
+    {
+      "name": "BA (Hons) Education, Special Needs and Disability",
+      "code": "09R3",
+      "department": null
+    },
+    {
+      "name": "BA (Hons) Physical Education in the Secondary Yrs",
+      "code": "CX65",
+      "department": null
+    },
+    {
+      "name": "BA (Hons) Education (with IFY)",
+      "code": "X306",
+      "department": null
+    },
+    {
+      "name": "BA (Hons) Education",
+      "code": "X300",
+      "department": null
+    },
+    {
+      "name": "BA (Hons) English Literature and History",
+      "code": "VQ31",
+      "department": "Humanities"
+    },
+    {
+      "name": "BA (Hons) English Literature & Philosophy & Ethics",
+      "code": "QV35",
+      "department": "Humanities"
+    },
+    {
+      "name": "BA (Hons) English Literature and Politics",
+      "code": "QL32",
+      "department": "Humanities"
+    },
+    {
+      "name": "BA (Hons) English Literature",
+      "code": "Q310",
+      "department": "Humanities"
+    },
+    {
+      "name": "BA (Hons) Event Management and Finance",
+      "code": "NN84",
+      "department": null
+    },
+    {
+      "name": "BA (Hons) Event Management (Top Up)",
+      "code": "N810",
+      "department": null
+    },
+    {
+      "name": "BA (Hons) Event Management",
+      "code": "N820",
+      "department": null
+    },
+    {
+      "name": "BA (Hons) Painting and Drawing",
+      "code": "045H",
+      "department": null
+    },
+    {
+      "name": "BA (Hons) Fine Art with Printmaking",
+      "code": "36T4",
+      "department": "Fine Art"
+    },
+    {
+      "name": "BA (Hons) Fine Art with Sculpture",
+      "code": "3H65",
+      "department": "Fine Art"
+    },
+    {
+      "name": "BA (Hons) Fine Art with Textiles",
+      "code": "3RT5",
+      "department": "Fine Art"
+    },
+    {
+      "name": "BA (Hons) Fine Art",
+      "code": "W100",
+      "department": "Fine Art"
+    },
+    {
+      "name": "BA (Hons) Football Development",
+      "code": "C630",
+      "department": null
+    },
+    {
+      "name": "BSc (Hons) Football Coaching and Performance",
+      "code": "CX62",
+      "department": null
+    },
+    {
+      "name": "BA (Hons) Games Design and Development",
+      "code": "I600",
+      "department": null
+    },
+    {
+      "name": "BA (Hons) History and Music",
+      "code": "VW13",
+      "department": "Humanities"
+    },
+    {
+      "name": "BA (Hons) History",
+      "code": "V100",
+      "department": "Humanities"
+    },
+    {
+      "name": "BA (Hons) Human Resource Management and Finance",
+      "code": "NN36",
+      "department": null
+    },
+    {
+      "name": "BA (Hons) Human Resource Management",
+      "code": "N600",
+      "department": null
+    },
+    {
+      "name": "BA (Hons) IT Management for Business and Finance",
+      "code": "GN51",
+      "department": null
+    },
+    {
+      "name": "BA (Hons) IT Management and Human Resource Mgt",
+      "code": "GN56",
+      "department": null
+    },
+    {
+      "name": "BA (Hons) Jazz and Cabaret Performance",
+      "code": "WW6C",
+      "department": null
+    },
+    {
+      "name": "BA (Hons) Media & Communications",
+      "code": "P303",
+      "department": "Creative"
+    },
+    {
+      "name": "BA (Hons) Medieval & Early Modern History",
+      "code": "V101",
+      "department": "Humanities"
+    },
+    {
+      "name": "BA (Hons) Marketing and Finance",
+      "code": "NN53",
+      "department": null
+    },
+    {
+      "name": "BA (Hons) Marketing and Event Management",
+      "code": "NN58",
+      "department": null
+    },
+    {
+      "name": "BA (Hons) Marketing and Human Resource Management",
+      "code": "NN56",
+      "department": null
+    },
+    {
+      "name": "BA (Hons) Marketing (Top Up)",
+      "code": "N510",
+      "department": null
+    },
+    {
+      "name": "BA (Hons) Marketing",
+      "code": "N500",
+      "department": null
+    },
+    {
+      "name": "BA (Hons) Modern History",
+      "code": "V102",
+      "department": "Humanities"
+    },
+    {
+      "name": "BA (Hons) Music Performance and Acting for Film",
+      "code": "WW3P",
+      "department": "Creative"
+    },
+    {
+      "name": "BA (Hons) Musical Theatre and Acting for Film",
+      "code": "WW4P",
+      "department": "Creative"
+    },
+    {
+      "name": "BA (Hons) Musical Theatre and Cabaret Performance",
+      "code": "WW4C",
+      "department": "School of Music"
+    },
+    {
+      "name": "BA (Hons) Musical Theatre with Teaching",
+      "code": "W4X1",
+      "department": "School of Music"
+    },
+    {
+      "name": "BA (Hons) Music and Cabaret Performance",
+      "code": "WW3C",
+      "department": "School of Music"
+    },
+    {
+      "name": "BA (Hons) Music and Musical Theatre",
+      "code": "W392",
+      "department": "School of Music"
+    },
+    {
+      "name": "BMus (Hons) Instrumental Teaching",
+      "code": "XWC3",
+      "department": "School of Music"
+    },
+    {
+      "name": "BMus (Hons) Jazz Performance",
+      "code": "AST3",
+      "department": "School of Music"
+    },
+    {
+      "name": "BMus (Hons) Performance",
+      "code": "W311",
+      "department": "School of Music"
+    },
+    {
+      "name": "BA (Hons) Music Performance",
+      "code": "W312",
+      "department": "School of Music"
+    },
+    {
+      "name": "BA (Hons) Music",
+      "code": "W300",
+      "department": "School of Music"
+    },
+    {
+      "name": "BMus (Hons) Vocal Performance",
+      "code": "W314",
+      "department": "School of Music"
+    },
+    {
+      "name": "BMus (Hons) Vocal Teaching",
+      "code": "XWD3",
+      "department": "School of Music"
+    },
+    {
+      "name": "BA (Hons) Musical Theatre and Arts Development",
+      "code": "WN49",
+      "department": "School of Music"
+    },
+    {
+      "name": "BA (Hons) Musical Theatre Performance",
+      "code": "W43W",
+      "department": "School of Music"
+    },
+    {
+      "name": "BA (Hons) Musical Theatre (Triple Threat)",
+      "code": "WW34",
+      "department": "School of Music"
+    },
+    {
+      "name": "BA (Hons) Music with Arts Development",
+      "code": "W322",
+      "department": "School of Music"
+    },
+    {
+      "name": "BA (Hons) Music with Jazz Studies",
+      "code": "W320",
+      "department": "School of Music"
+    },
+    {
+      "name": "BA (Hons) Music with Workshop Leadership",
+      "code": "W321",
+      "department": "School of Music"
+    },
+    {
+      "name": "BA (Hons) Music with Musical Theatre",
+      "code": "W391",
+      "department": "School of Music"
+    },
+    {
+      "name": "BA (Hons) Music with Teaching",
+      "code": "W32X",
+      "department": "School of Music"
+    },
+    {
+      "name": "BA (Hons) Outdoor and Adventure Education",
+      "code": "X391",
+      "department": "Outdoor Adventure Education"
+    },
+    {
+      "name": "BA (Hons) Politics and Contemporary History",
+      "code": "VL12",
+      "department": "Humanities"
+    },
+    {
+      "name": "BA (Hons) Physical Education (Secondary QTS)",
+      "code": "XC16",
+      "department": null
+    },
+    {
+      "name": "BA (Hons) Physical Education and Sports Coaching",
+      "code": "CX63",
+      "department": null
+    },
+    {
+      "name": "BA (Hons) Primary Teaching with Early Years (QTS)",
+      "code": "X121",
+      "department": "Childhood"
+    },
+    {
+      "name": "BA (Hons) Primary Teaching (Top Up)",
+      "code": "09C4",
+      "department": null
+    },
+    {
+      "name": "BA (Hons) Primary Teaching with QTS",
+      "code": "09C3",
+      "department": null
+    },
+    {
+      "name": "BA (Hons) Philosophy & Ethics",
+      "code": "V560",
+      "department": "Humanities"
+    },
+    {
+      "name": "BA (Hons) Politics and Philosophy & Ethics",
+      "code": "LV25",
+      "department": "Humanities"
+    },
+    {
+      "name": "BA (Hons) Politics and International Relations",
+      "code": "L291",
+      "department": "Humanities"
+    },
+    {
+      "name": "BA (Hons) Primary Teaching with Early Years (QTS)",
+      "code": "X120",
+      "department": "Childhood"
+    },
+    {
+      "name": "BA (Hons) Religion, Ethics and Society",
+      "code": "V610",
+      "department": "Humanities"
+    },
+    {
+      "name": "BA (Hons) Screen Acting & Creative Technologies",
+      "code": "W600",
+      "department": "Creative"
+    },
+    {
+      "name": "BA (Hons) Screenwriting",
+      "code": "W810",
+      "department": null
+    },
+    {
+      "name": "BA (Hons) Song Writing and Cabaret Performance",
+      "code": "WW5C",
+      "department": null
+    },
+    {
+      "name": "BA (Hons) Sociology (with IFY)",
+      "code": "L306",
+      "department": "Humanities"
+    },
+    {
+      "name": "BA (Hons) Sociology",
+      "code": "L300",
+      "department": "Humanities"
+    },
+    {
+      "name": "BA (Hons) Sociology with Criminology (IFY)",
+      "code": "L396",
+      "department": "Humanities"
+    },
+    {
+      "name": "BA (Hons) Sociology with Criminology",
+      "code": "L390",
+      "department": "Humanities"
+    },
+    {
+      "name": "BA (Hons) Sports Media",
+      "code": "PC36",
+      "department": "Creative"
+    },
+    {
+      "name": "BA (Hons) Sport Management",
+      "code": "NC26",
+      "department": null
+    },
+    {
+      "name": "BA (Hons) Sport Development",
+      "code": "C603",
+      "department": null
+    },
+    {
+      "name": "BA (Hons) Social Work",
+      "code": "L500",
+      "department": "Social Work"
+    },
+    {
+      "name": "BA (Hons) Theology",
+      "code": "V600",
+      "department": null
+    },
+    {
+      "name": "BA (Hons) Theatre",
+      "code": "2D46",
+      "department": "Theatre"
+    },
+    {
+      "name": "BA (Hons) Theatre (Performance and Production)",
+      "code": "W440",
+      "department": "Theatre"
+    },
+    {
+      "name": "BEng (Hons) Electronics and Electrical Engineering",
+      "code": "H606",
+      "department": "Engineering"
+    },
+    {
+      "name": "BEng (Hons) Electronics and Electrical Engineering",
+      "code": "H600",
+      "department": "Engineering"
+    },
+    {
+      "name": "BEng (Hons) Mechanical Engineering (with IFY)",
+      "code": "H316",
+      "department": "Engineering"
+    },
+    {
+      "name": "BEng (Hons) Mechanical Engineering",
+      "code": "H310",
+      "department": "Engineering"
+    },
+    {
+      "name": "BEng (Hons) Sports Engineering",
+      "code": "C650",
+      "department": "Engineering"
+    },
+    {
+      "name": "BA (Hons) ESports and Sports Media",
+      "code": "P375",
+      "department": "Creative"
+    },
+    {
+      "name": "BA (Hons) ESports",
+      "code": "P370",
+      "department": null
+    },
+    {
+      "name": "LLB Law with Criminology",
+      "code": "ML13",
+      "department": "Law"
+    },
+    {
+      "name": "LLB Law with International Relations",
+      "code": "ML12",
+      "department": "Law"
+    },
+    {
+      "name": "LLB Law",
+      "code": "M100",
+      "department": "Law"
+    },
+    {
+      "name": "MSci (Hons) Dance Science",
+      "code": "W5C6",
+      "department": "Dance"
+    },
+    {
+      "name": "MSci (Hons) Advanced Applied Psychology",
+      "code": "C801",
+      "department": null
+    },
+    {
+      "name": "MSci (Hons) Sport & Exercise Psychology",
+      "code": "C842",
+      "department": null
+    },
+    {
+      "name": "MSci (Hons) Sport & Exercise Science",
+      "code": "C605",
+      "department": null
+    },
+    {
+      "name": "MSci Sports Therapy",
+      "code": "C6B9",
+      "department": null
+    },
+    {
+      "name": "BMus (Hons) Musical Theatre",
+      "code": "WW43",
+      "department": "School of Music"
+    },
+    {
+      "name": "BMus (Hons) Orchestral Performance",
+      "code": "W316",
+      "department": "School of Music"
+    },
+    {
+      "name": "BSc (Hons) Criminology and Forensic Psychology",
+      "code": "C8M9",
+      "department": null
+    },
+    {
+      "name": "BSc (Hons) Computer Science",
+      "code": "G400",
+      "department": "Engineering Computing and Design"
+    },
+    {
+      "name": "BSc (Hons) Counselling Psychology (with IFY)",
+      "code": "C856",
+      "department": null
+    },
+    {
+      "name": "BSc (Hons) Counselling Psychology",
+      "code": "C850",
+      "department": null
+    },
+    {
+      "name": "BSc (Hons) Criminology (with IFY)",
+      "code": "L376",
+      "department": null
+    },
+    {
+      "name": "BSc (Hons) Criminology",
+      "code": "L370",
+      "department": null
+    },
+    {
+      "name": "BSc (Hons) Dance Science",
+      "code": "W5C6",
+      "department": "Dance"
+    },
+    {
+      "name": "BSc (Hons) Digital Marketing",
+      "code": "N530",
+      "department": "Creative"
+    },
+    {
+      "name": "BSc (Hons) Digital Film Technologies",
+      "code": "IP73",
+      "department": "Creative"
+    },
+    {
+      "name": "BSc (Hons) Educational Psychology",
+      "code": "C8X3",
+      "department": null
+    },
+    {
+      "name": "BSc (Hons) Computing for Business",
+      "code": "I206",
+      "department": "Engineering Computing and Design"
+    },
+    {
+      "name": "BSc (Hons) Mathematics and Teaching KS 2/3",
+      "code": "G1X1",
+      "department": null
+    },
+    {
+      "name": "BSc (Hons) Secondary Mathematics with QTS",
+      "code": "G1X2",
+      "department": null
+    },
+    {
+      "name": "BSc (Hons) Mathematics with Statistics",
+      "code": "GG31",
+      "department": null
+    },
+    {
+      "name": "BSc (Hons) Mathematics",
+      "code": "G100",
+      "department": null
+    },
+    {
+      "name": "BSc (Hons) Adult Nursing",
+      "code": "B700",
+      "department": "Nursing"
+    },
+    {
+      "name": "BSc (Hons) Physiotherapy",
+      "code": "B160",
+      "department": "Physiotherapy"
+    },
+    {
+      "name": "BSc (Hons) Politics",
+      "code": "L200",
+      "department": "Humanities"
+    },
+    {
+      "name": "BSc (Hons) Psychology (with IFY)",
+      "code": "C806",
+      "department": null
+    },
+    {
+      "name": "BSc (Hons) Psychology",
+      "code": "C800",
+      "department": null
+    },
+    {
+      "name": "BSc (Hons) Sport Coaching",
+      "code": "C620",
+      "department": null
+    },
+    {
+      "name": "BSc (Hons) Sport and Exercise Psychology",
+      "code": "C841",
+      "department": null
+    },
+    {
+      "name": "BSc (Hons) Sport and Exercise Science (Sailing)",
+      "code": "C606",
+      "department": null
+    },
+    {
+      "name": "BSc (Hons) Sport and Exercise Science",
+      "code": "C604",
+      "department": null
+    },
+    {
+      "name": "BSc (Hons) Sports Therapy",
+      "code": "CB69",
+      "department": null
+    },
+    {
+      "name": "Foundation Degree in Early Years",
+      "code": "X315",
+      "department": "Childhood"
+    },
+    {
+      "name": "PGCE Early Years (3-7)",
+      "code": "3DHN",
+      "department": "Childhood"
+    },
+    {
+      "name": "PGCE General - Primary",
+      "code": "X100",
+      "department": null
+    },
+    {
+      "name": "PGCE Primary - Modern Languages",
+      "code": "3DC6",
+      "department": null
+    },
+    {
+      "name": "PGCE Secondary - Dance",
+      "code": "3D2X",
+      "department": "Dance"
+    },
+    {
+      "name": "PGCE Secondary - English",
+      "code": "Q3X1",
+      "department": "Humanities"
+    },
+    {
+      "name": "PGCE Secondary - History",
+      "code": "V1X1",
+      "department": "Humanities"
+    },
+    {
+      "name": "PGCE Secondary - Mathematics",
+      "code": "G1X1",
+      "department": null
+    },
+    {
+      "name": "PGCE Secondary - MFL: French with German",
+      "code": "2TRG",
+      "department": null
+    },
+    {
+      "name": "PGCE Secondary - MFL: French with Spanish",
+      "code": "2TWP",
+      "department": null
+    },
+    {
+      "name": "PGCE Secondary - MFL: German with Spanish",
+      "code": "2TRD",
+      "department": null
+    },
+    {
+      "name": "PGCE Secondary - MFL: Spanish with French",
+      "code": "2TRC",
+      "department": null
+    },
+    {
+      "name": "PGCE Secondary - Modern Foreign Languages",
+      "code": "R9X1",
+      "department": null
+    },
+    {
+      "name": "PGCE Secondary - Music",
+      "code": "3CM7",
+      "department": "School of Music"
+    },
+    {
+      "name": "PGCE Secondary - Physical Education",
+      "code": "X9C6",
+      "department": null
+    },
+    {
+      "name": "PGCE Secondary - Science with Biology",
+      "code": "2C42",
+      "department": null
+    },
+    {
+      "name": "PGCE Secondary - Science with Chemistry",
+      "code": "2C43",
+      "department": null
+    },
+    {
+      "name": "PGCE Secondary - Science with Physics",
+      "code": "F3X2",
+      "department": null
+    },
+    {
+      "name": "School Direct - Bitterne Park - English (Salaried)",
+      "code": "25MG",
+      "department": "Humanities"
+    },
+    {
+      "name": "School Direct - TESLA, Bohunt  - Chemistry",
+      "code": "29BC",
+      "department": null
+    },
+    {
+      "name": "School Direct - Bohunt School  English (Salaried)",
+      "code": "2JGD",
+      "department": "Humanities"
+    },
+    {
+      "name": "School Direct - Bohunt School - Mathematics (Sal.)",
+      "code": "29B9",
+      "department": null
+    },
+    {
+      "name": "School Direct - Bohunt School - Physics",
+      "code": "29BB",
+      "department": null
+    },
+    {
+      "name": "School Direct - Bohunt -  Primary (Salaried)",
+      "code": "2TTR",
+      "department": null
+    },
+    {
+      "name": "School Direct - Bohunt -  Primary",
+      "code": "2TV2",
+      "department": null
+    },
+    {
+      "name": "School Direct - Horndean -  Primary (Salaried)",
+      "code": "25SY",
+      "department": null
+    },
+    {
+      "name": "School Direct - The Bay CE Primary -  Primary",
+      "code": "34Z9",
+      "department": null
+    },
+    {
+      "name": "School Direct - Bitterne Park - English",
+      "code": "25MJ",
+      "department": "Humanities"
+    },
+    {
+      "name": "School Direct - Bitterne Park - English with Drama",
+      "code": "BH7Y",
+      "department": "Humanities"
+    },
+    {
+      "name": "School Direct - Bitterne Park - English with Media",
+      "code": "BNJ5",
+      "department": "Creative"
+    },
+    {
+      "name": "School Direct - Bitterne Park - English with SEN",
+      "code": "BN76",
+      "department": "Humanities"
+    },
+    {
+      "name": "School Direct - Bishop Luffa - Modern Languages",
+      "code": "2T7B",
+      "department": null
+    },
+    {
+      "name": "School Direct - Bishop Luffa - Modern Languages",
+      "code": "2T79",
+      "department": null
+    },
+    {
+      "name": "School Direct - Bishop Luffa - Modern Languages",
+      "code": "2T79",
+      "department": null
+    },
+    {
+      "name": "School Direct - Blue Flag  - History",
+      "code": "2T7C",
+      "department": "Humanities"
+    },
+    {
+      "name": "School Direct - Bishop Luffa - Biology",
+      "code": "2FLZ",
+      "department": null
+    },
+    {
+      "name": "School Direct - Bishop Luffa - Chemistry",
+      "code": "2FLY",
+      "department": null
+    },
+    {
+      "name": "School Direct - Bishop Luffa - Chemistry",
+      "code": "2FLY",
+      "department": null
+    },
+    {
+      "name": "School Direct - Blue Flag   - Physics",
+      "code": "2FLX",
+      "department": null
+    },
+    {
+      "name": "School Direct - Bishop Luffa - English",
+      "code": "2MVS",
+      "department": "Humanities"
+    },
+    {
+      "name": "School Direct - Bishop Luffa - Biology",
+      "code": "2FLZ",
+      "department": null
+    },
+    {
+      "name": "School Direct - Bishop Luffa - Chemistry",
+      "code": "2FLY",
+      "department": null
+    },
+    {
+      "name": "School Direct - Blue Flag - English",
+      "code": "2MVS",
+      "department": "Humanities"
+    },
+    {
+      "name": "School Direct - Blue Flag  - History",
+      "code": "2T7C",
+      "department": "Humanities"
+    },
+    {
+      "name": "School Direct - Blue Flag - Modern Languages",
+      "code": "2T79",
+      "department": null
+    },
+    {
+      "name": "School Direct - Blue Flag   - Physics",
+      "code": "2FLX",
+      "department": null
+    },
+    {
+      "name": "School Direct - Bishop Luffa - Biology",
+      "code": "2FLZ",
+      "department": null
+    },
+    {
+      "name": "School Direct - Bishop Luffa - Chemistry",
+      "code": "2FLY",
+      "department": null
+    },
+    {
+      "name": "School Direct - Bishop Luffa - English",
+      "code": "2MVS",
+      "department": "Humanities"
+    },
+    {
+      "name": "School Direct - Bishop Luffa - History",
+      "code": "2T7C",
+      "department": "Humanities"
+    },
+    {
+      "name": "School Direct - Bishop Luffa - Biology",
+      "code": "2FLZ",
+      "department": null
+    },
+    {
+      "name": "School Direct - Bishop Luffa - Chemistry",
+      "code": "2FLY",
+      "department": null
+    },
+    {
+      "name": "School Direct - Blue Flag - English",
+      "code": "2MVS",
+      "department": "Humanities"
+    },
+    {
+      "name": "School Direct - Blue Flag  - History",
+      "code": "2T7C",
+      "department": "Humanities"
+    },
+    {
+      "name": "School Direct - Bishop Luffa  - Modern Languages",
+      "code": "37Y6",
+      "department": null
+    },
+    {
+      "name": "School Direct - Blue Flag   - Physics",
+      "code": "2FLX",
+      "department": null
+    },
+    {
+      "name": "School Direct - Bishop Luffa - Biology",
+      "code": "2FLZ",
+      "department": null
+    },
+    {
+      "name": "School Direct - Bishop Luffa - Chemistry",
+      "code": "2FLY",
+      "department": null
+    },
+    {
+      "name": "School Direct - Blue Flag - English",
+      "code": "2MVS",
+      "department": "Humanities"
+    },
+    {
+      "name": "School Direct - Blue Flag - History",
+      "code": "2T7C",
+      "department": "Humanities"
+    },
+    {
+      "name": "School Direct - Bishop Luffa   - Physics",
+      "code": "2FLX",
+      "department": null
+    },
+    {
+      "name": "School Direct - Blue Flag   - Physics",
+      "code": "2FLX",
+      "department": null
+    },
+    {
+      "name": "School Direct - Bishop Luffa -  Primary",
+      "code": "2C8N",
+      "department": null
+    },
+    {
+      "name": "School Direct - Bishop Luffa - Biology",
+      "code": "2FLZ",
+      "department": null
+    },
+    {
+      "name": "School Direct - Bishop Luffa - Chemistry",
+      "code": "2FLY",
+      "department": null
+    },
+    {
+      "name": "School Direct - Blue Flag - English",
+      "code": "2MVS",
+      "department": "Humanities"
+    },
+    {
+      "name": "School Direct - Blue Flag   - Physics",
+      "code": "2FLX",
+      "department": null
+    },
+    {
+      "name": "School Direct - Bohunt Cluster -  Primary",
+      "code": "2JSB",
+      "department": null
+    },
+    {
+      "name": "School Direct - Bohunt Cluster -  Primary",
+      "code": "2JS8",
+      "department": null
+    },
+    {
+      "name": "School Direct - TESLA, Bohunt -  Primary",
+      "code": "2TTS",
+      "department": null
+    },
+    {
+      "name": "School Direct - TESLA, Bohunt  -  Primary",
+      "code": "2JFK",
+      "department": null
+    },
+    {
+      "name": "School Direct - TESLA Bohunt School - Geography",
+      "code": "2TVK",
+      "department": null
+    },
+    {
+      "name": "School Direct - Bohunt School - Mathematics",
+      "code": "2NSC",
+      "department": null
+    },
+    {
+      "name": "School Direct - Bohunt School - Mathematics",
+      "code": "2NSD",
+      "department": null
+    },
+    {
+      "name": "School Direct - TESLA, Bohunt - Physical Education",
+      "code": "29B7",
+      "department": null
+    },
+    {
+      "name": "School Direct - Bohunt - Petersfield   - English",
+      "code": "2JGC",
+      "department": "Humanities"
+    },
+    {
+      "name": "School Direct - Bohunt - Petersfield   - MFL",
+      "code": "2LMN",
+      "department": null
+    },
+    {
+      "name": "School Direct - Bohunt / Petersfield - Physics",
+      "code": "2JG8",
+      "department": null
+    },
+    {
+      "name": "School Direct - Bohunt School - Physics",
+      "code": "2L8H",
+      "department": null
+    },
+    {
+      "name": "School Direct - TESLA, Bohunt  -  Primary",
+      "code": "2TTP",
+      "department": null
+    },
+    {
+      "name": "School Direct - Bohunt -  Primary with Mathematics",
+      "code": "32L3",
+      "department": null
+    },
+    {
+      "name": "School Direct - Bohunt - Priory School   - P.E.",
+      "code": "2LHW",
+      "department": null
+    },
+    {
+      "name": "School Direct - TESLA Bohunt -  Primary",
+      "code": "296Q",
+      "department": null
+    },
+    {
+      "name": "School Direct - Bishop Luffa / Regis - History",
+      "code": "2T7C",
+      "department": "Humanities"
+    },
+    {
+      "name": "School Direct - Millais School   - Biology",
+      "code": "L388",
+      "department": null
+    },
+    {
+      "name": "School Direct - Millais School   - Dance",
+      "code": "C866",
+      "department": "Dance"
+    },
+    {
+      "name": "School Direct - Millais School   - English",
+      "code": "L411",
+      "department": "Humanities"
+    },
+    {
+      "name": "School Direct - Millais School   - History",
+      "code": "T427",
+      "department": "Humanities"
+    },
+    {
+      "name": "School Direct - Millais Alliance   - Physics",
+      "code": "C496",
+      "department": null
+    },
+    {
+      "name": "School Direct - Millais School   - Mathematics",
+      "code": "L422",
+      "department": null
+    },
+    {
+      "name": "School Direct - Millais School   - Mathematics",
+      "code": "F244",
+      "department": null
+    },
+    {
+      "name": "School Direct - Millais School   - Mod Languages",
+      "code": "L399",
+      "department": null
+    },
+    {
+      "name": "School Direct - Millais School   - Mod Languages",
+      "code": "L455",
+      "department": null
+    },
+    {
+      "name": "School Direct - Millais School   - Music",
+      "code": "L466",
+      "department": "School of Music"
+    },
+    {
+      "name": "School Direct - Millais Alliance   - Physics",
+      "code": "L488",
+      "department": null
+    },
+    {
+      "name": "School Direct - Millais School   - P.E.",
+      "code": "L477",
+      "department": null
+    },
+    {
+      "name": "School Direct - Portsmouth TSA - History",
+      "code": "2VTT",
+      "department": "Humanities"
+    },
+    {
+      "name": "School Direct - Portsmouth TSA - Dance",
+      "code": "H288",
+      "department": "Dance"
+    },
+    {
+      "name": "School Direct - Portsmouth TSA - Music",
+      "code": "3DPJ",
+      "department": "School of Music"
+    },
+    {
+      "name": "School Direct - Portsmouth  TSA - Primary (SEN)",
+      "code": "32WY",
+      "department": null
+    },
+    {
+      "name": "School Direct - STAGE TSA -  Primary",
+      "code": "388Y",
+      "department": null
+    },
+    {
+      "name": "School Direct - STAGE TSA -  Primary",
+      "code": "388Y",
+      "department": null
+    },
+    {
+      "name": "School Direct - STAGE TSA -  Primary",
+      "code": "388Y",
+      "department": null
+    },
+    {
+      "name": "School Direct - STAGE TSA -  Primary",
+      "code": "388Y",
+      "department": null
+    },
+    {
+      "name": "School Direct - STAGE TSA -  Primary",
+      "code": "388Y",
+      "department": null
+    },
+    {
+      "name": "School Direct - Innovation Teacher Training  - SEN",
+      "code": "266P",
+      "department": null
+    },
+    {
+      "name": "School Direct - TESLA, Bohunt  - Chemistry",
+      "code": "2JGJ",
+      "department": null
+    },
+    {
+      "name": "School Direct - TESLA  - Biology",
+      "code": "2TV5",
+      "department": null
+    },
+    {
+      "name": "School Direct - TESLA  - Biology",
+      "code": "2TVG",
+      "department": null
+    },
+    {
+      "name": "School Direct - TESLA, Bohunt -  Primary",
+      "code": "2JS7",
+      "department": null
+    },
+    {
+      "name": "School Direct - TESLA, Bohunt -  Primary",
+      "code": "2JS8",
+      "department": null
+    },
+    {
+      "name": "School Direct - TESLA - Bohunt  - Chemistry",
+      "code": "2TVM",
+      "department": null
+    },
+    {
+      "name": "School Direct - TESLA, Bohunt -  Primary",
+      "code": "2JFJ",
+      "department": null
+    },
+    {
+      "name": "School Direct - TESLA, Bohunt  - Chemistry",
+      "code": "2JG7",
+      "department": null
+    },
+    {
+      "name": "School Direct - TESLA  - English",
+      "code": "2TVP",
+      "department": "Humanities"
+    },
+    {
+      "name": "School Direct - TESLA  - English",
+      "code": "2TV3",
+      "department": "Humanities"
+    },
+    {
+      "name": "School Direct - TESLA  - Geography",
+      "code": "2JFZ",
+      "department": null
+    },
+    {
+      "name": "School Direct - TESLA  - Geography",
+      "code": "2JGB",
+      "department": null
+    },
+    {
+      "name": "School Direct - TESLA  - History",
+      "code": "32KF",
+      "department": "Humanities"
+    },
+    {
+      "name": "School Direct - TESLA  - History",
+      "code": "2JFS",
+      "department": "Humanities"
+    },
+    {
+      "name": "School Direct - TESLA, Bohunt  - Chemistry",
+      "code": "32KQ",
+      "department": null
+    },
+    {
+      "name": "School Direct - TESLA  - Mathematics",
+      "code": "32KB",
+      "department": null
+    },
+    {
+      "name": "School Direct - TESLA  - Mathematics",
+      "code": "2JFY",
+      "department": null
+    },
+    {
+      "name": "School Direct - TESLA  - Mathematics",
+      "code": "29B9",
+      "department": null
+    },
+    {
+      "name": "School Direct - TESLA  - Modern Languages",
+      "code": "2LMN",
+      "department": null
+    },
+    {
+      "name": "School Direct - TESLA  - Music",
+      "code": "2TVD",
+      "department": "School of Music"
+    },
+    {
+      "name": "School Direct - TESLA  - P.E.",
+      "code": "32JW",
+      "department": null
+    },
+    {
+      "name": "School Direct - TESLA  - P.E.",
+      "code": "2LHW",
+      "department": null
+    },
+    {
+      "name": "School Direct - TESLA  - Physics",
+      "code": "32JN",
+      "department": null
+    },
+    {
+      "name": "School Direct - TESLA  - Primary",
+      "code": "2TTX",
+      "department": null
+    },
+    {
+      "name": "School Direct - TESLA  - Primary",
+      "code": "2TTW",
+      "department": null
+    },
+    {
+      "name": "School Direct - TESLA  - Primary",
+      "code": "2TTV",
+      "department": null
+    },
+    {
+      "name": "School Direct - TESLA  - Primary",
+      "code": "32L4",
+      "department": null
+    },
+    {
+      "name": "School Direct - TESLA  Bohunt - Primary",
+      "code": "2TTT",
+      "department": null
+    },
+    {
+      "name": "School Direct - TESLA  - Primary",
+      "code": "2TTZ",
+      "department": null
+    },
+    {
+      "name": "School Direct - TESLA  - Primary",
+      "code": "2JS9",
+      "department": null
+    },
+    {
+      "name": "School Direct - Portsmouth TSA  - Primary",
+      "code": "2MGS",
+      "department": null
+    },
+    {
+      "name": "School Direct - Uni. CAT Partnership -  English",
+      "code": "356N",
+      "department": "Humanities"
+    },
+    {
+      "name": "School Direct - Uni. CAT Partnership -  History",
+      "code": "2YSF",
+      "department": "Humanities"
+    },
+    {
+      "name": "School Direct - Uni. CAT Partnership -  Maths",
+      "code": "2YQG",
+      "department": "Engineering"
+    },
+    {
+      "name": "School Direct - UCAT  - Physics",
+      "code": "3BPQ",
+      "department": null
+    },
+    {
+      "name": "School Direct - Uni. CAT Partnership -  P.E.",
+      "code": "2YSG",
+      "department": null
+    },
+    {
+      "name": "School Direct - Uni. CAT Partnership -  Primary",
+      "code": "2YPW",
+      "department": null
+    },
+    {
+      "name": "School Direct - UCAT  - R.E.",
+      "code": "3BPT",
+      "department": null
+    },
+    {
+      "name": "School Direct - Petersfield - Physics (Salaried)",
+      "code": "274N",
+      "department": null
+    },
+    {
+      "name": "School Direct - STAGE TSA - Primary",
+      "code": "2Z9K",
+      "department": null
+    },
+    {
+      "name": "School Direct - Sparkle Alliance -  Primary",
+      "code": "39M8",
+      "department": null
+    },
+    {
+      "name": "School Direct - SCLP - Primary (Salaried)",
+      "code": "39J6",
+      "department": null
+    },
+    {
+      "name": "School Direct - SCLP - Mathematics (Salaried)",
+      "code": "39J7",
+      "department": null
+    },
+    {
+      "name": "INVALID COURSE",
+      "code": "ZZZZ",
+      "department": null
+    }
+  ]
+}

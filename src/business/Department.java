@@ -188,7 +188,7 @@ public class Department
     {
         System.out.println("\nCourses for " + name + " Department:");
         System.out.println("========");
-        courses.forEach(Course::printInfo);
+//        courses.forEach(Course::printInfo);
         System.out.println();
         return null;
     }

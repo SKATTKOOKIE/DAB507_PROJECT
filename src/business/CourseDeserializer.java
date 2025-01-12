@@ -1,36 +1,52 @@
 package business;
 
 import com.google.gson.*;
+import file_handling.JsonProcessor;
 
 import java.lang.reflect.Type;
 
 public class CourseDeserializer implements JsonDeserializer<Course>
 {
+    private JsonProcessor jsonProcessor;
+
+    public CourseDeserializer(String filePath)
+    {
+        this.jsonProcessor = new JsonProcessor(filePath);
+    }
+
     @Override
     public Course deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException
     {
-        JsonObject jsonObject = json.getAsJsonObject();
-        Course course = new Course();
-
-        // Get the first entry (key-value pair) from the JsonObject
-        String firstKey = jsonObject.keySet().iterator().next();
-        String secondKey = jsonObject.keySet().stream()
-                .skip(1)
-                .findFirst()
-                .orElse(null);
-
-        if (firstKey != null && secondKey != null)
+        try
         {
-            String courseTitle = jsonObject.get(firstKey).getAsString();
-            course.setCourseTitle(courseTitle);
-            course.setCourseId(jsonObject.get(secondKey).getAsString());
+            jsonProcessor.processFile();
+            JsonObject jsonObject = json.getAsJsonObject();
+            Course course = new Course();
 
-            // DepartmentMatcher.findDepartmentId now returns DepartmentId enum
-            DepartmentId departmentId = DepartmentMatcher.findDepartmentId(courseTitle);
+            // Get the course name and code using JsonProcessor's parsed content
+            String name = getStringValue(jsonObject, "name");
+            String code = getStringValue(jsonObject, "code");
+
+            course.setCourseTitle(name);
+            course.setCourseId(code);
+
+            // Get the department and map it to DepartmentId
+            String departmentName = getStringValue(jsonObject, "department");
+            DepartmentId departmentId = DepartmentMatcher.findDepartmentId(departmentName);
             course.setDepartmentId(departmentId);
-        }
 
-        return course;
+            return course;
+        }
+        catch (Exception e)
+        {
+            throw new JsonParseException("Error processing JSON file: " + e.getMessage());
+        }
+    }
+
+    private String getStringValue(JsonObject jsonObject, String key)
+    {
+        JsonElement element = jsonObject.get(key);
+        return (element != null && !element.isJsonNull()) ? element.getAsString() : null;
     }
 }

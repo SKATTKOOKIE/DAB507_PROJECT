@@ -1,56 +1,38 @@
 package business;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 class DepartmentMatcher
 {
-    private static final Map<DepartmentId, List<String>> DEPARTMENT_KEYWORDS = new HashMap<>();
+    private static final Map<String, DepartmentId> DEPARTMENT_MAPPINGS = new HashMap<>();
 
     static
     {
-        // Initialize keywords for each department
-        DEPARTMENT_KEYWORDS.put(DepartmentId.THE, Arrays.asList(
-                "theatre", "musical", "drama", "stage"
-        ));
-        DEPARTMENT_KEYWORDS.put(DepartmentId.CHI, Arrays.asList(
-                "childhood", "early childhood", "early years"
-        ));
-        // Add more departments as needed
-        DEPARTMENT_KEYWORDS.put(DepartmentId.SOM, Arrays.asList(
-                "music", "orchestral", "vocal", "jazz"
-        ));
-        DEPARTMENT_KEYWORDS.put(DepartmentId.ECD, Arrays.asList(
-                "computing", "computer", "design"
-        ));
-        DEPARTMENT_KEYWORDS.put(DepartmentId.DAN, Arrays.asList(
-                "dance", "performance"
-        ));
-        DEPARTMENT_KEYWORDS.put(DepartmentId.CRE, Arrays.asList(
-                "creative", "writing", "screenwriting"
-        ));
-        // Can easily add more departments following the same pattern
+        // Initialise direct mappings from JSON department strings to DepartmentId enums
+        DEPARTMENT_MAPPINGS.put("Engineering", DepartmentId.ENG);
+        DEPARTMENT_MAPPINGS.put("Childhood", DepartmentId.CHI);
+        DEPARTMENT_MAPPINGS.put("Dance", DepartmentId.DAN);
+        DEPARTMENT_MAPPINGS.put("Creative", DepartmentId.CRE);
+        DEPARTMENT_MAPPINGS.put("Engineering Computing and Design", DepartmentId.ECD);
+        DEPARTMENT_MAPPINGS.put("Fine Art", DepartmentId.FIA);
+        DEPARTMENT_MAPPINGS.put("Humanities", DepartmentId.HUM);
+        DEPARTMENT_MAPPINGS.put("Law", DepartmentId.LAW);
+        DEPARTMENT_MAPPINGS.put("Nursing", DepartmentId.NUR);
+        DEPARTMENT_MAPPINGS.put("Outdoor Adventure Education", DepartmentId.OAE);
+        DEPARTMENT_MAPPINGS.put("Physiotherapy", DepartmentId.PHY);
+        DEPARTMENT_MAPPINGS.put("School of Music", DepartmentId.SOM);
+        DEPARTMENT_MAPPINGS.put("Social Work", DepartmentId.SOW);
+        DEPARTMENT_MAPPINGS.put("Theatre", DepartmentId.THE);
     }
 
-    public static DepartmentId findDepartmentId(String courseTitle)
+    public static DepartmentId findDepartmentId(String departmentName)
     {
-        String normalizedTitle = courseTitle.toLowerCase();
-
-        for (Map.Entry<DepartmentId, List<String>> entry : DEPARTMENT_KEYWORDS.entrySet())
+        if (departmentName == null)
         {
-            DepartmentId departmentId = entry.getKey();
-            List<String> keywords = entry.getValue();
-
-            if (keywords.stream()
-                    .map(String::toLowerCase)
-                    .anyMatch(normalizedTitle::contains))
-            {
-                return departmentId;
-            }
+            return DepartmentId.UNKNOWN;
         }
 
-        return DepartmentId.UNKNOWN;
+        return DEPARTMENT_MAPPINGS.getOrDefault(departmentName, DepartmentId.UNKNOWN);
     }
 }

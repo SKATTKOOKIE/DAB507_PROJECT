@@ -3,7 +3,8 @@ package business;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
-import file_handling.CsvProcessor;
+import com.google.gson.JsonObject;
+import file_handling.JsonProcessor;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,11 +12,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * Represents a course in the system.
+ * Contains course-related data and operations, with integration to Department functionality.
+ */
 public class Course
 {
     private String courseTitle;
     private String courseId;
     private DepartmentId departmentId;
+    private static final String DATA_FILE = "data/courses_with_departments.json";
 
     // Default constructor
     public Course()
@@ -23,16 +29,7 @@ public class Course
         this.departmentId = DepartmentId.UNKNOWN;
     }
 
-    public DepartmentId getDepartmentId()
-    {
-        return departmentId;
-    }
-
-    public void setDepartmentId(DepartmentId departmentId)
-    {
-        this.departmentId = departmentId != null ? departmentId : DepartmentId.UNKNOWN;
-    }
-
+    // Getters and Setters
     public String getCourseTitle()
     {
         return courseTitle;
@@ -53,58 +50,46 @@ public class Course
         this.courseId = courseId;
     }
 
+    public DepartmentId getDepartmentId()
+    {
+        return departmentId;
+    }
+
+    public void setDepartmentId(DepartmentId departmentId)
+    {
+        this.departmentId = departmentId != null ? departmentId : DepartmentId.UNKNOWN;
+    }
+
     @Override
     public String toString()
     {
-        return "Course{" +
-                "courseTitle='" + courseTitle + '\'' +
-                ", courseId='" + courseId + '\'' +
-                ", departmentId='" + departmentId + '\'' +
-                '}';
+        return String.format("%s (ID: %s) [Department: %s]",
+                courseTitle,
+                courseId,
+                departmentId);
     }
 
-    @Override
-    public boolean equals(Object o)
-    {
-        if (this == o)
-        {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass())
-        {
-            return false;
-        }
-
-        Course course = (Course) o;
-
-        if (courseId != null ? !courseId.equals(course.courseId) : course.courseId != null)
-        {
-            return false;
-        }
-        if (courseTitle != null ? !courseTitle.equals(course.courseTitle) : course.courseTitle != null)
-        {
-            return false;
-        }
-        return departmentId == course.departmentId;  // Use == for enum comparison
-    }
-
-    @Override
-    public int hashCode()
-    {
-        int result = courseTitle != null ? courseTitle.hashCode() : 0;
-        result = 31 * result + (courseId != null ? courseId.hashCode() : 0);
-        result = 31 * result + (departmentId != null ? departmentId.hashCode() : 0);
-        return result;
-    }
-
+    /**
+     * Retrieves all courses from the JSON file.
+     *
+     * @return List of Course objects
+     * @throws IOException if there is an error reading the file
+     */
     public static List<Course> getAll() throws IOException
     {
-        var courseProcessor = new CsvProcessor("data/Courses.csv");
+        JsonProcessor courseProcessor = new JsonProcessor(DATA_FILE);
         courseProcessor.processFile();
-        JsonArray coursesJson = courseProcessor.getJsonContent();
+
+        JsonObject jsonContent = (JsonObject) courseProcessor.getJsonContent();
+        JsonArray coursesJson = jsonContent.getAsJsonArray("courses");
+
+        if (coursesJson == null)
+        {
+            throw new IOException("No courses array found in JSON file");
+        }
 
         Gson gson = new GsonBuilder()
-                .registerTypeAdapter(Course.class, new CourseDeserializer())
+                .registerTypeAdapter(Course.class, new CourseDeserializer(DATA_FILE))
                 .create();
 
         List<Course> courses = new ArrayList<>();
@@ -117,27 +102,35 @@ public class Course
         return courses;
     }
 
-    public void printInfo()
+    /**
+     * Displays all courses grouped by department.
+     *
+     * @throws IOException if there is an error reading the file
+     */
+    /**
+     * Gets courses for a specific department.
+     *
+     * @param department The department to get courses for
+     * @return List of courses in the department
+     * @throws IOException if there is an error reading the file
+     */
+    public static List<Course> getCoursesByDepartment(Department department) throws IOException
     {
-        System.out.printf("- %s (ID: %s) [Dept: %s]\n",
-                courseTitle,
-                courseId,
-                departmentId);
-    }
+        if (department == null)
+        {
+            return new ArrayList<>();
+        }
 
-    public static List<Course> filterByIdPrefix(List<Course> courses, String prefix)
-    {
-        return courses.stream()
-                .filter(course -> course.getCourseId() != null)
-                .filter(course -> course.getCourseId().toUpperCase().startsWith(prefix.toUpperCase()))
+        List<Course> allCourses = getAll();
+        return allCourses.stream()
+                .filter(course -> department.getDepartmentId() == course.getDepartmentId())
                 .collect(Collectors.toList());
     }
 
     /**
-     * Displays all courses from the CSV file in a formatted list.
-     * This method retrieves all courses and prints their information in a readable format.
+     * Displays all courses grouped by their departments.
      *
-     * @throws IOException if there is an error reading the CSV file
+     * @throws IOException if there is an error reading the file
      */
     public static void displayAllCourses() throws IOException
     {
@@ -152,27 +145,89 @@ public class Course
         System.out.println("\nCourse List:");
         System.out.println("============");
 
-        // Group courses by department for better organisation
+        // Group courses by department
         Map<DepartmentId, List<Course>> coursesByDepartment = courses.stream()
                 .collect(Collectors.groupingBy(Course::getDepartmentId));
 
-        coursesByDepartment.forEach((departmentId, departmentCourses) ->
+        // Display courses by department
+        coursesByDepartment.forEach((dept, deptCourses) ->
         {
-            System.out.printf("\n%s Department:%n", departmentId);
-            System.out.println("-".repeat(20));
+            System.out.printf("\n%s Department:%n", dept);
+            System.out.println("=".repeat(20));
 
-            departmentCourses.forEach(Course::printInfo);
+            deptCourses.forEach(course -> System.out.println(course.toString()));
         });
 
         System.out.printf("\nTotal Courses: %d%n", courses.size());
     }
 
-    public static String getAllCoursesInfo() throws IOException {
+    /**
+     * Filters courses by their ID prefix (case-insensitive).
+     *
+     * @param courses List of courses to filter
+     * @param prefix  The prefix to search for
+     * @return Filtered list of courses
+     */
+    public static List<Course> filterByIdPrefix(List<Course> courses, String prefix)
+    {
+        return courses.stream()
+                .filter(course -> course.getCourseId() != null)
+                .filter(course -> course.getCourseId().toUpperCase().startsWith(prefix.toUpperCase()))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Displays courses that match a specific department.
+     *
+     * @param department The department to filter by
+     * @throws IOException if there is an error reading the file
+     */
+    public static void displayCoursesByDepartment(DepartmentId department) throws IOException
+    {
         List<Course> courses = getAll();
-        StringBuilder info = new StringBuilder("All University Courses:\n");
-        for (Course course : courses) {
-            info.append("- ").append(course.toString()).append("\n");
+
+        List<Course> departmentCourses = courses.stream()
+                .filter(course -> course.getDepartmentId() == department)
+                .collect(Collectors.toList());
+
+        if (departmentCourses.isEmpty())
+        {
+            System.out.printf("No courses found for department: %s%n", department);
+            return;
         }
-        return info.toString();
+
+        System.out.printf("\nCourses in %s Department:%n", department);
+        System.out.println("=".repeat(30));
+
+        departmentCourses.forEach(course -> System.out.println(course.toString()));
+        System.out.printf("\nTotal Courses in Department: %d%n", departmentCourses.size());
+    }
+
+    /**
+     * Search for courses by title (case-insensitive, partial match).
+     *
+     * @param searchTerm The term to search for in course titles
+     * @throws IOException if there is an error reading the file
+     */
+    public static void searchCoursesByTitle(String searchTerm) throws IOException
+    {
+        List<Course> courses = getAll();
+
+        List<Course> matchingCourses = courses.stream()
+                .filter(course -> course.getCourseTitle().toLowerCase()
+                        .contains(searchTerm.toLowerCase()))
+                .collect(Collectors.toList());
+
+        if (matchingCourses.isEmpty())
+        {
+            System.out.printf("No courses found matching: %s%n", searchTerm);
+            return;
+        }
+
+        System.out.printf("\nCourses matching '%s':%n", searchTerm);
+        System.out.println("=".repeat(30));
+
+        matchingCourses.forEach(course -> System.out.println(course.toString()));
+        System.out.printf("\nTotal Matching Courses: %d%n", matchingCourses.size());
     }
 }

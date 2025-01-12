@@ -21,6 +21,7 @@ public class GuiMainScreen
     private List<Student> theatreStudents;
     private List<Staff> theatreStaff;
     private ChiUniTextArea outputArea;
+    private DepartmentPanel departmentPanel;
 
     public GuiMainScreen()
     {
@@ -36,7 +37,7 @@ public class GuiMainScreen
             theatreDept = new Department("Theatre", DepartmentId.THE);
             theatreStudents = Student.getByDepartment("Theatre");
             theatreStaff = Staff.getByDepartment("Theatre");
-            allCourses = Course.getAll();
+//            allCourses = Course.getAll();
             OutputManager.print("Theatre Department initialized successfully!");
 
             // Initialize Childcare Department
@@ -66,6 +67,9 @@ public class GuiMainScreen
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(0, 0, 20, 0);
         mainPanel.add(bannerPanel, gbc);
+
+        departmentPanel = new DepartmentPanel();
+        mainPanel.add(departmentPanel);
 
         // Create left panel for buttons
         ChiUniPanel leftPanel = new ChiUniPanel();
@@ -163,13 +167,13 @@ public class GuiMainScreen
         panel.setLayout(new GridLayout(0, 2, 10, 10));
 
         ChiUniButton displayCoursesBtn = new ChiUniButton("Display All Courses");
-        displayCoursesBtn.addActionListener(e -> displayAllCourses());
+//        displayCoursesBtn.addActionListener(e -> displayAllCourses());
 
         ChiUniButton theaterCoursesBtn = new ChiUniButton("Show Theatre Courses");
-        theaterCoursesBtn.addActionListener(e -> showTheatreCourses());
+//        theaterCoursesBtn.addActionListener(e -> showTheatreCourses());
 
         ChiUniButton childcareCoursesBtn = new ChiUniButton("Show Childcare Courses");
-        childcareCoursesBtn.addActionListener(e -> showChildcareCourses());
+//        childcareCoursesBtn.addActionListener(e -> showChildcareCourses());
 
         panel.add(displayCoursesBtn);
         panel.add(theaterCoursesBtn);
@@ -218,46 +222,46 @@ public class GuiMainScreen
         }
     }
 
-    private void displayAllCourses()
-    {
-        try
-        {
-            String courseInfo = Course.getAllCoursesInfo();
-            OutputManager.print(courseInfo);
-        }
-        catch (IOException ex)
-        {
-            handleError("Error displaying courses", ex);
-        }
-    }
+//    private void displayAllCourses()
+//    {
+//        try
+//        {
+//            String courseInfo = Course.getAllCoursesInfo();
+//            OutputManager.print(courseInfo);
+//        }
+//        catch (IOException ex)
+//        {
+//            handleError("Error displaying courses", ex);
+//        }
+//    }
 
-    private void showTheatreCourses()
-    {
-        if (theatreDept != null && allCourses != null)
-        {
-            List<Course> theatreCourses = theatreDept.filterCoursesByDepartment(allCourses);
-            String courseInfo = theatreDept.getCourseInfo(theatreCourses);
-            OutputManager.print(courseInfo);
-        }
-        else
-        {
-            JOptionPane.showMessageDialog(mainFrame, "Please initialize Theatre department first!");
-        }
-    }
+//    private void showTheatreCourses()
+//    {
+//        if (theatreDept != null && allCourses != null)
+//        {
+//            List<Course> theatreCourses = theatreDept.filterCoursesByDepartment(allCourses);
+//            String courseInfo = theatreDept.getCourseInfo(theatreCourses);
+//            OutputManager.print(courseInfo);
+//        }
+//        else
+//        {
+//            JOptionPane.showMessageDialog(mainFrame, "Please initialize Theatre department first!");
+//        }
+//    }
 
-    private void showChildcareCourses()
-    {
-        if (childCareDept != null && allCourses != null)
-        {
-            List<Course> childCareCourses = childCareDept.filterCoursesByDepartment(allCourses);
-            String courseInfo = childCareDept.getCourseInfo(childCareCourses);
-            OutputManager.print(courseInfo);
-        }
-        else
-        {
-            JOptionPane.showMessageDialog(mainFrame, "Please initialize Childcare department first!");
-        }
-    }
+//    private void showChildcareCourses()
+//    {
+//        if (childCareDept != null && allCourses != null)
+//        {
+//            List<Course> childCareCourses = childCareDept.filterCoursesByDepartment(allCourses);
+//            String courseInfo = childCareDept.getCourseInfo(childCareCourses);
+//            OutputManager.print(courseInfo);
+//        }
+//        else
+//        {
+//            JOptionPane.showMessageDialog(mainFrame, "Please initialize Childcare department first!");
+//        }
+//    }
 
     private void displayAllModules()
     {
