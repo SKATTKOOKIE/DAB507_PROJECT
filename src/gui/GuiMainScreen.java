@@ -1,75 +1,34 @@
 package gui;// GuiMainScreen.java
 
 import java.awt.*;
-import java.io.IOException;
-import java.util.List;
 import javax.swing.*;
-
-import business.Department;
-import business.Course;
-import business.DepartmentId;
-import business.Module;
-import users.Staff;
-import users.Student;
 
 public class GuiMainScreen
 {
     private ChiUniFrame mainFrame;
-    private Department theatreDept;
-    private Department childCareDept;
-    private List<Course> allCourses;
-    private List<Student> theatreStudents;
-    private List<Staff> theatreStaff;
     private ChiUniTextArea outputArea;
     private DepartmentPanel departmentPanel;
 
     public GuiMainScreen()
     {
-        initializeDepartments();
         initializeGUI();
-    }
-
-    private void initializeDepartments()
-    {
-        try
-        {
-            // Initialize Theatre Department
-            theatreDept = new Department("Theatre", DepartmentId.THE);
-            theatreStudents = Student.getByDepartment("Theatre");
-            theatreStaff = Staff.getByDepartment("Theatre");
-//            allCourses = Course.getAll();
-            OutputManager.print("Theatre Department initialized successfully!");
-
-            // Initialize Childcare Department
-            childCareDept = new Department("Childhood", DepartmentId.CHI);
-            OutputManager.print("Childcare Department initialized successfully!");
-        }
-        catch (IOException ex)
-        {
-            handleError("Error initializing departments", ex);
-        }
     }
 
     private void initializeGUI()
     {
         mainFrame = new ChiUniFrame("University Management System");
 
-        // Create main panel with grid layout
-        ChiUniPanel mainPanel = new ChiUniPanel();
-        mainPanel.setLayout(new GridBagLayout());
+        // Create banner panel and add it to the NORTH position
+        ChiUniPanel bannerPanel = createBannerPanel();
+        mainFrame.addComponent(bannerPanel, BorderLayout.NORTH);
+
+        // Create main content panel
+        ChiUniPanel contentPanel = new ChiUniPanel();
+        contentPanel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
-        // Create and add banner panel
-        ChiUniPanel bannerPanel = createBannerPanel();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.weightx = 1.0;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(0, 0, 20, 0);
-        mainPanel.add(bannerPanel, gbc);
-
         departmentPanel = new DepartmentPanel();
-        mainPanel.add(departmentPanel);
+        contentPanel.add(departmentPanel);
 
         // Create left panel for buttons
         ChiUniPanel leftPanel = new ChiUniPanel();
@@ -81,42 +40,18 @@ public class GuiMainScreen
         leftGbc.fill = GridBagConstraints.HORIZONTAL;
         leftGbc.insets = new Insets(0, 10, 5, 10);
 
-        // Add department panel to left panel
-        ChiUniPanel deptPanel = createDepartmentPanel();
-        leftPanel.add(deptPanel, leftGbc);
-
-        // Add courses panel to left panel
-        leftGbc.gridy = 1;
-        ChiUniPanel coursesPanel = createCoursesPanel();
-        leftPanel.add(coursesPanel, leftGbc);
-
-        // Add modules panel to left panel
-        leftGbc.gridy = 2;
-        ChiUniPanel modulesPanel = createModulesPanel();
-        leftPanel.add(modulesPanel, leftGbc);
-
-        // Add left panel to main panel
+        // Add left panel to content panel
         gbc.gridx = 0;
-        gbc.gridy = 1;
+        gbc.gridy = 0;
         gbc.weightx = 0.4;
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
-        mainPanel.add(leftPanel, gbc);
+        contentPanel.add(leftPanel, gbc);
 
-        // Create and add output panel
-        ChiUniPanel outputPanel = createOutputPanel();
-        gbc.gridx = 1;
-        gbc.weightx = 0.6;
-        mainPanel.add(outputPanel, gbc);
-
-        // Initialize OutputManager with our text area
-        OutputManager.initialize(outputArea);
-
-        // Add main panel to frame
-        mainFrame.addComponent(mainPanel, BorderLayout.CENTER);
+        // Add content panel to frame in the CENTER position
+        mainFrame.addComponent(contentPanel, BorderLayout.CENTER);
         mainFrame.setMinimumSize(new Dimension(1000, 700));
     }
-
 
     private ChiUniPanel createOutputPanel()
     {
@@ -142,46 +77,6 @@ public class GuiMainScreen
         return panel;
     }
 
-    private ChiUniPanel createDepartmentPanel()
-    {
-        ChiUniPanel panel = new ChiUniPanel();
-        panel.setBorder(BorderFactory.createTitledBorder("Department Information"));
-        panel.setLayout(new GridLayout(0, 1, 10, 10));
-
-        ChiUniButton printTheaterInfoBtn = new ChiUniButton("View Theatre Department Details");
-        printTheaterInfoBtn.addActionListener(e -> printTheatreDepartmentInfo());
-
-        ChiUniButton printSummaryBtn = new ChiUniButton("View Department Summary");
-        printSummaryBtn.addActionListener(e -> printDepartmentSummary());
-
-        panel.add(printTheaterInfoBtn);
-        panel.add(printSummaryBtn);
-
-        return panel;
-    }
-
-    private ChiUniPanel createCoursesPanel()
-    {
-        ChiUniPanel panel = new ChiUniPanel();
-        panel.setBorder(BorderFactory.createTitledBorder("Course Management"));
-        panel.setLayout(new GridLayout(0, 2, 10, 10));
-
-        ChiUniButton displayCoursesBtn = new ChiUniButton("Display All Courses");
-//        displayCoursesBtn.addActionListener(e -> displayAllCourses());
-
-        ChiUniButton theaterCoursesBtn = new ChiUniButton("Show Theatre Courses");
-//        theaterCoursesBtn.addActionListener(e -> showTheatreCourses());
-
-        ChiUniButton childcareCoursesBtn = new ChiUniButton("Show Childcare Courses");
-//        childcareCoursesBtn.addActionListener(e -> showChildcareCourses());
-
-        panel.add(displayCoursesBtn);
-        panel.add(theaterCoursesBtn);
-        panel.add(childcareCoursesBtn);
-
-        return panel;
-    }
-
     private ChiUniPanel createModulesPanel()
     {
         ChiUniPanel panel = new ChiUniPanel();
@@ -189,91 +84,11 @@ public class GuiMainScreen
         panel.setLayout(new GridLayout(1, 1, 10, 10));
 
         ChiUniButton displayModulesBtn = new ChiUniButton("Display All Modules");
-        displayModulesBtn.addActionListener(e -> displayAllModules());
+//        displayModulesBtn.addActionListener(e -> displayAllModules());
 
         panel.add(displayModulesBtn);
 
         return panel;
-    }
-
-    private void printTheatreDepartmentInfo()
-    {
-        if (theatreDept != null)
-        {
-            String info = theatreDept.getDetailedInfo(theatreStudents, theatreStaff);
-            OutputManager.print(info);
-        }
-        else
-        {
-            JOptionPane.showMessageDialog(mainFrame, "Please initialise Theatre department first!");
-        }
-    }
-
-    private void printDepartmentSummary()
-    {
-        if (theatreDept != null && theatreStudents != null && theatreStaff != null)
-        {
-            String summary = theatreDept.getSummary(theatreStudents.size(), theatreStaff.size());
-            OutputManager.print(summary);
-        }
-        else
-        {
-            JOptionPane.showMessageDialog(mainFrame, "Please initialise Theatre department first!");
-        }
-    }
-
-//    private void displayAllCourses()
-//    {
-//        try
-//        {
-//            String courseInfo = Course.getAllCoursesInfo();
-//            OutputManager.print(courseInfo);
-//        }
-//        catch (IOException ex)
-//        {
-//            handleError("Error displaying courses", ex);
-//        }
-//    }
-
-//    private void showTheatreCourses()
-//    {
-//        if (theatreDept != null && allCourses != null)
-//        {
-//            List<Course> theatreCourses = theatreDept.filterCoursesByDepartment(allCourses);
-//            String courseInfo = theatreDept.getCourseInfo(theatreCourses);
-//            OutputManager.print(courseInfo);
-//        }
-//        else
-//        {
-//            JOptionPane.showMessageDialog(mainFrame, "Please initialize Theatre department first!");
-//        }
-//    }
-
-//    private void showChildcareCourses()
-//    {
-//        if (childCareDept != null && allCourses != null)
-//        {
-//            List<Course> childCareCourses = childCareDept.filterCoursesByDepartment(allCourses);
-//            String courseInfo = childCareDept.getCourseInfo(childCareCourses);
-//            OutputManager.print(courseInfo);
-//        }
-//        else
-//        {
-//            JOptionPane.showMessageDialog(mainFrame, "Please initialize Childcare department first!");
-//        }
-//    }
-
-    private void displayAllModules()
-    {
-        try
-        {
-            String moduleInfo = Module.getAllModulesInfo();
-            OutputManager.print(moduleInfo);
-        }
-        catch (IOException ex)
-        {
-            handleError("Error displaying modules", ex);
-        }
     }
 
     private ChiUniPanel createBannerPanel()
