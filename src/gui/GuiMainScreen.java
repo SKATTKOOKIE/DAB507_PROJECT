@@ -11,6 +11,7 @@ public class GuiMainScreen
     private ChiUniPanel welcomePanel;
     private ChiUniPanel contentPanel;
     private ChiUniPanel loginPanel;
+    private StudentListPanel studentListPanel;
 
     // Admin credentials (in practice, these should be stored securely)
     private static final String ADMIN_USERNAME = "admin";
@@ -41,6 +42,11 @@ public class GuiMainScreen
         welcomePanel = createWelcomePanel();
         contentPanel.add(welcomePanel, "WELCOME");
 
+        studentListPanel = new StudentListPanel();
+        ChiUniButton studentBackButton = new ChiUniButton("Back to Welcome");
+        studentBackButton.addActionListener(e -> showWelcomePanel());
+        studentListPanel.add(studentBackButton, BorderLayout.SOUTH);
+
         // Create departments panel
         departmentPanel = new DepartmentPanel();
         // Add back button to department panel
@@ -49,6 +55,7 @@ public class GuiMainScreen
         departmentPanel.add(backButton, BorderLayout.SOUTH);
 
         contentPanel.add(departmentPanel, "DEPARTMENTS");
+        contentPanel.add(studentListPanel, "STUDENTS");
 
         // Add content panel to frame in the CENTER position
         mainFrame.addComponent(contentPanel, BorderLayout.CENTER);
@@ -167,6 +174,13 @@ public class GuiMainScreen
         departmentsButton.setFont(new Font("Arial", Font.PLAIN, 16));
         departmentsButton.addActionListener(e -> showDepartmentsPanel());
 
+        ChiUniButton studentsButton = new ChiUniButton("View Students");
+        studentsButton.setFont(new Font("Arial", Font.PLAIN, 16));
+        studentsButton.addActionListener(e -> showStudentsPanel());
+        studentsButton.setPreferredSize(new Dimension(200, 40));
+        gbc.gridy = 2;
+        panel.add(studentsButton, gbc);
+
         // Style the button
         departmentsButton.setPreferredSize(new Dimension(200, 40));
         gbc.gridy = 1;
@@ -214,6 +228,12 @@ public class GuiMainScreen
                 errorMessage,
                 "Error",
                 JOptionPane.ERROR_MESSAGE);
+    }
+
+    private void showStudentsPanel()
+    {
+        CardLayout cl = (CardLayout) contentPanel.getLayout();
+        cl.show(contentPanel, "STUDENTS");
     }
 
     public void show()
