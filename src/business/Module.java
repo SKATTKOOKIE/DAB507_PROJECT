@@ -3,60 +3,46 @@ package business;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
 import file_handling.JsonProcessor;
-
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
+import business.Department;
 
-/**
- * Represents a module in the system.
- * Contains all module-related data and operations.
- */
-public class Module
-{
+public class Module {
     private final String name;
     private final String code;
     private final String acYear;
+    private final List<String> associatedCourses;
 
-    /**
-     * Constructs a Module with the specified parameters.
-     *
-     * @param name   Module name
-     * @param code   Module code
-     * @param acYear Academic year
-     */
-    public Module(String name, String code, String acYear)
-    {
+    public Module(String name, String code, String acYear, List<String> associatedCourses) {
         this.name = name != null ? name.trim() : "";
         this.code = code != null ? code.trim() : "";
         this.acYear = acYear != null ? acYear.trim() : "";
+        this.associatedCourses = associatedCourses != null ? associatedCourses : new ArrayList<>();
     }
 
-    /**
-     * Creates a list of Modules from a JsonArray.
-     *
-     * @param jsonArray JsonArray containing module data
-     * @return List of Module objects
-     */
-    public static List<Module> fromJsonArray(JsonArray jsonArray)
-    {
+    public static List<Module> fromJsonArray(JsonArray jsonArray) {
         List<Module> modules = new ArrayList<>();
 
-        for (JsonElement element : jsonArray)
-        {
+        for (JsonElement element : jsonArray) {
             JsonObject moduleObj = element.getAsJsonObject();
 
-            String name = moduleObj.get("name").getAsString();
-            String code = moduleObj.get("code").getAsString();
+            String name = moduleObj.get("module_name").getAsString();
+            String code = moduleObj.get("module_code").getAsString();
             String acYear = moduleObj.get("ac_year").getAsString();
 
-            Module module = new Module(name, code, acYear);
-            if (module.isValid())
-            {
+            // Extract associated courses
+            List<String> associatedCourses = new ArrayList<>();
+            if (moduleObj.has("associated_courses")) {
+                JsonArray coursesArray = moduleObj.getAsJsonArray("associated_courses");
+                for (JsonElement courseElement : coursesArray) {
+                    associatedCourses.add(courseElement.getAsString());
+                }
+            }
+
+            Module module = new Module(name, code, acYear, associatedCourses);
+            if (module.isValid()) {
                 modules.add(module);
             }
         }
@@ -64,95 +50,51 @@ public class Module
         return modules;
     }
 
-    // Getters
-    public String getName()
-    {
-        return name;
+    public String getName() { return name; }
+    public String getCode() { return code; }
+    public String getAcYear() { return acYear; }
+    public List<String> getAssociatedCourses() { return associatedCourses; }
+
+    public boolean isAssociatedWithCourse(String courseCode) {
+        return associatedCourses.contains(courseCode);
     }
 
-    public String getCode()
-    {
-        return code;
-    }
-
-    public String getAcYear()
-    {
-        return acYear;
-    }
-
-    /**
-     * Checks if this is a current year module.
-     */
-    public boolean isCurrentYear()
-    {
-        return acYear != null && acYear.equals("20");
-    }
-
-    /**
-     * Checks if this is a previous year module.
-     */
-    public boolean isPreviousYear()
-    {
-        return acYear != null && acYear.equals("19");
-    }
-
-    /**
-     * Filters a list of modules by academic year.
-     */
-    public static List<Module> filterByYear(List<Module> modules, String year)
-    {
-        return modules.stream()
-                .filter(m -> year.equals(m.getAcYear()))
+    public static List<Module> getModulesForCourse(String courseCode) throws IOException {
+        List<Module> allModules = getAll();
+        return allModules.stream()
+                .filter(module -> module.isAssociatedWithCourse(courseCode))
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Searches modules by name.
-     */
-    public static List<Module> searchByName(List<Module> modules, String searchTerm)
-    {
-        return modules.stream()
-                .filter(m -> m.getName().toLowerCase().contains(searchTerm.toLowerCase()))
-                .collect(Collectors.toList());
+    public static List<Module> getAll() throws IOException {
+        JsonProcessor processor = new JsonProcessor("data/associated_modules.json");
+        processor.processFile();
+        JsonElement root = (JsonElement) processor.getJsonContent(); // Change JsonObject to JsonElement
+
+        if (!root.isJsonObject()) {
+            throw new IOException("Root element is not a JsonObject");
+        }
+
+        JsonObject rootObj = root.getAsJsonObject();
+        JsonArray modulesJson = rootObj.getAsJsonArray("modules");
+        return Module.fromJsonArray(modulesJson);
     }
 
-    /**
-     * Filters modules by code prefix.
-     */
-    public static List<Module> filterByCode(List<Module> modules, String codePrefix)
-    {
-        return modules.stream()
-                .filter(m -> m.getCode().startsWith(codePrefix))
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * Checks if the module has valid data.
-     */
-    public boolean isValid()
-    {
+    public boolean isValid() {
         return name != null && !name.trim().isEmpty() &&
                 code != null && !code.trim().isEmpty() &&
                 acYear != null && !acYear.trim().isEmpty();
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return String.format("%s (%s) - Year %s", name, code, acYear);
     }
 
     @Override
-    public boolean equals(Object o)
-    {
-        if (this == o)
-        {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass())
-        {
-            return false;
-        }
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         Module module = (Module) o;
         return Objects.equals(name, module.name) &&
                 Objects.equals(code, module.code) &&
@@ -160,108 +102,59 @@ public class Module
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return Objects.hash(name, code, acYear);
     }
 
     /**
-     * Displays all modules in a formatted table.
-     * Shows module name, code and academic year with separators.
+     * Filters modules by academic year.
+     *
+     * @param modules List of modules to filter
+     * @param year Academic year to filter by
+     * @return Filtered list of modules
      */
-    public static void displayAllModules() throws IOException
-    {
-        // Create JsonProcessor instance
-        JsonProcessor processor = new JsonProcessor("data/modules.json");
-        processor.processFile();
-
-        // Get modules from JSON as JsonArray
-        JsonArray modulesJson = (JsonArray) processor.getJsonContent();
-        List<Module> modules = Module.fromJsonArray(modulesJson);
-
-        // Define the separator line
-        String separator = "----------------------------------------";
-
-        // Print header
-        System.out.println(separator);
-        System.out.printf("%-40s %-10s %-6s%n", "Module Name", "Code", "Year");
-        System.out.println(separator);
-
-        // Print each module
-        for (Module module : modules)
-        {
-            // Truncate name if longer than 40 characters
-            String displayName = module.getName();
-            if (displayName.length() > 37)
-            {
-                displayName = displayName.substring(0, 34) + "...";
-            }
-
-            System.out.printf("%-40s %-10s %-6s%n",
-                    displayName,
-                    module.getCode(),
-                    module.getAcYear());
+    public static List<Module> filterByYear(List<Module> modules, String year) {
+        if (modules == null || year == null) {
+            return new ArrayList<>();
         }
 
-        // Print footer separator
-        System.out.println(separator);
-        System.out.printf("Total Modules: %d%n", modules.size());
+        return modules.stream()
+                .filter(module -> module.getAcYear().equals(year))
+                .collect(Collectors.toList());
     }
 
     /**
-     * Returns a list of all modules from the JSON file.
+     * Searches for modules by name.
      *
-     * @return List of all modules
-     * @throws IOException if there's an error reading the file
+     * @param modules List of modules to search through
+     * @param searchTerm Term to search for (case-insensitive)
+     * @return List of modules whose names contain the search term
      */
-    public static List<Module> getAll() throws IOException
-    {
-        // Create JsonProcessor instance
-        JsonProcessor processor = new JsonProcessor("data/modules.json");
-        processor.processFile();
+    public static List<Module> searchByName(List<Module> modules, String searchTerm) {
+        if (modules == null || searchTerm == null) {
+            return new ArrayList<>();
+        }
 
-        // Get modules from JSON as JsonArray
-        JsonArray modulesJson = (JsonArray) processor.getJsonContent();
-        return Module.fromJsonArray(modulesJson);
+        return modules.stream()
+                .filter(module -> module.getName().toLowerCase()
+                        .contains(searchTerm.toLowerCase()))
+                .collect(Collectors.toList());
     }
 
     /**
-     * Returns a formatted string containing information about all modules.
+     * Filters modules by code prefix.
      *
-     * @return Formatted string with module information
-     * @throws IOException if there's an error reading the file
+     * @param modules List of modules to filter
+     * @param codePrefix Code prefix to filter by
+     * @return Filtered list of modules
      */
-    public static String getAllModulesInfo() throws IOException
-    {
-        List<Module> modules = getAll();
-        StringBuilder info = new StringBuilder();
-
-        // Add header
-        info.append("All University Modules:\n");
-        info.append("----------------------------------------\n");
-        info.append(String.format("%-40s %-10s %-6s%n", "Module Name", "Code", "Year"));
-        info.append("----------------------------------------\n");
-
-        // Add each module
-        for (Module module : modules)
-        {
-            String displayName = module.getName();
-            if (displayName.length() > 37)
-            {
-                displayName = displayName.substring(0, 34) + "...";
-            }
-
-            info.append(String.format("%-40s %-10s %-6s%n",
-                    displayName,
-                    module.getCode(),
-                    module.getAcYear()));
+    public static List<Module> filterByCode(List<Module> modules, String codePrefix) {
+        if (modules == null || codePrefix == null) {
+            return new ArrayList<>();
         }
 
-        // Add footer
-        info.append("----------------------------------------\n");
-        info.append(String.format("Total Modules: %d%n", modules.size()));
-
-        return info.toString();
+        return modules.stream()
+                .filter(module -> module.getCode().startsWith(codePrefix))
+                .collect(Collectors.toList());
     }
-
 }

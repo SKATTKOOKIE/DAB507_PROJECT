@@ -230,4 +230,20 @@ public class Course
         matchingCourses.forEach(course -> System.out.println(course.toString()));
         System.out.printf("\nTotal Matching Courses: %d%n", matchingCourses.size());
     }
+
+    public String getCourseCode()
+    {
+        if (courseId == null)
+        {
+            return "";
+        }
+        // Remove any non-alphanumeric characters and convert to uppercase
+        return courseId.replaceAll("[^A-Za-z0-9]", "").toUpperCase();
+    }
+
+    public boolean hasValidCourseCode()
+    {
+        String code = getCourseCode();
+        return code != null && !code.isEmpty() && code.matches("[A-Z0-9]{4,5}");
+    }
 }
