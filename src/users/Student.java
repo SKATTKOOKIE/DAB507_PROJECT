@@ -2,7 +2,6 @@ package users;
 
 import com.google.gson.Gson;
 import file_handling.JsonProcessor;
-import users.User;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -13,7 +12,7 @@ import java.util.stream.Collectors;
  * Represents a student user in the system.
  * Extends User class with student-specific attributes.
  */
-public class Student extends User
+public class Student extends User implements IStudent
 {
     private String gender;
     private String type;
@@ -67,6 +66,7 @@ public class Student extends User
                 .collect(Collectors.toList());
     }
 
+    @Override
     public void printDetailedInfo()
     {
         System.out.printf("- %s %s (ID: %d)\n",
