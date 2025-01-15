@@ -1,4 +1,4 @@
-package gui;// GuiMainScreen.java
+package gui;
 
 import java.awt.*;
 import javax.swing.*;
@@ -8,6 +8,13 @@ public class GuiMainScreen
     private ChiUniFrame mainFrame;
     private ChiUniTextArea outputArea;
     private DepartmentPanel departmentPanel;
+    private ChiUniPanel welcomePanel;
+    private ChiUniPanel contentPanel;
+    private ChiUniPanel loginPanel;
+
+    // Admin credentials (in practice, these should be stored securely)
+    private static final String ADMIN_USERNAME = "admin";
+    private static final String ADMIN_PASSWORD = "password123";
 
     public GuiMainScreen()
     {
@@ -23,72 +30,162 @@ public class GuiMainScreen
         mainFrame.addComponent(bannerPanel, BorderLayout.NORTH);
 
         // Create main content panel
-        ChiUniPanel contentPanel = new ChiUniPanel();
-        contentPanel.setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
+        contentPanel = new ChiUniPanel();
+        contentPanel.setLayout(new CardLayout());
 
+        // Create login panel
+        loginPanel = createLoginPanel();
+        contentPanel.add(loginPanel, "LOGIN");
+
+        // Create welcome panel
+        welcomePanel = createWelcomePanel();
+        contentPanel.add(welcomePanel, "WELCOME");
+
+        // Create departments panel
         departmentPanel = new DepartmentPanel();
-        contentPanel.add(departmentPanel);
+        // Add back button to department panel
+        ChiUniButton backButton = new ChiUniButton("Back to Welcome");
+        backButton.addActionListener(e -> showWelcomePanel());
+        departmentPanel.add(backButton, BorderLayout.SOUTH);
 
-        // Create left panel for buttons
-        ChiUniPanel leftPanel = new ChiUniPanel();
-        leftPanel.setLayout(new GridBagLayout());
-        GridBagConstraints leftGbc = new GridBagConstraints();
-        leftGbc.gridx = 0;
-        leftGbc.gridy = 0;
-        leftGbc.weightx = 1.0;
-        leftGbc.fill = GridBagConstraints.HORIZONTAL;
-        leftGbc.insets = new Insets(0, 10, 5, 10);
-
-        // Add left panel to content panel
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.weightx = 0.4;
-        gbc.weighty = 1.0;
-        gbc.fill = GridBagConstraints.BOTH;
-        contentPanel.add(leftPanel, gbc);
+        contentPanel.add(departmentPanel, "DEPARTMENTS");
 
         // Add content panel to frame in the CENTER position
         mainFrame.addComponent(contentPanel, BorderLayout.CENTER);
         mainFrame.setMinimumSize(new Dimension(1000, 700));
+
+        // Show login panel by default
+        showLoginPanel();
     }
 
-    private ChiUniPanel createOutputPanel()
+    private ChiUniPanel createLoginPanel()
     {
         ChiUniPanel panel = new ChiUniPanel();
-        panel.setBorder(BorderFactory.createTitledBorder("Output"));
-        panel.setLayout(new BorderLayout(10, 10));
+        panel.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // Create text area
-        outputArea = new ChiUniTextArea();
-        JScrollPane scrollPane = new JScrollPane(outputArea);
-        panel.add(scrollPane, BorderLayout.CENTER);
+        // Login title
+        JLabel titleLabel = new JLabel("Admin Login");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        titleLabel.setHorizontalAlignment(JLabel.CENTER);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        gbc.insets = new Insets(0, 0, 20, 0);
+        panel.add(titleLabel, gbc);
 
-        // Create button panel
-        ChiUniPanel buttonPanel = new ChiUniPanel();
-        buttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+        // Username label and field
+        JLabel usernameLabel = new JLabel("Username:");
+        usernameLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = 1;
+        gbc.insets = new Insets(5, 5, 5, 5);
+        panel.add(usernameLabel, gbc);
 
-        ChiUniButton clearButton = new ChiUniButton("Clear Output");
-        clearButton.addActionListener(e -> OutputManager.clear());
-        buttonPanel.add(clearButton);
+        JTextField usernameField = new JTextField(20);
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        panel.add(usernameField, gbc);
 
-        panel.add(buttonPanel, BorderLayout.SOUTH);
+        // Password label and field
+        JLabel passwordLabel = new JLabel("Password:");
+        passwordLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        panel.add(passwordLabel, gbc);
+
+        JPasswordField passwordField = new JPasswordField(20);
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        panel.add(passwordField, gbc);
+
+        // Login button
+        ChiUniButton loginButton = new ChiUniButton("Login");
+        loginButton.setFont(new Font("Arial", Font.PLAIN, 14));
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.gridwidth = 2;
+        gbc.insets = new Insets(20, 5, 5, 5);
+        panel.add(loginButton, gbc);
+
+        // Add action listener to login button
+        loginButton.addActionListener(e ->
+        {
+            String username = usernameField.getText();
+            String password = new String(passwordField.getPassword());
+
+            if (validateCredentials(username, password))
+            {
+                showWelcomePanel();
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(mainFrame,
+                        "Invalid credentials. Please try again.",
+                        "Login Failed",
+                        JOptionPane.ERROR_MESSAGE);
+                passwordField.setText("");
+            }
+        });
+
+        // Add action listener to password field for Enter key
+        passwordField.addActionListener(e -> loginButton.doClick());
 
         return panel;
     }
 
-    private ChiUniPanel createModulesPanel()
+    private boolean validateCredentials(String username, String password)
+    {
+        return ADMIN_USERNAME.equals(username) && ADMIN_PASSWORD.equals(password);
+    }
+
+    private void showLoginPanel()
+    {
+        CardLayout cl = (CardLayout) contentPanel.getLayout();
+        cl.show(contentPanel, "LOGIN");
+    }
+
+    private ChiUniPanel createWelcomePanel()
     {
         ChiUniPanel panel = new ChiUniPanel();
-        panel.setBorder(BorderFactory.createTitledBorder("Module Management"));
-        panel.setLayout(new GridLayout(1, 1, 10, 10));
+        panel.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
 
-        ChiUniButton displayModulesBtn = new ChiUniButton("Display All Modules");
-//        displayModulesBtn.addActionListener(e -> displayAllModules());
+        // Welcome message
+        JLabel welcomeLabel = new JLabel("Welcome to Chichester University Portal");
+        welcomeLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(0, 0, 30, 0);
+        panel.add(welcomeLabel, gbc);
 
-        panel.add(displayModulesBtn);
+        // Departments button
+        ChiUniButton departmentsButton = new ChiUniButton("View Departments");
+        departmentsButton.setFont(new Font("Arial", Font.PLAIN, 16));
+        departmentsButton.addActionListener(e -> showDepartmentsPanel());
+
+        // Style the button
+        departmentsButton.setPreferredSize(new Dimension(200, 40));
+        gbc.gridy = 1;
+        gbc.insets = new Insets(0, 0, 15, 0);
+        panel.add(departmentsButton, gbc);
 
         return panel;
+    }
+
+    private void showWelcomePanel()
+    {
+        CardLayout cl = (CardLayout) contentPanel.getLayout();
+        cl.show(contentPanel, "WELCOME");
+    }
+
+    private void showDepartmentsPanel()
+    {
+        CardLayout cl = (CardLayout) contentPanel.getLayout();
+        cl.show(contentPanel, "DEPARTMENTS");
     }
 
     private ChiUniPanel createBannerPanel()

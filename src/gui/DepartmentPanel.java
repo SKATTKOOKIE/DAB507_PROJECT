@@ -6,11 +6,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Arrays;
 
-public class DepartmentPanel extends ChiUniPanel {
+public class DepartmentPanel extends ChiUniPanel
+{
     private final CardLayout cardLayout;
     private final ChiUniPanel cardsPanel;
 
-    public DepartmentPanel() {
+    public DepartmentPanel()
+    {
         setLayout(new BorderLayout());
         cardLayout = new CardLayout();
 
@@ -29,17 +31,20 @@ public class DepartmentPanel extends ChiUniPanel {
         createDepartmentDetailPanels();
     }
 
-    private void createDepartmentDetailPanels() {
+    private void createDepartmentDetailPanels()
+    {
         Arrays.stream(DepartmentId.values())
                 .filter(dept -> dept != DepartmentId.UNKNOWN)
-                .forEach(deptId -> {
+                .forEach(deptId ->
+                {
                     // Create and add department detail panel
                     DepartmentDetailPanel detailPanel = new DepartmentDetailPanel(deptId, this);
                     cardsPanel.add(detailPanel, deptId.toString());
                 });
     }
 
-    private ChiUniPanel createDepartmentsListPanel() {
+    private ChiUniPanel createDepartmentsListPanel()
+    {
         ChiUniPanel panel = new ChiUniPanel();
         panel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -64,7 +69,8 @@ public class DepartmentPanel extends ChiUniPanel {
         // Create buttons for each department
         Arrays.stream(DepartmentId.values())
                 .filter(dept -> dept != DepartmentId.UNKNOWN)
-                .forEach(deptId -> {
+                .forEach(deptId ->
+                {
                     ChiUniButton deptButton = createDepartmentButton(deptId);
                     buttonsPanel.add(deptButton, buttonGbc);
                 });
@@ -77,7 +83,8 @@ public class DepartmentPanel extends ChiUniPanel {
         return panel;
     }
 
-    private ChiUniButton createDepartmentButton(DepartmentId deptId) {
+    private ChiUniButton createDepartmentButton(DepartmentId deptId)
+    {
         ChiUniButton button = new ChiUniButton(deptId.getDepartmentName());
         button.setFont(new Font("Arial", Font.BOLD, 14));
         button.setPreferredSize(new Dimension(300, 50));
@@ -88,12 +95,15 @@ public class DepartmentPanel extends ChiUniPanel {
         button.setFocusPainted(false);
 
         // Add hover effect
-        button.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+        button.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseEntered(java.awt.event.MouseEvent evt)
+            {
                 button.setBackground(new Color(0, 71, 130));
             }
 
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+            public void mouseExited(java.awt.event.MouseEvent evt)
+            {
                 button.setBackground(new Color(0, 48, 87));
             }
         });
@@ -104,11 +114,13 @@ public class DepartmentPanel extends ChiUniPanel {
         return button;
     }
 
-    public void showDepartmentDetail(DepartmentId deptId) {
+    public void showDepartmentDetail(DepartmentId deptId)
+    {
         cardLayout.show(cardsPanel, deptId.toString());
     }
 
-    public void showDepartmentsList() {
+    public void showDepartmentsList()
+    {
         cardLayout.show(cardsPanel, "DEPARTMENTS_LIST");
     }
 }
