@@ -15,6 +15,7 @@ public abstract class User implements IUser
     private String lastName;
     private String email;
     private String department;
+    private String course;
 
     // Getters and setters
     @Override
@@ -75,6 +76,18 @@ public abstract class User implements IUser
     public void setDepartment(String department)
     {
         this.department = department;
+    }
+
+    @Override
+    public String getCourse()
+    {
+        return course;
+    }
+
+    @Override
+    public void setCourse(String course)
+    {
+        this.course = course;
     }
 
     @Override

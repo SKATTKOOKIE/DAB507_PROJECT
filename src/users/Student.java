@@ -45,7 +45,7 @@ public class Student extends User implements IStudent
                 gender, type);
     }
 
-    public static List<Student> getByDepartment(String departmentName) throws IOException
+    public static List<Student> getByCourse(String courseName) throws IOException
     {
         var studentProcessor = new JsonProcessor("data/students.json");
         try
@@ -61,8 +61,15 @@ public class Student extends User implements IStudent
                 Student[].class
         );
 
+        // If courseName is empty, return all students
+        if (courseName == null || courseName.trim().isEmpty())
+        {
+            return Arrays.asList(allStudents);
+        }
+
+        // Otherwise filter by course name
         return Arrays.stream(allStudents)
-                .filter(student -> departmentName.equals(student.getDepartment()))
+                .filter(student -> courseName.equals(student.getCourse()))
                 .collect(Collectors.toList());
     }
 

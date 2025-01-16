@@ -35,7 +35,7 @@ public class StudentListPanel extends ChiUniPanel
     {
         try
         {
-            List<Student> students = Student.getByDepartment("");  // Get all students
+            List<Student> students = Student.getByCourse("");  // Get all students
             displayStudents(students);
         }
         catch (IOException e)
@@ -95,7 +95,7 @@ public class StudentListPanel extends ChiUniPanel
         detailsPanel.add(new JLabel("ID: " + student.getId()));
         detailsPanel.add(new JLabel("Type: " + student.getType()));
         detailsPanel.add(new JLabel("Email: " + student.getEmail()));
-
+        
         card.add(detailsPanel, BorderLayout.CENTER);
 
         // Set preferred size for consistent card dimensions

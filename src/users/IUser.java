@@ -23,4 +23,9 @@ public interface IUser
     void setDepartment(String department);
 
     void printDetailedInfo();
+
+    String getCourse();
+
+    void setCourse(String course);
+
 }
