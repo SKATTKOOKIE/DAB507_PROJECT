@@ -241,6 +241,22 @@ public class Course
         return courseId.replaceAll("[^A-Za-z0-9]", "").toUpperCase();
     }
 
+    /**
+     * Gets course code from course title
+     *
+     * @param courseTitle The full course title (e.g., "BA (Hons) Theatre")
+     * @return The course code or empty string if not found
+     */
+    public static String getCourseCodeFromTitle(String courseTitle) throws IOException
+    {
+        List<Course> allCourses = getAll();
+        return allCourses.stream()
+                .filter(course -> course.getCourseTitle().equals(courseTitle))
+                .map(Course::getCourseCode)
+                .findFirst()
+                .orElse("");
+    }
+
     public boolean hasValidCourseCode()
     {
         String code = getCourseCode();
