@@ -4,25 +4,60 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import business.Module;
 import users.Student;
+import users.StudentType;
+import business.Module;
 import business.Course;
 
 public class StudentListPanel extends ChiUniPanel
 {
     private final ChiUniPanel studentsContainer;
     private JDialog moduleDialog;
+    private List<Student> allStudents;
+    private JComboBox<StudentType> typeFilter;
 
     public StudentListPanel()
     {
         setLayout(new BorderLayout(10, 10));
 
-        // Create header
+        // Create header panel
+        JPanel headerPanel = new JPanel(new BorderLayout());
+
+        // Title
         JLabel titleLabel = new JLabel("Student Directory", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         titleLabel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
-        add(titleLabel, BorderLayout.NORTH);
+        headerPanel.add(titleLabel, BorderLayout.CENTER);
+
+        // Filter panel
+        JPanel filterPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JLabel filterLabel = new JLabel("Filter by Type: ");
+        filterPanel.add(filterLabel);
+
+        // Create and populate type filter dropdown
+        typeFilter = new JComboBox<>(StudentType.values());
+        typeFilter.insertItemAt(null, 0); // Add "All" option
+        typeFilter.setSelectedIndex(0); // Select "All" by default
+        typeFilter.setRenderer(new DefaultListCellRenderer()
+        {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value,
+                                                          int index, boolean isSelected, boolean cellHasFocus)
+            {
+                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                setText(value == null ? "All" : value.toString());
+                return this;
+            }
+        });
+
+        // Add filter change listener
+        typeFilter.addActionListener(e -> filterStudents());
+        filterPanel.add(typeFilter);
+
+        headerPanel.add(filterPanel, BorderLayout.SOUTH);
+        add(headerPanel, BorderLayout.NORTH);
 
         // Create scrollable container for student cards
         studentsContainer = new ChiUniPanel();
@@ -38,13 +73,43 @@ public class StudentListPanel extends ChiUniPanel
     {
         try
         {
-            List<Student> students = Student.getByCourse("");  // Get all students
-            displayStudents(students);
+            allStudents = Student.getByCourse("");  // Get all students
+            filterStudents(); // Apply initial filter
         }
         catch (IOException e)
         {
             handleError("Error loading students", e);
         }
+    }
+
+    private void filterStudents()
+    {
+        StudentType selectedType = (StudentType) typeFilter.getSelectedItem();
+        List<Student> filteredStudents;
+
+        if (selectedType == null)
+        {
+            filteredStudents = allStudents; // Show all students
+        }
+        else
+        {
+            // Filter students by selected type
+            filteredStudents = allStudents.stream()
+                    .filter(student ->
+                    {
+                        try
+                        {
+                            return StudentType.fromString(student.getType()) == selectedType;
+                        }
+                        catch (IllegalArgumentException e)
+                        {
+                            return false; // Skip students with invalid types
+                        }
+                    })
+                    .collect(Collectors.toList());
+        }
+
+        displayStudents(filteredStudents);
     }
 
     private void displayStudents(List<Student> students)
