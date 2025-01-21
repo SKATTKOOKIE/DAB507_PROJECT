@@ -14,7 +14,7 @@ import java.util.List;
  * Handles both JSON arrays and objects at the root level.
  * This class is final to prevent further inheritance.
  */
-public class JsonProcessor extends FileProcessor
+public final class JsonProcessor extends FileProcessor
 {
     private JsonArray jsonArray;
     private JsonObject jsonObject;
