@@ -25,25 +25,8 @@ public class GuiMainScreen
 
     public GuiMainScreen()
     {
-        try
-        {
-            File assignmentsFile = new File("data/staff_module_assignments.json");
-            File assignmentsFile2 = new File("data/student_module_assignments.json");
-            if (!assignmentsFile.exists() || !assignmentsFile2.exists())
-            {
-                // Maybe thread this procedure
-                System.out.println("Generating initial staff module assignments...");
-                StaffModuleAssignment.generateInitialAssignments();
-                StudentModuleAssignment.generateInitialAssignments();
-                System.out.println("Initial assignments generated successfully.");
-            }
-        }
-        catch (IOException e)
-        {
-            System.err.println("Error checking/generating staff assignments: " + e.getMessage());
-        }
-
         initializeGUI();
+        initializeData();
     }
 
     private void initializeGUI()
@@ -94,6 +77,35 @@ public class GuiMainScreen
 
         // Show login panel by default
         showLoginPanel();
+    }
+
+    private void initializeData()
+    {
+        SwingWorker<Void, Void> worker = new SwingWorker<>()
+        {
+            @Override
+            protected Void doInBackground() throws Exception
+            {
+                try
+                {
+                    File assignmentsFile = new File("data/staff_module_assignments.json");
+                    File assignmentsFile2 = new File("data/student_module_assignments.json");
+                    if (!assignmentsFile.exists() || !assignmentsFile2.exists())
+                    {
+                        System.out.println("Generating initial staff module assignments...");
+                        StaffModuleAssignment.generateInitialAssignments();
+                        StudentModuleAssignment.generateInitialAssignments();
+                        System.out.println("Initial assignments generated successfully.");
+                    }
+                }
+                catch (IOException e)
+                {
+                    System.err.println("Error checking/generating staff assignments: " + e.getMessage());
+                }
+                return null;
+            }
+        };
+        worker.execute();
     }
 
     private ChiUniPanel createLoginPanel()
