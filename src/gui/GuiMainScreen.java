@@ -12,6 +12,7 @@ public class GuiMainScreen
     private ChiUniPanel contentPanel;
     private ChiUniPanel loginPanel;
     private StudentListPanel studentListPanel;
+    private StaffListPanel staffListPanel;
 
     // Admin credentials (in practice, these should be stored securely)
     private static final String ADMIN_USERNAME = "admin";
@@ -54,8 +55,15 @@ public class GuiMainScreen
         backButton.addActionListener(e -> showWelcomePanel());
         departmentPanel.add(backButton, BorderLayout.SOUTH);
 
+        // Create staff panel
+        staffListPanel = new StaffListPanel();
+        ChiUniButton staffBackButton = new ChiUniButton("Back to Welcome");
+        staffBackButton.addActionListener(e -> showWelcomePanel());
+        staffListPanel.add(staffBackButton, BorderLayout.SOUTH);
+
         contentPanel.add(departmentPanel, "DEPARTMENTS");
         contentPanel.add(studentListPanel, "STUDENTS");
+        contentPanel.add(staffListPanel, "STAFF");
 
         // Add content panel to frame in the CENTER position
         mainFrame.addComponent(contentPanel, BorderLayout.CENTER);
@@ -181,6 +189,14 @@ public class GuiMainScreen
         gbc.gridy = 2;
         panel.add(studentsButton, gbc);
 
+        ChiUniButton staffButton = new ChiUniButton("View Staff");
+        staffButton.setFont(new Font("Arial", Font.PLAIN, 16));
+        staffButton.addActionListener(e -> showStaffPanel());
+        staffButton.setPreferredSize(new Dimension(200, 40));
+        gbc.gridy = 3;
+        gbc.insets = new Insets(0, 0, 15, 0);
+        panel.add(staffButton, gbc);
+
         // Style the button
         departmentsButton.setPreferredSize(new Dimension(200, 40));
         gbc.gridy = 1;
@@ -200,6 +216,11 @@ public class GuiMainScreen
     {
         CardLayout cl = (CardLayout) contentPanel.getLayout();
         cl.show(contentPanel, "DEPARTMENTS");
+    }
+
+    private void showStaffPanel() {
+        CardLayout cl = (CardLayout) contentPanel.getLayout();
+        cl.show(contentPanel, "STAFF");
     }
 
     private ChiUniPanel createBannerPanel()
