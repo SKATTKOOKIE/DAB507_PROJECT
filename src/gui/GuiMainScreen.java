@@ -1,7 +1,12 @@
 package gui;
 
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import javax.swing.*;
+
+import business.StaffModuleAssignment;
+import business.StudentModuleAssignment;
 
 public class GuiMainScreen
 {
@@ -16,10 +21,28 @@ public class GuiMainScreen
 
     // Admin credentials (in practice, these should be stored securely)
     private static final String ADMIN_USERNAME = "admin";
-    private static final String ADMIN_PASSWORD = "password123";
+    private static final String ADMIN_PASSWORD = "password";
 
     public GuiMainScreen()
     {
+        try
+        {
+            File assignmentsFile = new File("data/staff_module_assignments.json");
+            File assignmentsFile2 = new File("data/student_module_assignments.json");
+            if (!assignmentsFile.exists() || !assignmentsFile2.exists())
+            {
+                // Maybe thread this procedure
+                System.out.println("Generating initial staff module assignments...");
+                StaffModuleAssignment.generateInitialAssignments();
+                StudentModuleAssignment.generateInitialAssignments();
+                System.out.println("Initial assignments generated successfully.");
+            }
+        }
+        catch (IOException e)
+        {
+            System.err.println("Error checking/generating staff assignments: " + e.getMessage());
+        }
+
         initializeGUI();
     }
 
@@ -218,7 +241,8 @@ public class GuiMainScreen
         cl.show(contentPanel, "DEPARTMENTS");
     }
 
-    private void showStaffPanel() {
+    private void showStaffPanel()
+    {
         CardLayout cl = (CardLayout) contentPanel.getLayout();
         cl.show(contentPanel, "STAFF");
     }
