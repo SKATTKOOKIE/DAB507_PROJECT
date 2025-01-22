@@ -246,7 +246,8 @@ public class StudentListPanel extends ChiUniPanel
      *
      * @param student The student whose course modules should be displayed
      */
-    private void showModulesDialog(Student student) {
+    private void showModulesDialog(Student student)
+    {
         JDialog dialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this),
                 "Module Management - " + student.getFirstName() + " " + student.getLastName(), true);
 
@@ -285,20 +286,23 @@ public class StudentListPanel extends ChiUniPanel
         JList<ModuleDisplay> assignedList = new JList<>(assignedModel);
         assignedList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-        try {
+        try
+        {
             // Get student's course code
             String courseCode = Course.getCourseCodeFromTitle(student.getCourse());
 
             // Get all available modules for the course
             List<Module> courseModules = Module.getModulesForCourse(courseCode);
             Map<String, Module> moduleMap = new HashMap<>();
-            for (Module module : courseModules) {
+            for (Module module : courseModules)
+            {
                 moduleMap.put(module.getCode(), module);
             }
 
             // Load current assignments
             List<String> assignedModuleIds = StudentModuleAssignment.getStudentAssignments(student.getId());
-            if (assignedModuleIds.isEmpty()) {
+            if (assignedModuleIds.isEmpty())
+            {
                 // Generate initial assignments if none exist
                 StudentModuleAssignment.generateInitialAssignments(student.getId(), courseCode);
                 assignedModuleIds = StudentModuleAssignment.getStudentAssignments(student.getId());
@@ -306,11 +310,15 @@ public class StudentListPanel extends ChiUniPanel
 
             // Add modules to appropriate lists
             List<String> finalAssignedModuleIds = assignedModuleIds;
-            moduleMap.forEach((code, module) -> {
+            moduleMap.forEach((code, module) ->
+            {
                 ModuleDisplay display = new ModuleDisplay(module);
-                if (finalAssignedModuleIds.contains(code)) {
+                if (finalAssignedModuleIds.contains(code))
+                {
                     assignedModel.addElement(display);
-                } else {
+                }
+                else
+                {
                     availableModel.addElement(display);
                 }
             });
@@ -318,7 +326,9 @@ public class StudentListPanel extends ChiUniPanel
             // Update count label
             countLabel.setText(String.format("Selected Modules: %d", assignedModel.getSize()));
 
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             handleError("Error loading modules", e);
         }
 
@@ -334,9 +344,11 @@ public class StudentListPanel extends ChiUniPanel
         ChiUniButton assignButton = new ChiUniButton(">>");
         ChiUniButton unassignButton = new ChiUniButton("<<");
 
-        assignButton.addActionListener(e -> {
+        assignButton.addActionListener(e ->
+        {
             ModuleDisplay selected = availableList.getSelectedValue();
-            if (selected != null) {
+            if (selected != null)
+            {
                 assignedModel.addElement(selected);
                 availableModel.removeElement(selected);
                 updateAssignments(student.getId(), assignedModel);
@@ -344,14 +356,18 @@ public class StudentListPanel extends ChiUniPanel
             }
         });
 
-        unassignButton.addActionListener(e -> {
+        unassignButton.addActionListener(e ->
+        {
             ModuleDisplay selected = assignedList.getSelectedValue();
-            if (selected != null)  {
+            if (selected != null)
+            {
                 availableModel.addElement(selected);
                 assignedModel.removeElement(selected);
                 updateAssignments(student.getId(), assignedModel);
                 countLabel.setText(String.format("Selected Modules: %d", assignedModel.getSize()));
-            } else if (selected != null) {
+            }
+            else if (selected != null)
+            {
                 JOptionPane.showMessageDialog(dialog,
                         "Cannot remove core module: " + selected.getModule().getName(),
                         "Core Module",
@@ -395,10 +411,12 @@ public class StudentListPanel extends ChiUniPanel
     }
 
     // Helper class for displaying modules in JList
-    private static class ModuleDisplay {
+    private static class ModuleDisplay
+    {
         private final Module module;
 
-        public ModuleDisplay(Object module) {
+        public ModuleDisplay(Object module)
+        {
             this.module = (Module) module;
         }
 
@@ -408,24 +426,31 @@ public class StudentListPanel extends ChiUniPanel
 //            return String.format("%s - %s%s", module.getCode(), module.getName(), coreIndicator);
 //        }
 
-        public Module getModule() {
+        public Module getModule()
+        {
             return module;
         }
 
-        public String getModuleCode() {
+        public String getModuleCode()
+        {
             return module.getCode();
         }
     }
 
     // Helper method to update assignments in storage
-    private void updateAssignments(int studentId, DefaultListModel<ModuleDisplay> assignedModel) {
-        try {
+    private void updateAssignments(int studentId, DefaultListModel<ModuleDisplay> assignedModel)
+    {
+        try
+        {
             List<String> moduleIds = new ArrayList<>();
-            for (int i = 0; i < assignedModel.size(); i++) {
+            for (int i = 0; i < assignedModel.size(); i++)
+            {
                 moduleIds.add(assignedModel.getElementAt(i).getModuleCode());
             }
             StudentModuleAssignment.updateStudentAssignments(studentId, moduleIds);
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             handleError("Error saving module assignments", e);
         }
     }

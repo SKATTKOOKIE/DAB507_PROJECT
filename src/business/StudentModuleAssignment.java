@@ -13,35 +13,90 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class StudentModuleAssignment {
+/**
+ * Manages the assignment of modules to students.
+ * This class handles the persistence and retrieval of module assignments,
+ * including functionality to generate initial assignments for new students
+ * and update existing assignments.
+ */
+public class StudentModuleAssignment
+{
+    /**
+     * The file path where student module assignments are stored
+     */
     private static final String ASSIGNMENTS_FILE = "data/student_module_assignments.json";
+
+    /**
+     * The unique identifier of the student
+     */
     private final int studentId;
+
+    /**
+     * List of module IDs assigned to the student
+     */
     private final List<String> moduleIds;
+
+    /**
+     * Timestamp of when the assignment was last updated
+     */
     private final String lastUpdated;
 
-    public StudentModuleAssignment(int studentId, List<String> moduleIds) {
+    /**
+     * Constructs a new StudentModuleAssignment instance.
+     *
+     * @param studentId The unique identifier of the student
+     * @param moduleIds List of module IDs to be assigned to the student.
+     *                  If null, an empty list will be created
+     */
+    public StudentModuleAssignment(int studentId, List<String> moduleIds)
+    {
         this.studentId = studentId;
         this.moduleIds = moduleIds != null ? moduleIds : new ArrayList<>();
         this.lastUpdated = new Date().toString();
     }
 
-    // Getters
-    public int getStudentId() {
+    /**
+     * Gets the student's ID.
+     *
+     * @return The unique identifier of the student
+     */
+    public int getStudentId()
+    {
         return studentId;
     }
 
-    public List<String> getModuleIds() {
+    /**
+     * Gets the list of module IDs assigned to the student.
+     *
+     * @return List of assigned module IDs
+     */
+    public List<String> getModuleIds()
+    {
         return moduleIds;
     }
 
-    public String getLastUpdated() {
+    /**
+     * Gets the timestamp of when the assignment was last updated.
+     *
+     * @return String representation of the last update timestamp
+     */
+    public String getLastUpdated()
+    {
         return lastUpdated;
     }
 
-    // Load all assignments from JSON file
-    public static Map<Integer, StudentModuleAssignment> loadAssignments() throws IOException {
+    /**
+     * Loads all student module assignments from the JSON storage file.
+     * Creates a new empty map if the file doesn't exist.
+     *
+     * @return Map of student IDs to their corresponding module assignments
+     * @throws IOException If there is an error reading from the file
+     */
+    public static Map<Integer, StudentModuleAssignment> loadAssignments() throws IOException
+    {
         File file = new File(ASSIGNMENTS_FILE);
-        if (!file.exists()) {
+        if (!file.exists())
+        {
             return new HashMap<>();
         }
 
@@ -53,8 +108,10 @@ public class StudentModuleAssignment {
         Map<Integer, StudentModuleAssignment> assignments = new HashMap<>();
         Gson gson = new GsonBuilder().create();
 
-        if (assignmentsArray != null) {
-            assignmentsArray.forEach(element -> {
+        if (assignmentsArray != null)
+        {
+            assignmentsArray.forEach(element ->
+            {
                 StudentModuleAssignment assignment = gson.fromJson(element, StudentModuleAssignment.class);
                 assignments.put(assignment.getStudentId(), assignment);
             });
@@ -63,8 +120,14 @@ public class StudentModuleAssignment {
         return assignments;
     }
 
-    // Save all assignments to JSON file
-    public static void saveAssignments(Map<Integer, StudentModuleAssignment> assignments) throws IOException {
+    /**
+     * Saves all student module assignments to the JSON storage file.
+     *
+     * @param assignments Map of student IDs to their corresponding module assignments
+     * @throws IOException If there is an error writing to the file
+     */
+    public static void saveAssignments(Map<Integer, StudentModuleAssignment> assignments) throws IOException
+    {
         JsonObject root = new JsonObject();
         JsonArray assignmentsArray = new JsonArray();
 
@@ -74,20 +137,30 @@ public class StudentModuleAssignment {
 
         root.add("assignments", assignmentsArray);
 
-        try (FileWriter writer = new FileWriter(ASSIGNMENTS_FILE)) {
+        try (FileWriter writer = new FileWriter(ASSIGNMENTS_FILE))
+        {
             gson.toJson(root, writer);
         }
     }
 
-    // Generate initial assignments for all students
-    public static void generateInitialAssignments() throws IOException {
+    /**
+     * Generates initial module assignments for all students in the system.
+     * Students are assigned all modules associated with their course.
+     *
+     * @throws IOException If there is an error accessing the storage file
+     */
+    public static void generateInitialAssignments() throws IOException
+    {
         List<Student> allStudents = Student.getByCourse("");
         Map<Integer, StudentModuleAssignment> assignments = new HashMap<>();
 
-        for (Student student : allStudents) {
-            try {
+        for (Student student : allStudents)
+        {
+            try
+            {
                 String courseCode = Course.getCourseCodeFromTitle(student.getCourse());
-                if (courseCode != null && !courseCode.isEmpty()) {
+                if (courseCode != null && !courseCode.isEmpty())
+                {
                     // Get all modules for the student's course
                     List<Module> courseModules = Module.getModulesForCourse(courseCode);
 
@@ -101,7 +174,9 @@ public class StudentModuleAssignment {
                             student.getId(), moduleIds);
                     assignments.put(student.getId(), assignment);
                 }
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 System.err.println("Error generating assignments for student " + student.getId() + ": " + e.getMessage());
             }
         }
@@ -110,11 +185,20 @@ public class StudentModuleAssignment {
         saveAssignments(assignments);
     }
 
-    // Generate initial assignments for a specific student
-    public static void generateInitialAssignments(int studentId, String courseCode) throws IOException {
+    /**
+     * Generates initial module assignments for a specific student.
+     * The student is assigned all modules associated with their course.
+     *
+     * @param studentId  The unique identifier of the student
+     * @param courseCode The course code for which to generate module assignments
+     * @throws IOException If there is an error accessing the storage file or generating assignments
+     */
+    public static void generateInitialAssignments(int studentId, String courseCode) throws IOException
+    {
         Map<Integer, StudentModuleAssignment> assignments = loadAssignments();
 
-        try {
+        try
+        {
             // Get all modules for the student's course
             List<Module> courseModules = Module.getModulesForCourse(courseCode);
 
@@ -129,22 +213,38 @@ public class StudentModuleAssignment {
 
             // Save all assignments
             saveAssignments(assignments);
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             System.err.println("Error generating assignments for student " + studentId + ": " + e.getMessage());
             throw new IOException(e);
         }
     }
 
-    // Update assignments for a specific student
-    public static void updateStudentAssignments(int studentId, List<String> moduleIds) throws IOException {
+    /**
+     * Updates the module assignments for a specific student.
+     *
+     * @param studentId The unique identifier of the student
+     * @param moduleIds List of new module IDs to be assigned
+     * @throws IOException If there is an error accessing the storage file
+     */
+    public static void updateStudentAssignments(int studentId, List<String> moduleIds) throws IOException
+    {
         Map<Integer, StudentModuleAssignment> assignments = loadAssignments();
         StudentModuleAssignment updated = new StudentModuleAssignment(studentId, moduleIds);
         assignments.put(studentId, updated);
         saveAssignments(assignments);
     }
 
-    // Get assignments for a specific student
-    public static List<String> getStudentAssignments(int studentId) throws IOException {
+    /**
+     * Retrieves the current module assignments for a specific student.
+     *
+     * @param studentId The unique identifier of the student
+     * @return List of assigned module IDs. Returns an empty list if no assignments exist
+     * @throws IOException If there is an error accessing the storage file
+     */
+    public static List<String> getStudentAssignments(int studentId) throws IOException
+    {
         Map<Integer, StudentModuleAssignment> assignments = loadAssignments();
         StudentModuleAssignment assignment = assignments.get(studentId);
         return assignment != null ? assignment.getModuleIds() : new ArrayList<>();

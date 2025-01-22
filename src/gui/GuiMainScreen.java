@@ -8,27 +8,78 @@ import javax.swing.*;
 import business.StaffModuleAssignment;
 import business.StudentModuleAssignment;
 
+/**
+ * Main graphical user interface for the University Management System.
+ * This class manages the primary window of the application, including
+ * the login screen, navigation, and various content panels for departments,
+ * students, and staff management.
+ */
 public class GuiMainScreen
 {
+    /**
+     * Main application window
+     */
     private ChiUniFrame mainFrame;
+
+    /**
+     * Text area for displaying output messages
+     */
     private ChiUniTextArea outputArea;
+
+    /**
+     * Panel for displaying and managing departments
+     */
     private DepartmentPanel departmentPanel;
+
+    /**
+     * Welcome screen panel
+     */
     private ChiUniPanel welcomePanel;
+
+    /**
+     * Main content panel that holds all other panels
+     */
     private ChiUniPanel contentPanel;
+
+    /**
+     * Login screen panel
+     */
     private ChiUniPanel loginPanel;
+
+    /**
+     * Panel for displaying and managing student lists
+     */
     private StudentListPanel studentListPanel;
+
+    /**
+     * Panel for displaying and managing staff lists
+     */
     private StaffListPanel staffListPanel;
 
-    // Admin credentials (in practice, these should be stored securely)
+    /**
+     * Administrator username for login
+     */
     private static final String ADMIN_USERNAME = "admin";
+
+    /**
+     * Administrator password for login
+     */
     private static final String ADMIN_PASSWORD = "password";
 
+    /**
+     * Constructs a new GuiMainScreen and initializes all components.
+     * Sets up the main frame, creates all panels, and initializes data.
+     */
     public GuiMainScreen()
     {
         initializeGUI();
         initializeData();
     }
 
+    /**
+     * Initializes all GUI components and layouts.
+     * Sets up the main frame, banner, content panels, and navigation buttons.
+     */
     private void initializeGUI()
     {
         mainFrame = new ChiUniFrame("University Management System");
@@ -56,7 +107,6 @@ public class GuiMainScreen
 
         // Create departments panel
         departmentPanel = new DepartmentPanel();
-        // Add back button to department panel
         ChiUniButton backButton = new ChiUniButton("Back to Welcome");
         backButton.addActionListener(e -> showWelcomePanel());
         departmentPanel.add(backButton, BorderLayout.SOUTH);
@@ -71,14 +121,16 @@ public class GuiMainScreen
         contentPanel.add(studentListPanel, "STUDENTS");
         contentPanel.add(staffListPanel, "STAFF");
 
-        // Add content panel to frame in the CENTER position
         mainFrame.addComponent(contentPanel, BorderLayout.CENTER);
         mainFrame.setMinimumSize(new Dimension(1000, 700));
 
-        // Show login panel by default
         showLoginPanel();
     }
 
+    /**
+     * Initializes application data in a background thread.
+     * Checks for existing assignments files and generates initial assignments if needed.
+     */
     private void initializeData()
     {
         SwingWorker<Void, Void> worker = new SwingWorker<>()
@@ -108,6 +160,11 @@ public class GuiMainScreen
         worker.execute();
     }
 
+    /**
+     * Creates and configures the login panel with username and password fields.
+     *
+     * @return Configured login panel
+     */
     private ChiUniPanel createLoginPanel()
     {
         ChiUniPanel panel = new ChiUniPanel();
@@ -126,7 +183,7 @@ public class GuiMainScreen
         gbc.insets = new Insets(0, 0, 20, 0);
         panel.add(titleLabel, gbc);
 
-        // Username label and field
+        // Username components
         JLabel usernameLabel = new JLabel("Username:");
         usernameLabel.setFont(new Font("Arial", Font.PLAIN, 14));
         gbc.gridx = 0;
@@ -140,7 +197,7 @@ public class GuiMainScreen
         gbc.gridy = 1;
         panel.add(usernameField, gbc);
 
-        // Password label and field
+        // Password components
         JLabel passwordLabel = new JLabel("Password:");
         passwordLabel.setFont(new Font("Arial", Font.PLAIN, 14));
         gbc.gridx = 0;
@@ -161,7 +218,7 @@ public class GuiMainScreen
         gbc.insets = new Insets(20, 5, 5, 5);
         panel.add(loginButton, gbc);
 
-        // Add action listener to login button
+        // Add action listeners
         loginButton.addActionListener(e ->
         {
             String username = usernameField.getText();
@@ -181,23 +238,37 @@ public class GuiMainScreen
             }
         });
 
-        // Add action listener to password field for Enter key
         passwordField.addActionListener(e -> loginButton.doClick());
 
         return panel;
     }
 
+    /**
+     * Validates the provided login credentials.
+     *
+     * @param username The entered username
+     * @param password The entered password
+     * @return true if credentials are valid, false otherwise
+     */
     private boolean validateCredentials(String username, String password)
     {
         return ADMIN_USERNAME.equals(username) && ADMIN_PASSWORD.equals(password);
     }
 
+    /**
+     * Shows the login panel in the main content area.
+     */
     private void showLoginPanel()
     {
         CardLayout cl = (CardLayout) contentPanel.getLayout();
         cl.show(contentPanel, "LOGIN");
     }
 
+    /**
+     * Creates and configures the welcome panel with navigation buttons.
+     *
+     * @return Configured welcome panel
+     */
     private ChiUniPanel createWelcomePanel()
     {
         ChiUniPanel panel = new ChiUniPanel();
@@ -212,10 +283,14 @@ public class GuiMainScreen
         gbc.insets = new Insets(0, 0, 30, 0);
         panel.add(welcomeLabel, gbc);
 
-        // Departments button
+        // Navigation buttons
         ChiUniButton departmentsButton = new ChiUniButton("View Departments");
         departmentsButton.setFont(new Font("Arial", Font.PLAIN, 16));
         departmentsButton.addActionListener(e -> showDepartmentsPanel());
+        departmentsButton.setPreferredSize(new Dimension(200, 40));
+        gbc.gridy = 1;
+        gbc.insets = new Insets(0, 0, 15, 0);
+        panel.add(departmentsButton, gbc);
 
         ChiUniButton studentsButton = new ChiUniButton("View Students");
         studentsButton.setFont(new Font("Arial", Font.PLAIN, 16));
@@ -232,33 +307,41 @@ public class GuiMainScreen
         gbc.insets = new Insets(0, 0, 15, 0);
         panel.add(staffButton, gbc);
 
-        // Style the button
-        departmentsButton.setPreferredSize(new Dimension(200, 40));
-        gbc.gridy = 1;
-        gbc.insets = new Insets(0, 0, 15, 0);
-        panel.add(departmentsButton, gbc);
-
         return panel;
     }
 
+    /**
+     * Shows the welcome panel in the main content area.
+     */
     private void showWelcomePanel()
     {
         CardLayout cl = (CardLayout) contentPanel.getLayout();
         cl.show(contentPanel, "WELCOME");
     }
 
+    /**
+     * Shows the departments panel in the main content area.
+     */
     private void showDepartmentsPanel()
     {
         CardLayout cl = (CardLayout) contentPanel.getLayout();
         cl.show(contentPanel, "DEPARTMENTS");
     }
 
+    /**
+     * Shows the staff panel in the main content area.
+     */
     private void showStaffPanel()
     {
         CardLayout cl = (CardLayout) contentPanel.getLayout();
         cl.show(contentPanel, "STAFF");
     }
 
+    /**
+     * Creates and configures the banner panel with university title.
+     *
+     * @return Configured banner panel
+     */
     private ChiUniPanel createBannerPanel()
     {
         ChiUniPanel panel = new ChiUniPanel();
@@ -277,6 +360,12 @@ public class GuiMainScreen
         return panel;
     }
 
+    /**
+     * Handles and displays error messages to the user.
+     *
+     * @param message The error message to display
+     * @param ex      The exception that occurred
+     */
     private void handleError(String message, Exception ex)
     {
         String errorMessage = message + ": " + ex.getMessage();
@@ -287,12 +376,18 @@ public class GuiMainScreen
                 JOptionPane.ERROR_MESSAGE);
     }
 
+    /**
+     * Shows the students panel in the main content area.
+     */
     private void showStudentsPanel()
     {
         CardLayout cl = (CardLayout) contentPanel.getLayout();
         cl.show(contentPanel, "STUDENTS");
     }
 
+    /**
+     * Makes the main application window visible.
+     */
     public void show()
     {
         mainFrame.setVisible(true);

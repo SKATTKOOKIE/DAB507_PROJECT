@@ -79,7 +79,7 @@ public class DepartmentDetailPanel extends ChiUniPanel
         panel.add(titleLabel, BorderLayout.CENTER);
 
         // Add back button
-        ChiUniButton backButton = new ChiUniButton("← Back to Departments");
+        ChiUniButton backButton = new ChiUniButton("Back to Departments");
         backButton.addActionListener(e -> parentPanel.showDepartmentsList());
         panel.add(backButton, BorderLayout.WEST);
 
@@ -174,14 +174,17 @@ public class DepartmentDetailPanel extends ChiUniPanel
         return button;
     }
 
-    private void showModulesForCourse(Course course) {
+    private void showModulesForCourse(Course course)
+    {
         modulePanel.removeAll();
 
-        try {
+        try
+        {
             // Get modules specifically for this course
             List<Module> modules = new ArrayList<>();
             String courseCode = course.getCourseCode();
-            if (course.hasValidCourseCode()) {
+            if (course.hasValidCourseCode())
+            {
                 modules = Module.getModulesForCourse(courseCode);
             }
 
@@ -198,7 +201,7 @@ public class DepartmentDetailPanel extends ChiUniPanel
             modulePanel.add(courseTitle, gbc);
 
             // Add back to courses button
-            ChiUniButton backButton = new ChiUniButton("← Back to Courses");
+            ChiUniButton backButton = new ChiUniButton("Back to Courses");
             backButton.addActionListener(e -> cardLayout.show(contentPanel, "COURSES"));
             gbc.insets = new Insets(5, 20, 20, 20);
             modulePanel.add(backButton, gbc);
@@ -207,12 +210,14 @@ public class DepartmentDetailPanel extends ChiUniPanel
             gbc.insets = new Insets(5, 20, 5, 20);
 
             // Add modules list
-            if (!modules.isEmpty()) {
+            if (!modules.isEmpty())
+            {
                 JLabel modulesHeader = new JLabel("Course Modules:", SwingConstants.LEFT);
                 modulesHeader.setFont(new Font("Arial", Font.BOLD, 16));
                 modulePanel.add(modulesHeader, gbc);
 
-                for (Module module : modules) {
+                for (Module module : modules)
+                {
                     // Create panel for module info
                     JPanel moduleInfoPanel = new JPanel(new BorderLayout(10, 5));
                     moduleInfoPanel.setBackground(Color.WHITE);
@@ -242,7 +247,9 @@ public class DepartmentDetailPanel extends ChiUniPanel
 
                     modulePanel.add(moduleInfoPanel, gbc);
                 }
-            } else {
+            }
+            else
+            {
                 JLabel noModulesLabel = new JLabel("No modules found for this course");
                 noModulesLabel.setFont(new Font("Arial", Font.PLAIN, 14));
                 modulePanel.add(noModulesLabel, gbc);
@@ -259,7 +266,9 @@ public class DepartmentDetailPanel extends ChiUniPanel
             modulePanel.revalidate();
             modulePanel.repaint();
 
-        } catch (IOException ex) {
+        }
+        catch (IOException ex)
+        {
             JOptionPane.showMessageDialog(this,
                     "Error loading modules: " + ex.getMessage(),
                     "Error",
