@@ -22,15 +22,30 @@ import business.Course;
  */
 public class StaffListPanel extends ChiUniPanel
 {
-    private final ChiUniPanel staffContainer;
+    private ChiUniPanel staffContainer;
     private List<Staff> allStaff;
     private JComboBox<DepartmentId> departmentFilter;
+    private boolean dataLoaded = false;
+
+    @Override
+    public void addNotify()
+    {
+        super.addNotify();
+        if (!dataLoaded)
+        {
+            loadStaffData();
+        }
+    }
 
     public StaffListPanel()
     {
         setLayout(new BorderLayout(10, 10));
+        initializeUI(); // Initialize UI components without loading data
+    }
 
-        // Create header panel with ChiUniPanel
+    private void initializeUI()
+    {
+        // Create header panel
         ChiUniPanel headerPanel = new ChiUniPanel();
         headerPanel.setLayout(new BorderLayout());
 
@@ -40,7 +55,7 @@ public class StaffListPanel extends ChiUniPanel
         titleLabel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
         headerPanel.add(titleLabel, BorderLayout.CENTER);
 
-        // Filter panel using ChiUniPanel
+        // Filter panel
         ChiUniPanel filterPanel = new ChiUniPanel();
         filterPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 
@@ -48,43 +63,57 @@ public class StaffListPanel extends ChiUniPanel
         filterLabel.setFont(new Font("Arial", Font.PLAIN, 14));
         filterPanel.add(filterLabel);
 
-        // Create department filter dropdown using DepartmentId enum
+        // Create department filter dropdown
         DepartmentId[] departments = DepartmentId.values();
         departmentFilter = new JComboBox<>(departments);
-        departmentFilter.setFont(new Font("Arial", Font.PLAIN, 14));
-        departmentFilter.setRenderer(new DefaultListCellRenderer()
+        departmentFilter.setSelectedItem(DepartmentId.UNKNOWN);
+        departmentFilter.addActionListener(e ->
         {
-            @Override
-            public Component getListCellRendererComponent(JList<?> list, Object value,
-                                                          int index, boolean isSelected, boolean cellHasFocus)
+            if (dataLoaded)
             {
-                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-                if (value instanceof DepartmentId)
-                {
-                    setText(((DepartmentId) value).getDepartmentName());
-                }
-                setFont(new Font("Arial", Font.PLAIN, 14));
-                return this;
+                filterStaff();
             }
         });
-        departmentFilter.setSelectedItem(DepartmentId.UNKNOWN);
-        departmentFilter.addActionListener(e -> filterStaff());
         filterPanel.add(departmentFilter);
 
         headerPanel.add(filterPanel, BorderLayout.SOUTH);
         add(headerPanel, BorderLayout.NORTH);
 
-        // Create scrollable container for staff cards using ChiUniPanel
+        // Create scrollable container for staff cards
         staffContainer = new ChiUniPanel();
         staffContainer.setLayout(new GridBagLayout());
-        staffContainer.setPadding(5); // Smaller padding for grid cells
-
         JScrollPane scrollPane = new JScrollPane(staffContainer);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
-        scrollPane.getVerticalScrollBar().setUnitIncrement(16); // Smooth scrolling
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
         add(scrollPane, BorderLayout.CENTER);
+    }
 
-        loadStaff();
+    private void loadStaffData()
+    {
+        SwingWorker<List<Staff>, Void> worker = new SwingWorker<>()
+        {
+            @Override
+            protected List<Staff> doInBackground() throws Exception
+            {
+                return Staff.getByDepartment("");
+            }
+
+            @Override
+            protected void done()
+            {
+                try
+                {
+                    allStaff = get();
+                    dataLoaded = true;
+                    filterStaff(); // Initial display
+                }
+                catch (Exception e)
+                {
+                    handleError("Error loading staff", e);
+                }
+            }
+        };
+        worker.execute();
     }
 
     private void loadStaff()

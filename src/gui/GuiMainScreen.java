@@ -56,6 +56,8 @@ public class GuiMainScreen
      */
     private StaffListPanel staffListPanel;
 
+    private JDialog loadingDialog;
+
     /**
      * Administrator username for login
      */
@@ -73,7 +75,10 @@ public class GuiMainScreen
     public GuiMainScreen()
     {
         initializeGUI();
-        initializeData();
+        // Show GUI immediately
+        show();
+        // Then initialize data
+//        initializeData();
     }
 
     /**
@@ -131,28 +136,20 @@ public class GuiMainScreen
      * Initializes application data in a background thread.
      * Checks for existing assignments files and generates initial assignments if needed.
      */
-    private void initializeData()
-    {
-        SwingWorker<Void, Void> worker = new SwingWorker<>()
-        {
+    private void initializeData() {
+        // Only check/generate assignments - no need to show loading dialog
+        SwingWorker<Void, Void> worker = new SwingWorker<>() {
             @Override
-            protected Void doInBackground() throws Exception
-            {
-                try
-                {
+            protected Void doInBackground() throws Exception {
+                try {
                     File assignmentsFile = new File("data/staff_module_assignments.json");
                     File assignmentsFile2 = new File("data/student_module_assignments.json");
-                    if (!assignmentsFile.exists() || !assignmentsFile2.exists())
-                    {
-                        System.out.println("Generating initial staff module assignments...");
+                    if (!assignmentsFile.exists() || !assignmentsFile2.exists()) {
                         StaffModuleAssignment.generateInitialAssignments();
                         StudentModuleAssignment.generateInitialAssignments();
-                        System.out.println("Initial assignments generated successfully.");
                     }
-                }
-                catch (IOException e)
-                {
-                    System.err.println("Error checking/generating staff assignments: " + e.getMessage());
+                } catch (IOException e) {
+                    System.err.println("Error checking/generating assignments: " + e.getMessage());
                 }
                 return null;
             }
@@ -160,7 +157,9 @@ public class GuiMainScreen
         worker.execute();
     }
 
-    /**
+
+
+/**
      * Creates and configures the login panel with username and password fields.
      *
      * @return Configured login panel
@@ -264,6 +263,33 @@ public class GuiMainScreen
         cl.show(contentPanel, "LOGIN");
     }
 
+    private void showLoadingDialog()
+    {
+        loadingDialog = new JDialog(mainFrame, "Loading", false);
+        loadingDialog.setUndecorated(true);
+
+        JPanel panel = new JPanel(new BorderLayout(10, 10));
+        panel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(200, 200, 200)),
+                BorderFactory.createEmptyBorder(20, 30, 20, 30)
+        ));
+
+        JLabel loadingLabel = new JLabel("Initializing data...");
+        loadingLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        panel.add(loadingLabel, BorderLayout.CENTER);
+
+        // Add a simple progress indicator
+        JProgressBar progressBar = new JProgressBar();
+        progressBar.setIndeterminate(true);
+        panel.add(progressBar, BorderLayout.SOUTH);
+
+        loadingDialog.add(panel);
+        loadingDialog.pack();
+        loadingDialog.setLocationRelativeTo(mainFrame);
+        loadingDialog.setVisible(true);
+    }
+
+
     /**
      * Creates and configures the welcome panel with navigation buttons.
      *
@@ -315,6 +341,7 @@ public class GuiMainScreen
      */
     private void showWelcomePanel()
     {
+        initializeData();
         CardLayout cl = (CardLayout) contentPanel.getLayout();
         cl.show(contentPanel, "WELCOME");
     }
