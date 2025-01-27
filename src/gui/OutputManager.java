@@ -4,7 +4,7 @@ public class OutputManager
 {
     private static ChiUniTextArea textArea;
 
-    public static void initialize(ChiUniTextArea area)
+    public static void initialise(ChiUniTextArea area)
     {
         textArea = area;
     }

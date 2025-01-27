@@ -7,10 +7,10 @@ public class ChiUniTextArea extends JTextArea
 {
     public ChiUniTextArea()
     {
-        initializeTextArea();
+        initialiseTextArea();
     }
 
-    private void initializeTextArea()
+    private void initialiseTextArea()
     {
         // Set default properties
         setEditable(false);

@@ -3,9 +3,13 @@ package gui;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
+import business.StudentModuleAssignment;
 import users.Student;
 import users.StudentType;
 import business.Module;
@@ -21,7 +25,7 @@ public class StudentListPanel extends ChiUniPanel
     /**
      * Container panel for the student cards grid
      */
-    private final ChiUniPanel studentsContainer;
+    private ChiUniPanel studentsContainer;
 
     /**
      * Dialog for displaying module information
@@ -38,15 +42,22 @@ public class StudentListPanel extends ChiUniPanel
      */
     private JComboBox<StudentType> typeFilter;
 
+    private boolean dataLoaded = false;
+
     /**
      * Constructs a new StudentListPanel.
-     * Initializes the UI components including the header, filter dropdown,
+     * initialises the UI components including the header, filter dropdown,
      * and scrollable container for student cards.
      */
+
     public StudentListPanel()
     {
         setLayout(new BorderLayout(10, 10));
-
+        initialiseUI(); // initialise UI components without loading data
+    }
+    
+    private void initialiseUI()
+    {
         // Create header panel
         JPanel headerPanel = new JPanel(new BorderLayout());
 
@@ -63,22 +74,15 @@ public class StudentListPanel extends ChiUniPanel
 
         // Create and populate type filter dropdown
         typeFilter = new JComboBox<>(StudentType.values());
-        typeFilter.insertItemAt(null, 0); // Add "All" option
-        typeFilter.setSelectedIndex(0); // Select "All" by default
-        typeFilter.setRenderer(new DefaultListCellRenderer()
+        typeFilter.insertItemAt(null, 0);
+        typeFilter.setSelectedIndex(0);
+        typeFilter.addActionListener(e ->
         {
-            @Override
-            public Component getListCellRendererComponent(JList<?> list, Object value,
-                                                          int index, boolean isSelected, boolean cellHasFocus)
+            if (dataLoaded)
             {
-                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-                setText(value == null ? "All" : value.toString());
-                return this;
+                filterStudents();
             }
         });
-
-        // Add filter change listener
-        typeFilter.addActionListener(e -> filterStudents());
         filterPanel.add(typeFilter);
 
         headerPanel.add(filterPanel, BorderLayout.SOUTH);
@@ -90,8 +94,44 @@ public class StudentListPanel extends ChiUniPanel
         JScrollPane scrollPane = new JScrollPane(studentsContainer);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
         add(scrollPane, BorderLayout.CENTER);
+    }
 
-        loadStudents();
+    @Override
+    public void addNotify()
+    {
+        super.addNotify();
+        if (!dataLoaded)
+        {
+            loadStudentData();
+        }
+    }
+
+    private void loadStudentData()
+    {
+        SwingWorker<List<Student>, Void> worker = new SwingWorker<>()
+        {
+            @Override
+            protected List<Student> doInBackground() throws Exception
+            {
+                return Student.getByCourse("");
+            }
+
+            @Override
+            protected void done()
+            {
+                try
+                {
+                    allStudents = get();
+                    dataLoaded = true;
+                    filterStudents(); // Initial display
+                }
+                catch (Exception e)
+                {
+                    handleError("Error loading students", e);
+                }
+            }
+        };
+        worker.execute();
     }
 
     /**
@@ -244,42 +284,211 @@ public class StudentListPanel extends ChiUniPanel
      */
     private void showModulesDialog(Student student)
     {
-        moduleDialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this),
-                "Modules for " + student.getFirstName() + " " + student.getLastName(), true);
-        moduleDialog.setLayout(new BorderLayout());
+        JDialog dialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this),
+                "Module Management - " + student.getFirstName() + " " + student.getLastName(), true);
 
-        JPanel modulesPanel = new JPanel();
-        modulesPanel.setLayout(new BoxLayout(modulesPanel, BoxLayout.Y_AXIS));
+        ChiUniPanel contentPanel = new ChiUniPanel();
+        contentPanel.setLayout(new BorderLayout(10, 10));
+        contentPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        // Header with module count
+        ChiUniPanel headerPanel = new ChiUniPanel();
+        headerPanel.setLayout(new BorderLayout());
+        JLabel countLabel = new JLabel("Selected Modules: 0");
+        countLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        headerPanel.add(countLabel, BorderLayout.WEST);
+
+        contentPanel.add(headerPanel, BorderLayout.NORTH);
+
+        // Create split pane for available and assigned modules
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+        splitPane.setDividerLocation(250);
+
+        // Available modules panel
+        ChiUniPanel availablePanel = new ChiUniPanel();
+        availablePanel.setLayout(new BorderLayout());
+        availablePanel.setBorder(BorderFactory.createTitledBorder("Available Modules"));
+
+        DefaultListModel<ModuleDisplay> availableModel = new DefaultListModel<>();
+        JList<ModuleDisplay> availableList = new JList<>(availableModel);
+        availableList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        // Assigned modules panel
+        ChiUniPanel assignedPanel = new ChiUniPanel();
+        assignedPanel.setLayout(new BorderLayout());
+        assignedPanel.setBorder(BorderFactory.createTitledBorder("Selected Modules"));
+
+        DefaultListModel<ModuleDisplay> assignedModel = new DefaultListModel<>();
+        JList<ModuleDisplay> assignedList = new JList<>(assignedModel);
+        assignedList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         try
         {
+            // Get student's course code
             String courseCode = Course.getCourseCodeFromTitle(student.getCourse());
-            List<Module> modules = Module.getModulesForCourse(courseCode);
 
-            if (modules.isEmpty())
+            // Get all available modules for the course
+            List<Module> courseModules = Module.getModulesForCourse(courseCode);
+            Map<String, Module> moduleMap = new HashMap<>();
+            for (Module module : courseModules)
             {
-                modulesPanel.add(new JLabel("No modules found for this course: " +
-                        student.getCourse() + " (" + courseCode + ")"));
+                moduleMap.put(module.getCode(), module);
             }
-            else
+
+            // Load current assignments
+            List<String> assignedModuleIds = StudentModuleAssignment.getStudentAssignments(student.getId());
+            if (assignedModuleIds.isEmpty())
             {
-                displayModulesInPanel(modules, modulesPanel);
+                // Generate initial assignments if none exist
+                StudentModuleAssignment.generateInitialAssignments(student.getId(), courseCode);
+                assignedModuleIds = StudentModuleAssignment.getStudentAssignments(student.getId());
             }
+
+            // Add modules to appropriate lists
+            List<String> finalAssignedModuleIds = assignedModuleIds;
+            moduleMap.forEach((code, module) ->
+            {
+                ModuleDisplay display = new ModuleDisplay(module);
+                if (finalAssignedModuleIds.contains(code))
+                {
+                    assignedModel.addElement(display);
+                }
+                else
+                {
+                    availableModel.addElement(display);
+                }
+            });
+
+            // Update count label
+            countLabel.setText(String.format("Selected Modules: %d", assignedModel.getSize()));
+
         }
         catch (IOException e)
         {
-            modulesPanel.add(new JLabel("Error loading modules: " + e.getMessage()));
+            handleError("Error loading modules", e);
         }
 
-        JScrollPane scrollPane = new JScrollPane(modulesPanel);
-        scrollPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        moduleDialog.add(scrollPane, BorderLayout.CENTER);
+        // Add lists to scroll panes
+        availablePanel.add(new JScrollPane(availableList), BorderLayout.CENTER);
+        assignedPanel.add(new JScrollPane(assignedList), BorderLayout.CENTER);
 
-        addCloseButtonToDialog();
+        // Add assign/unassign buttons
+        ChiUniPanel buttonPanel = new ChiUniPanel();
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 5, 10, 5));
 
-        moduleDialog.setSize(450, 500);
-        moduleDialog.setLocationRelativeTo(this);
-        moduleDialog.setVisible(true);
+        ChiUniButton assignButton = new ChiUniButton(">>");
+        ChiUniButton unassignButton = new ChiUniButton("<<");
+
+        assignButton.addActionListener(e ->
+        {
+            ModuleDisplay selected = availableList.getSelectedValue();
+            if (selected != null)
+            {
+                assignedModel.addElement(selected);
+                availableModel.removeElement(selected);
+                updateAssignments(student.getId(), assignedModel);
+                countLabel.setText(String.format("Selected Modules: %d", assignedModel.getSize()));
+            }
+        });
+
+        unassignButton.addActionListener(e ->
+        {
+            ModuleDisplay selected = assignedList.getSelectedValue();
+            if (selected != null)
+            {
+                availableModel.addElement(selected);
+                assignedModel.removeElement(selected);
+                updateAssignments(student.getId(), assignedModel);
+                countLabel.setText(String.format("Selected Modules: %d", assignedModel.getSize()));
+            }
+            else if (selected != null)
+            {
+                JOptionPane.showMessageDialog(dialog,
+                        "Cannot remove core module: " + selected.getModule().getName(),
+                        "Core Module",
+                        JOptionPane.WARNING_MESSAGE);
+            }
+        });
+
+        // Add buttons to panel
+        buttonPanel.add(Box.createVerticalGlue());
+        buttonPanel.add(assignButton);
+        buttonPanel.add(Box.createVerticalStrut(5));
+        buttonPanel.add(unassignButton);
+        buttonPanel.add(Box.createVerticalGlue());
+
+        // Add components to split pane
+        splitPane.setLeftComponent(availablePanel);
+        splitPane.setRightComponent(assignedPanel);
+
+        // Add button panel between lists
+        ChiUniPanel centerPanel = new ChiUniPanel();
+        centerPanel.setLayout(new BorderLayout());
+        centerPanel.add(splitPane, BorderLayout.CENTER);
+        centerPanel.add(buttonPanel, BorderLayout.EAST);
+
+        contentPanel.add(centerPanel, BorderLayout.CENTER);
+
+        // Add close button
+        ChiUniButton closeButton = new ChiUniButton("Close");
+        closeButton.addActionListener(e -> dialog.dispose());
+
+        ChiUniPanel bottomPanel = new ChiUniPanel();
+        bottomPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+        bottomPanel.add(closeButton);
+
+        contentPanel.add(bottomPanel, BorderLayout.SOUTH);
+
+        dialog.add(contentPanel);
+        dialog.setSize(800, 500);
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
+    }
+
+    // Helper class for displaying modules in JList
+    private static class ModuleDisplay
+    {
+        private final Module module;
+
+        public ModuleDisplay(Object module)
+        {
+            this.module = (Module) module;
+        }
+
+//        @Override
+//        public String toString() {
+//            String coreIndicator = module.isCore() ? " (Core)" : "";
+//            return String.format("%s - %s%s", module.getCode(), module.getName(), coreIndicator);
+//        }
+
+        public Module getModule()
+        {
+            return module;
+        }
+
+        public String getModuleCode()
+        {
+            return module.getCode();
+        }
+    }
+
+    // Helper method to update assignments in storage
+    private void updateAssignments(int studentId, DefaultListModel<ModuleDisplay> assignedModel)
+    {
+        try
+        {
+            List<String> moduleIds = new ArrayList<>();
+            for (int i = 0; i < assignedModel.size(); i++)
+            {
+                moduleIds.add(assignedModel.getElementAt(i).getModuleCode());
+            }
+            StudentModuleAssignment.updateStudentAssignments(studentId, moduleIds);
+        }
+        catch (IOException e)
+        {
+            handleError("Error saving module assignments", e);
+        }
     }
 
     /**

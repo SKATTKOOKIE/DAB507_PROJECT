@@ -1,0 +1,1342 @@
+{
+  "assignments": [
+    {
+      "staffId": 1,
+      "moduleIds": [
+        "2ce-19",
+        "3b6-AY",
+        "38f-19",
+        "20c-19"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:01 GMT 2025"
+    },
+    {
+      "staffId": 2,
+      "moduleIds": [
+        "98d-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:01 GMT 2025"
+    },
+    {
+      "staffId": 3,
+      "moduleIds": [],
+      "lastUpdated": "Mon Jan 27 11:02:02 GMT 2025"
+    },
+    {
+      "staffId": 4,
+      "moduleIds": [
+        "c45-19",
+        "e22-19",
+        "61d-20",
+        "f92-AY"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:02 GMT 2025"
+    },
+    {
+      "staffId": 5,
+      "moduleIds": [
+        "2cc-18",
+        "141-20",
+        "819-20",
+        "257-20",
+        "a94-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:02 GMT 2025"
+    },
+    {
+      "staffId": 6,
+      "moduleIds": [
+        "9cb-19",
+        "f14-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:02 GMT 2025"
+    },
+    {
+      "staffId": 7,
+      "moduleIds": [],
+      "lastUpdated": "Mon Jan 27 11:02:02 GMT 2025"
+    },
+    {
+      "staffId": 8,
+      "moduleIds": [
+        "c55-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:03 GMT 2025"
+    },
+    {
+      "staffId": 9,
+      "moduleIds": [
+        "e47-20",
+        "7ca-19",
+        "3fc-19",
+        "dd3-20",
+        "e8a-20",
+        "c40-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:03 GMT 2025"
+    },
+    {
+      "staffId": 10,
+      "moduleIds": [
+        "2ce-19",
+        "3b6-AY",
+        "38f-19"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:03 GMT 2025"
+    },
+    {
+      "staffId": 11,
+      "moduleIds": [
+        "a73-19",
+        "a94-20",
+        "ef3-20",
+        "c40-20",
+        "d02-19",
+        "253-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:03 GMT 2025"
+    },
+    {
+      "staffId": 12,
+      "moduleIds": [
+        "d06-20",
+        "4b8-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:03 GMT 2025"
+    },
+    {
+      "staffId": 13,
+      "moduleIds": [
+        "9cb-19",
+        "f14-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:03 GMT 2025"
+    },
+    {
+      "staffId": 14,
+      "moduleIds": [],
+      "lastUpdated": "Mon Jan 27 11:02:03 GMT 2025"
+    },
+    {
+      "staffId": 15,
+      "moduleIds": [
+        "c4b-20",
+        "73e-AY",
+        "089-20",
+        "1b4-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:04 GMT 2025"
+    },
+    {
+      "staffId": 16,
+      "moduleIds": [
+        "2cc-18",
+        "141-20",
+        "819-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:04 GMT 2025"
+    },
+    {
+      "staffId": 17,
+      "moduleIds": [
+        "2ce-19",
+        "3b6-AY",
+        "38f-19",
+        "20c-19",
+        "5a2-20",
+        "d48-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:04 GMT 2025"
+    },
+    {
+      "staffId": 18,
+      "moduleIds": [],
+      "lastUpdated": "Mon Jan 27 11:02:04 GMT 2025"
+    },
+    {
+      "staffId": 19,
+      "moduleIds": [
+        "c4b-20",
+        "73e-AY",
+        "089-20",
+        "1b4-20",
+        "739-AY"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:04 GMT 2025"
+    },
+    {
+      "staffId": 20,
+      "moduleIds": [
+        "2cc-18",
+        "c55-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:04 GMT 2025"
+    },
+    {
+      "staffId": 21,
+      "moduleIds": [
+        "d8e-19",
+        "1dc-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:05 GMT 2025"
+    },
+    {
+      "staffId": 22,
+      "moduleIds": [
+        "c55-20",
+        "9bd-19",
+        "005-20",
+        "6aa-20",
+        "646-19",
+        "e36-18"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:05 GMT 2025"
+    },
+    {
+      "staffId": 23,
+      "moduleIds": [
+        "98d-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:05 GMT 2025"
+    },
+    {
+      "staffId": 24,
+      "moduleIds": [
+        "c55-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:06 GMT 2025"
+    },
+    {
+      "staffId": 25,
+      "moduleIds": [
+        "a73-19",
+        "a94-20",
+        "ef3-20",
+        "c40-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:06 GMT 2025"
+    },
+    {
+      "staffId": 26,
+      "moduleIds": [
+        "c45-19",
+        "e22-19",
+        "61d-20",
+        "f92-AY"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:06 GMT 2025"
+    },
+    {
+      "staffId": 27,
+      "moduleIds": [
+        "c4b-20",
+        "73e-AY",
+        "089-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:06 GMT 2025"
+    },
+    {
+      "staffId": 28,
+      "moduleIds": [
+        "c45-19",
+        "e22-19",
+        "61d-20",
+        "f92-AY"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:06 GMT 2025"
+    },
+    {
+      "staffId": 29,
+      "moduleIds": [
+        "a73-19",
+        "621-19",
+        "20a-AY",
+        "6aa-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:07 GMT 2025"
+    },
+    {
+      "staffId": 30,
+      "moduleIds": [
+        "a73-19",
+        "621-19"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:07 GMT 2025"
+    },
+    {
+      "staffId": 31,
+      "moduleIds": [],
+      "lastUpdated": "Mon Jan 27 11:02:07 GMT 2025"
+    },
+    {
+      "staffId": 32,
+      "moduleIds": [
+        "d06-20",
+        "4b8-20",
+        "f9a-19",
+        "74c-19",
+        "f61-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:07 GMT 2025"
+    },
+    {
+      "staffId": 33,
+      "moduleIds": [],
+      "lastUpdated": "Mon Jan 27 11:02:07 GMT 2025"
+    },
+    {
+      "staffId": 34,
+      "moduleIds": [
+        "d06-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:07 GMT 2025"
+    },
+    {
+      "staffId": 35,
+      "moduleIds": [
+        "98d-20",
+        "aa5-19"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:08 GMT 2025"
+    },
+    {
+      "staffId": 36,
+      "moduleIds": [
+        "2ce-19",
+        "3b6-AY",
+        "38f-19",
+        "20c-19"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:08 GMT 2025"
+    },
+    {
+      "staffId": 37,
+      "moduleIds": [
+        "2cc-18"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:08 GMT 2025"
+    },
+    {
+      "staffId": 38,
+      "moduleIds": [
+        "e47-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:08 GMT 2025"
+    },
+    {
+      "staffId": 39,
+      "moduleIds": [
+        "a73-19",
+        "621-19",
+        "20a-AY"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:08 GMT 2025"
+    },
+    {
+      "staffId": 40,
+      "moduleIds": [
+        "c55-20",
+        "9bd-19",
+        "005-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:09 GMT 2025"
+    },
+    {
+      "staffId": 41,
+      "moduleIds": [
+        "deb-19",
+        "275-20",
+        "d72-19",
+        "e94-20",
+        "945-19",
+        "13d-19"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:09 GMT 2025"
+    },
+    {
+      "staffId": 42,
+      "moduleIds": [
+        "2cc-18",
+        "c55-20",
+        "767-19",
+        "11c-19"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:09 GMT 2025"
+    },
+    {
+      "staffId": 43,
+      "moduleIds": [
+        "e47-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:09 GMT 2025"
+    },
+    {
+      "staffId": 44,
+      "moduleIds": [],
+      "lastUpdated": "Mon Jan 27 11:02:09 GMT 2025"
+    },
+    {
+      "staffId": 45,
+      "moduleIds": [
+        "2ce-19",
+        "3b6-AY",
+        "38f-19",
+        "20c-19"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:09 GMT 2025"
+    },
+    {
+      "staffId": 46,
+      "moduleIds": [
+        "9cb-19"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:10 GMT 2025"
+    },
+    {
+      "staffId": 47,
+      "moduleIds": [
+        "c4b-20",
+        "73e-AY",
+        "089-20",
+        "1b4-20",
+        "739-AY"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:10 GMT 2025"
+    },
+    {
+      "staffId": 48,
+      "moduleIds": [
+        "9cb-19",
+        "f14-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:10 GMT 2025"
+    },
+    {
+      "staffId": 49,
+      "moduleIds": [
+        "d8e-19",
+        "1dc-20",
+        "21b-20",
+        "3af-20",
+        "ad9-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:10 GMT 2025"
+    },
+    {
+      "staffId": 50,
+      "moduleIds": [
+        "e47-20",
+        "7ca-19",
+        "3fc-19",
+        "dd3-20",
+        "e8a-20",
+        "c40-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:10 GMT 2025"
+    },
+    {
+      "staffId": 51,
+      "moduleIds": [
+        "a73-19",
+        "a94-20",
+        "ef3-20",
+        "c40-20",
+        "d02-19"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:10 GMT 2025"
+    },
+    {
+      "staffId": 52,
+      "moduleIds": [
+        "98d-20",
+        "aa5-19",
+        "5f2-18",
+        "8be-19",
+        "dd1-19"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:10 GMT 2025"
+    },
+    {
+      "staffId": 53,
+      "moduleIds": [
+        "98d-20",
+        "aa5-19",
+        "5f2-18"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:11 GMT 2025"
+    },
+    {
+      "staffId": 54,
+      "moduleIds": [
+        "98d-20",
+        "aa5-19",
+        "5f2-18",
+        "8be-19",
+        "dd1-19"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:11 GMT 2025"
+    },
+    {
+      "staffId": 55,
+      "moduleIds": [],
+      "lastUpdated": "Mon Jan 27 11:02:11 GMT 2025"
+    },
+    {
+      "staffId": 56,
+      "moduleIds": [
+        "e47-20",
+        "7ca-19"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:11 GMT 2025"
+    },
+    {
+      "staffId": 57,
+      "moduleIds": [
+        "d06-20",
+        "4b8-20",
+        "f9a-19",
+        "74c-19",
+        "f61-20",
+        "ef3-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:11 GMT 2025"
+    },
+    {
+      "staffId": 58,
+      "moduleIds": [
+        "2cc-18",
+        "141-20",
+        "819-20",
+        "257-20",
+        "a94-20",
+        "c1f-19"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:11 GMT 2025"
+    },
+    {
+      "staffId": 59,
+      "moduleIds": [
+        "98d-20",
+        "aa5-19",
+        "5f2-18"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:12 GMT 2025"
+    },
+    {
+      "staffId": 60,
+      "moduleIds": [
+        "d8e-19"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:12 GMT 2025"
+    },
+    {
+      "staffId": 61,
+      "moduleIds": [],
+      "lastUpdated": "Mon Jan 27 11:02:12 GMT 2025"
+    },
+    {
+      "staffId": 62,
+      "moduleIds": [],
+      "lastUpdated": "Mon Jan 27 11:02:12 GMT 2025"
+    },
+    {
+      "staffId": 63,
+      "moduleIds": [
+        "deb-19",
+        "275-20",
+        "d72-19",
+        "e94-20",
+        "945-19",
+        "13d-19"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:12 GMT 2025"
+    },
+    {
+      "staffId": 64,
+      "moduleIds": [
+        "d8e-19"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:12 GMT 2025"
+    },
+    {
+      "staffId": 65,
+      "moduleIds": [],
+      "lastUpdated": "Mon Jan 27 11:02:12 GMT 2025"
+    },
+    {
+      "staffId": 66,
+      "moduleIds": [
+        "a73-19",
+        "621-19",
+        "20a-AY",
+        "6aa-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:13 GMT 2025"
+    },
+    {
+      "staffId": 67,
+      "moduleIds": [
+        "9cb-19",
+        "f14-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:13 GMT 2025"
+    },
+    {
+      "staffId": 68,
+      "moduleIds": [],
+      "lastUpdated": "Mon Jan 27 11:02:13 GMT 2025"
+    },
+    {
+      "staffId": 69,
+      "moduleIds": [
+        "2cc-18",
+        "c55-20",
+        "767-19",
+        "11c-19",
+        "9c3-19"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:13 GMT 2025"
+    },
+    {
+      "staffId": 70,
+      "moduleIds": [
+        "deb-19",
+        "275-20",
+        "d72-19",
+        "e94-20",
+        "945-19",
+        "13d-19"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:13 GMT 2025"
+    },
+    {
+      "staffId": 71,
+      "moduleIds": [
+        "d06-20",
+        "4b8-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:13 GMT 2025"
+    },
+    {
+      "staffId": 72,
+      "moduleIds": [
+        "a73-19",
+        "a94-20",
+        "ef3-20",
+        "c40-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:14 GMT 2025"
+    },
+    {
+      "staffId": 73,
+      "moduleIds": [],
+      "lastUpdated": "Mon Jan 27 11:02:14 GMT 2025"
+    },
+    {
+      "staffId": 74,
+      "moduleIds": [
+        "deb-19",
+        "275-20",
+        "d72-19"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:14 GMT 2025"
+    },
+    {
+      "staffId": 75,
+      "moduleIds": [
+        "deb-19",
+        "275-20",
+        "d72-19",
+        "e94-20",
+        "945-19",
+        "13d-19"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:14 GMT 2025"
+    },
+    {
+      "staffId": 76,
+      "moduleIds": [],
+      "lastUpdated": "Mon Jan 27 11:02:14 GMT 2025"
+    },
+    {
+      "staffId": 77,
+      "moduleIds": [
+        "c55-20",
+        "9bd-19",
+        "005-20",
+        "6aa-20",
+        "646-19",
+        "e36-18"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:15 GMT 2025"
+    },
+    {
+      "staffId": 78,
+      "moduleIds": [
+        "e47-20",
+        "7ca-19",
+        "3fc-19",
+        "dd3-20",
+        "e8a-20",
+        "c40-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:15 GMT 2025"
+    },
+    {
+      "staffId": 79,
+      "moduleIds": [
+        "2cc-18",
+        "141-20",
+        "819-20",
+        "257-20",
+        "a94-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:15 GMT 2025"
+    },
+    {
+      "staffId": 80,
+      "moduleIds": [
+        "98d-20",
+        "aa5-19"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:15 GMT 2025"
+    },
+    {
+      "staffId": 81,
+      "moduleIds": [],
+      "lastUpdated": "Mon Jan 27 11:02:15 GMT 2025"
+    },
+    {
+      "staffId": 82,
+      "moduleIds": [
+        "d8e-19",
+        "1dc-20",
+        "21b-20",
+        "3af-20",
+        "ad9-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:15 GMT 2025"
+    },
+    {
+      "staffId": 83,
+      "moduleIds": [
+        "d8e-19",
+        "1dc-20",
+        "21b-20",
+        "3af-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:15 GMT 2025"
+    },
+    {
+      "staffId": 84,
+      "moduleIds": [
+        "d8e-19"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:16 GMT 2025"
+    },
+    {
+      "staffId": 85,
+      "moduleIds": [],
+      "lastUpdated": "Mon Jan 27 11:02:16 GMT 2025"
+    },
+    {
+      "staffId": 86,
+      "moduleIds": [],
+      "lastUpdated": "Mon Jan 27 11:02:16 GMT 2025"
+    },
+    {
+      "staffId": 87,
+      "moduleIds": [],
+      "lastUpdated": "Mon Jan 27 11:02:16 GMT 2025"
+    },
+    {
+      "staffId": 88,
+      "moduleIds": [
+        "a73-19",
+        "621-19",
+        "20a-AY"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:16 GMT 2025"
+    },
+    {
+      "staffId": 89,
+      "moduleIds": [],
+      "lastUpdated": "Mon Jan 27 11:02:16 GMT 2025"
+    },
+    {
+      "staffId": 90,
+      "moduleIds": [
+        "98d-20",
+        "aa5-19",
+        "5f2-18",
+        "8be-19"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:17 GMT 2025"
+    },
+    {
+      "staffId": 91,
+      "moduleIds": [
+        "9cb-19",
+        "f14-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:17 GMT 2025"
+    },
+    {
+      "staffId": 92,
+      "moduleIds": [],
+      "lastUpdated": "Mon Jan 27 11:02:17 GMT 2025"
+    },
+    {
+      "staffId": 93,
+      "moduleIds": [
+        "98d-20",
+        "aa5-19",
+        "5f2-18",
+        "8be-19"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:17 GMT 2025"
+    },
+    {
+      "staffId": 94,
+      "moduleIds": [
+        "d8e-19",
+        "1dc-20",
+        "21b-20",
+        "3af-20",
+        "ad9-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:17 GMT 2025"
+    },
+    {
+      "staffId": 95,
+      "moduleIds": [
+        "2cc-18",
+        "141-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:17 GMT 2025"
+    },
+    {
+      "staffId": 96,
+      "moduleIds": [
+        "c55-20",
+        "9bd-19"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:18 GMT 2025"
+    },
+    {
+      "staffId": 97,
+      "moduleIds": [],
+      "lastUpdated": "Mon Jan 27 11:02:18 GMT 2025"
+    },
+    {
+      "staffId": 98,
+      "moduleIds": [
+        "d06-20",
+        "4b8-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:18 GMT 2025"
+    },
+    {
+      "staffId": 99,
+      "moduleIds": [
+        "2ce-19",
+        "3b6-AY",
+        "38f-19",
+        "20c-19",
+        "5a2-20",
+        "d48-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:18 GMT 2025"
+    },
+    {
+      "staffId": 100,
+      "moduleIds": [
+        "c55-20",
+        "9bd-19",
+        "005-20",
+        "6aa-20",
+        "646-19"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:18 GMT 2025"
+    },
+    {
+      "staffId": 101,
+      "moduleIds": [
+        "e47-20",
+        "7ca-19"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:19 GMT 2025"
+    },
+    {
+      "staffId": 102,
+      "moduleIds": [
+        "a73-19",
+        "a94-20",
+        "ef3-20",
+        "c40-20",
+        "d02-19"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:19 GMT 2025"
+    },
+    {
+      "staffId": 103,
+      "moduleIds": [
+        "9cb-19",
+        "f14-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:19 GMT 2025"
+    },
+    {
+      "staffId": 104,
+      "moduleIds": [
+        "c45-19",
+        "e22-19",
+        "61d-20",
+        "f92-AY"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:19 GMT 2025"
+    },
+    {
+      "staffId": 105,
+      "moduleIds": [
+        "a73-19",
+        "621-19",
+        "20a-AY"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:19 GMT 2025"
+    },
+    {
+      "staffId": 106,
+      "moduleIds": [
+        "9cb-19",
+        "f14-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:20 GMT 2025"
+    },
+    {
+      "staffId": 107,
+      "moduleIds": [
+        "d8e-19",
+        "1dc-20",
+        "21b-20",
+        "3af-20",
+        "ad9-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:20 GMT 2025"
+    },
+    {
+      "staffId": 108,
+      "moduleIds": [
+        "a73-19",
+        "a94-20",
+        "ef3-20",
+        "c40-20",
+        "d02-19",
+        "253-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:20 GMT 2025"
+    },
+    {
+      "staffId": 109,
+      "moduleIds": [
+        "a73-19",
+        "621-19",
+        "20a-AY",
+        "6aa-20",
+        "253-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:20 GMT 2025"
+    },
+    {
+      "staffId": 110,
+      "moduleIds": [
+        "d8e-19",
+        "1dc-20",
+        "21b-20",
+        "3af-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:21 GMT 2025"
+    },
+    {
+      "staffId": 111,
+      "moduleIds": [
+        "c45-19",
+        "e22-19",
+        "61d-20",
+        "f92-AY",
+        "602-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:21 GMT 2025"
+    },
+    {
+      "staffId": 112,
+      "moduleIds": [
+        "2cc-18",
+        "c55-20",
+        "767-19",
+        "11c-19"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:21 GMT 2025"
+    },
+    {
+      "staffId": 113,
+      "moduleIds": [
+        "deb-19",
+        "275-20",
+        "d72-19",
+        "e94-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:21 GMT 2025"
+    },
+    {
+      "staffId": 114,
+      "moduleIds": [
+        "2cc-18"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:22 GMT 2025"
+    },
+    {
+      "staffId": 115,
+      "moduleIds": [
+        "c4b-20",
+        "73e-AY",
+        "089-20",
+        "1b4-20",
+        "739-AY",
+        "e27-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:22 GMT 2025"
+    },
+    {
+      "staffId": 116,
+      "moduleIds": [
+        "a73-19",
+        "621-19"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:22 GMT 2025"
+    },
+    {
+      "staffId": 117,
+      "moduleIds": [
+        "deb-19",
+        "275-20",
+        "d72-19"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:22 GMT 2025"
+    },
+    {
+      "staffId": 118,
+      "moduleIds": [
+        "d8e-19",
+        "1dc-20",
+        "21b-20",
+        "3af-20",
+        "ad9-20",
+        "df4-19"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:22 GMT 2025"
+    },
+    {
+      "staffId": 119,
+      "moduleIds": [
+        "d8e-19",
+        "1dc-20",
+        "21b-20",
+        "3af-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:23 GMT 2025"
+    },
+    {
+      "staffId": 120,
+      "moduleIds": [
+        "a73-19"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:23 GMT 2025"
+    },
+    {
+      "staffId": 121,
+      "moduleIds": [],
+      "lastUpdated": "Mon Jan 27 11:02:23 GMT 2025"
+    },
+    {
+      "staffId": 122,
+      "moduleIds": [
+        "d06-20",
+        "4b8-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:24 GMT 2025"
+    },
+    {
+      "staffId": 123,
+      "moduleIds": [
+        "deb-19",
+        "275-20",
+        "d72-19"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:24 GMT 2025"
+    },
+    {
+      "staffId": 124,
+      "moduleIds": [
+        "e47-20",
+        "7ca-19",
+        "3fc-19",
+        "dd3-20",
+        "e8a-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:24 GMT 2025"
+    },
+    {
+      "staffId": 125,
+      "moduleIds": [
+        "9cb-19",
+        "f14-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:24 GMT 2025"
+    },
+    {
+      "staffId": 126,
+      "moduleIds": [
+        "d06-20",
+        "4b8-20",
+        "f9a-19",
+        "74c-19",
+        "f61-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:25 GMT 2025"
+    },
+    {
+      "staffId": 127,
+      "moduleIds": [
+        "c55-20",
+        "9bd-19",
+        "005-20",
+        "6aa-20",
+        "646-19"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:25 GMT 2025"
+    },
+    {
+      "staffId": 128,
+      "moduleIds": [
+        "c45-19",
+        "e22-19",
+        "61d-20",
+        "f92-AY"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:26 GMT 2025"
+    },
+    {
+      "staffId": 129,
+      "moduleIds": [
+        "2cc-18",
+        "c55-20",
+        "767-19",
+        "11c-19",
+        "9c3-19",
+        "20a-AY"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:26 GMT 2025"
+    },
+    {
+      "staffId": 130,
+      "moduleIds": [
+        "d06-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:26 GMT 2025"
+    },
+    {
+      "staffId": 131,
+      "moduleIds": [
+        "9cb-19",
+        "f14-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:26 GMT 2025"
+    },
+    {
+      "staffId": 132,
+      "moduleIds": [
+        "e47-20",
+        "7ca-19",
+        "3fc-19",
+        "dd3-20",
+        "e8a-20",
+        "c40-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:27 GMT 2025"
+    },
+    {
+      "staffId": 133,
+      "moduleIds": [
+        "98d-20",
+        "aa5-19",
+        "5f2-18",
+        "8be-19"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:27 GMT 2025"
+    },
+    {
+      "staffId": 134,
+      "moduleIds": [
+        "c45-19",
+        "e22-19",
+        "61d-20",
+        "f92-AY"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:27 GMT 2025"
+    },
+    {
+      "staffId": 135,
+      "moduleIds": [
+        "d8e-19",
+        "1dc-20",
+        "21b-20",
+        "3af-20",
+        "ad9-20",
+        "df4-19"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:27 GMT 2025"
+    },
+    {
+      "staffId": 136,
+      "moduleIds": [
+        "d8e-19",
+        "1dc-20",
+        "21b-20",
+        "3af-20",
+        "ad9-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:28 GMT 2025"
+    },
+    {
+      "staffId": 137,
+      "moduleIds": [
+        "2cc-18"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:28 GMT 2025"
+    },
+    {
+      "staffId": 138,
+      "moduleIds": [
+        "2cc-18"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:29 GMT 2025"
+    },
+    {
+      "staffId": 139,
+      "moduleIds": [
+        "2ce-19",
+        "3b6-AY",
+        "38f-19",
+        "20c-19"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:29 GMT 2025"
+    },
+    {
+      "staffId": 140,
+      "moduleIds": [
+        "a73-19",
+        "621-19",
+        "20a-AY",
+        "6aa-20",
+        "253-20",
+        "67e-19"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:30 GMT 2025"
+    },
+    {
+      "staffId": 141,
+      "moduleIds": [
+        "a73-19",
+        "621-19",
+        "20a-AY",
+        "6aa-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:31 GMT 2025"
+    },
+    {
+      "staffId": 142,
+      "moduleIds": [
+        "c55-20",
+        "9bd-19",
+        "005-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:31 GMT 2025"
+    },
+    {
+      "staffId": 143,
+      "moduleIds": [
+        "d8e-19",
+        "1dc-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:32 GMT 2025"
+    },
+    {
+      "staffId": 144,
+      "moduleIds": [
+        "d06-20",
+        "4b8-20",
+        "f9a-19",
+        "74c-19",
+        "f61-20",
+        "ef3-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:32 GMT 2025"
+    },
+    {
+      "staffId": 145,
+      "moduleIds": [],
+      "lastUpdated": "Mon Jan 27 11:02:32 GMT 2025"
+    },
+    {
+      "staffId": 146,
+      "moduleIds": [
+        "2cc-18",
+        "141-20",
+        "819-20",
+        "257-20",
+        "a94-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:32 GMT 2025"
+    },
+    {
+      "staffId": 147,
+      "moduleIds": [
+        "a73-19",
+        "621-19",
+        "20a-AY"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:33 GMT 2025"
+    },
+    {
+      "staffId": 148,
+      "moduleIds": [
+        "a73-19",
+        "a94-20",
+        "ef3-20",
+        "c40-20",
+        "d02-19"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:33 GMT 2025"
+    },
+    {
+      "staffId": 149,
+      "moduleIds": [
+        "2cc-18"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:33 GMT 2025"
+    },
+    {
+      "staffId": 150,
+      "moduleIds": [
+        "2ce-19",
+        "3b6-AY",
+        "38f-19",
+        "20c-19",
+        "5a2-20",
+        "d48-20"
+      ],
+      "lastUpdated": "Mon Jan 27 11:02:34 GMT 2025"
+    }
+  ]
+}

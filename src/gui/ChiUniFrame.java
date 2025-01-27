@@ -11,10 +11,10 @@ public class ChiUniFrame extends JFrame
     public ChiUniFrame(String title)
     {
         super(title);
-        initializeFrame();
+        initialiseFrame();
     }
 
-    private void initializeFrame()
+    private void initialiseFrame()
     {
         // Set default close operation
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
