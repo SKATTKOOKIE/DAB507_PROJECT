@@ -3,6 +3,7 @@ package users;
 import business.DepartmentId;
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
+import file_handling.FilePathHandler;
 import file_handling.JsonProcessor;
 
 import java.io.IOException;
@@ -91,7 +92,7 @@ public class Staff extends User implements IStaffMember
 
     public static List<Staff> getByDepartment(String departmentName) throws IOException
     {
-        JsonProcessor staffProcessor = new JsonProcessor("data/staff.json");
+        JsonProcessor staffProcessor = new JsonProcessor(FilePathHandler.STAFF_FILE.getNormalisedPath());
         staffProcessor.processFile();
         Staff[] allStaff = new Gson().fromJson(
                 staffProcessor.getJsonContent().toString(),

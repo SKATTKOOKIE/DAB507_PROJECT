@@ -55,7 +55,7 @@ public class StudentListPanel extends ChiUniPanel
         setLayout(new BorderLayout(10, 10));
         initialiseUI(); // initialise UI components without loading data
     }
-    
+
     private void initialiseUI()
     {
         // Create header panel
@@ -456,11 +456,11 @@ public class StudentListPanel extends ChiUniPanel
             this.module = (Module) module;
         }
 
-//        @Override
-//        public String toString() {
-//            String coreIndicator = module.isCore() ? " (Core)" : "";
-//            return String.format("%s - %s%s", module.getCode(), module.getName(), coreIndicator);
-//        }
+        @Override
+        public String toString()
+        {
+            return String.format("%s - %s", module.getCode(), module.getName());
+        }
 
         public Module getModule()
         {

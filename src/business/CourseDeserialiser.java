@@ -5,11 +5,11 @@ import file_handling.JsonProcessor;
 
 import java.lang.reflect.Type;
 
-public class CourseDeserializer implements JsonDeserializer<Course>
+public class CourseDeserialiser implements JsonDeserializer<Course>
 {
     private JsonProcessor jsonProcessor;
 
-    public CourseDeserializer(String filePath)
+    public CourseDeserialiser(String filePath)
     {
         this.jsonProcessor = new JsonProcessor(filePath);
     }
