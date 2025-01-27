@@ -12,10 +12,10 @@ public class ChiUniButton extends JButton
     public ChiUniButton(String text)
     {
         super(text);
-        initializeButton();
+        initialiseButton();
     }
 
-    private void initializeButton()
+    private void initialiseButton()
     {
         // Set default styling
         setBackground(DEFAULT_BACKGROUND);

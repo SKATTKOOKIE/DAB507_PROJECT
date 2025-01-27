@@ -69,23 +69,23 @@ public class GuiMainScreen
     private static final String ADMIN_PASSWORD = "password";
 
     /**
-     * Constructs a new GuiMainScreen and initializes all components.
-     * Sets up the main frame, creates all panels, and initializes data.
+     * Constructs a new GuiMainScreen and initialises all components.
+     * Sets up the main frame, creates all panels, and initialises data.
      */
     public GuiMainScreen()
     {
-        initializeGUI();
+        initialiseGUI();
         // Show GUI immediately
         show();
-        // Then initialize data
-//        initializeData();
+        // Then initialise data
+//        initialiseData();
     }
 
     /**
-     * Initializes all GUI components and layouts.
+     * initialises all GUI components and layouts.
      * Sets up the main frame, banner, content panels, and navigation buttons.
      */
-    private void initializeGUI()
+    private void initialiseGUI()
     {
         mainFrame = new ChiUniFrame("University Management System");
 
@@ -133,10 +133,10 @@ public class GuiMainScreen
     }
 
     /**
-     * Initializes application data in a background thread.
+     * initialises application data in a background thread.
      * Checks for existing assignments files and generates initial assignments if needed.
      */
-    private void initializeData() {
+    private void initialiseData() {
         // Only check/generate assignments - no need to show loading dialog
         SwingWorker<Void, Void> worker = new SwingWorker<>() {
             @Override
@@ -341,7 +341,7 @@ public class GuiMainScreen
      */
     private void showWelcomePanel()
     {
-        initializeData();
+        initialiseData();
         CardLayout cl = (CardLayout) contentPanel.getLayout();
         cl.show(contentPanel, "WELCOME");
     }

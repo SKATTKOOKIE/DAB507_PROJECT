@@ -46,67 +46,17 @@ public class StudentListPanel extends ChiUniPanel
 
     /**
      * Constructs a new StudentListPanel.
-     * Initializes the UI components including the header, filter dropdown,
+     * initialises the UI components including the header, filter dropdown,
      * and scrollable container for student cards.
      */
 
     public StudentListPanel()
     {
         setLayout(new BorderLayout(10, 10));
-        initializeUI(); // Initialize UI components without loading data
+        initialiseUI(); // initialise UI components without loading data
     }
-//    public StudentListPanel()
-//    {
-//        setLayout(new BorderLayout(10, 10));
-//        setupUI();
-//        // Create header panel
-//        JPanel headerPanel = new JPanel(new BorderLayout());
-//
-//        // Title
-//        JLabel titleLabel = new JLabel("Student Directory", SwingConstants.CENTER);
-//        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
-//        titleLabel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
-//        headerPanel.add(titleLabel, BorderLayout.CENTER);
-//
-//        // Filter panel
-//        JPanel filterPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-//        JLabel filterLabel = new JLabel("Filter by Type: ");
-//        filterPanel.add(filterLabel);
-//
-//        // Create and populate type filter dropdown
-//        typeFilter = new JComboBox<>(StudentType.values());
-//        typeFilter.insertItemAt(null, 0); // Add "All" option
-//        typeFilter.setSelectedIndex(0); // Select "All" by default
-//        typeFilter.setRenderer(new DefaultListCellRenderer()
-//        {
-//            @Override
-//            public Component getListCellRendererComponent(JList<?> list, Object value,
-//                                                          int index, boolean isSelected, boolean cellHasFocus)
-//            {
-//                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-//                setText(value == null ? "All" : value.toString());
-//                return this;
-//            }
-//        });
-//
-//        // Add filter change listener
-//        typeFilter.addActionListener(e -> filterStudents());
-//        filterPanel.add(typeFilter);
-//
-//        headerPanel.add(filterPanel, BorderLayout.SOUTH);
-//        add(headerPanel, BorderLayout.NORTH);
-//
-//        // Create scrollable container for student cards
-//        studentsContainer = new ChiUniPanel();
-//        studentsContainer.setLayout(new GridBagLayout());
-//        JScrollPane scrollPane = new JScrollPane(studentsContainer);
-//        scrollPane.setBorder(BorderFactory.createEmptyBorder());
-//        add(scrollPane, BorderLayout.CENTER);
-//
-//        loadStudents();
-//    }
-
-    private void initializeUI()
+    
+    private void initialiseUI()
     {
         // Create header panel
         JPanel headerPanel = new JPanel(new BorderLayout());

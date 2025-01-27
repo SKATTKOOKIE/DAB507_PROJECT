@@ -40,10 +40,10 @@ public class StaffListPanel extends ChiUniPanel
     public StaffListPanel()
     {
         setLayout(new BorderLayout(10, 10));
-        initializeUI(); // Initialize UI components without loading data
+        initialiseUI(); // initialise UI components without loading data
     }
 
-    private void initializeUI()
+    private void initialiseUI()
     {
         // Create header panel
         ChiUniPanel headerPanel = new ChiUniPanel();

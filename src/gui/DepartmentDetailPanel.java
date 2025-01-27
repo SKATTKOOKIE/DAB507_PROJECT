@@ -29,11 +29,11 @@ public class DepartmentDetailPanel extends ChiUniPanel
         this.coursesPanel = new ChiUniPanel();
         this.modulePanel = new ChiUniPanel();
 
-        initializeUI();
+        initialiseUI();
         loadDepartmentCourses();
     }
 
-    private void initializeUI()
+    private void initialiseUI()
     {
         setLayout(new BorderLayout(10, 10));
 

@@ -10,10 +10,10 @@ public class ChiUniPanel extends JPanel
 
     public ChiUniPanel()
     {
-        initializePanel();
+        initialisePanel();
     }
 
-    private void initializePanel()
+    private void initialisePanel()
     {
         // Set default properties
         setBackground(DEFAULT_BACKGROUND);
