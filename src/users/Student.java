@@ -84,6 +84,9 @@ public class Student extends User implements IStudent
      * @return A string containing all student information in the format:
      * "[base user info], Gender: [gender], Type: [type]"
      */
+
+    private static List<Student> cachedStudents = null;
+
     @Override
     public String toString()
     {
@@ -101,30 +104,24 @@ public class Student extends User implements IStudent
      * @throws IOException      If there is an error reading or processing the student data file
      * @throws RuntimeException If there is an error processing the JSON file
      */
-    public static List<Student> getByCourse(String courseName) throws IOException
-    {
+    public static List<Student> getByCourse(String courseName) throws IOException {
+        // Always read fresh from file
         var studentProcessor = new JsonProcessor(FilePathHandler.STUDENTS_FILE.getNormalisedPath());
-        try
-        {
-            studentProcessor.processFile();
-        }
-        catch (IOException e)
-        {
-            throw new RuntimeException(e);
-        }
+        studentProcessor.processFile();
         Student[] allStudents = new Gson().fromJson(
                 studentProcessor.getJsonContent().toString(),
                 Student[].class
         );
 
+        cachedStudents = Arrays.asList(allStudents);
+
         // If courseName is empty, return all students
-        if (courseName == null || courseName.trim().isEmpty())
-        {
-            return Arrays.asList(allStudents);
+        if (courseName == null || courseName.trim().isEmpty()) {
+            return cachedStudents;
         }
 
         // Otherwise filter by course name
-        return Arrays.stream(allStudents)
+        return cachedStudents.stream()
                 .filter(student -> courseName.equals(student.getCourse()))
                 .collect(Collectors.toList());
     }

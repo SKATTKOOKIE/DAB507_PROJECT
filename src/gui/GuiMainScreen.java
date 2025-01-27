@@ -59,6 +59,8 @@ public class GuiMainScreen
 
     private JDialog loadingDialog;
 
+    private ChiUniProgressBar progressBar;
+
     /**
      * Administrator username for login
      */
@@ -76,10 +78,9 @@ public class GuiMainScreen
     public GuiMainScreen()
     {
         initialiseGUI();
-        // Show GUI immediately
+        progressBar = new ChiUniProgressBar(mainFrame, "Loading", "Initialising system...");
+        progressBar.showProgress();
         show();
-        // Then initialise data
-//        initialiseData();
     }
 
     /**
@@ -134,39 +135,60 @@ public class GuiMainScreen
     }
 
     /**
-     * initialises application data in a background thread.
+     * Initialises application data in a background thread.
      * Checks for existing assignments files and generates initial assignments if needed.
      */
     private void initialiseData()
     {
-        SwingWorker<Void, Void> worker = new SwingWorker<>()
+        SwingWorker<Void, String> worker = new SwingWorker<Void, String>()
         {
             @Override
             protected Void doInBackground() throws Exception
             {
                 try
                 {
+                    publish("Checking file system...");
                     // Use FilePathHandler enum to get the file paths
-                    FilePathHandler FilePathHandler = null;
                     File staffAssignmentsFile = new File(FilePathHandler.ASSIGNED_STAFF_FILE.getNormalisedPath());
                     File studentAssignmentsFile = new File(FilePathHandler.ASSIGNED_STUDENTS_FILE.getNormalisedPath());
 
                     if (!staffAssignmentsFile.exists() || !studentAssignmentsFile.exists())
                     {
+                        publish("Generating initial assignments...");
                         StaffModuleAssignment.generateInitialAssignments();
                         StudentModuleAssignment.generateInitialAssignments();
                     }
+
+                    publish("Loading complete!");
+                    Thread.sleep(500); // Brief pause to show completion message
                 }
                 catch (IOException e)
                 {
+                    publish("Error: " + e.getMessage());
                     System.err.println("Error checking/generating assignments: " + e.getMessage());
                 }
                 return null;
             }
+
+            @Override
+            protected void process(java.util.List<String> chunks)
+            {
+                // Update progress message
+                if (chunks != null && !chunks.isEmpty())
+                {
+                    progressBar.updateMessage(chunks.get(chunks.size() - 1));
+                }
+            }
+
+            @Override
+            protected void done()
+            {
+                // Hide progress bar when complete
+                progressBar.hideProgress();
+            }
         };
         worker.execute();
     }
-
 
     /**
      * Creates and configures the login panel with username and password fields.
@@ -342,6 +364,15 @@ public class GuiMainScreen
         gbc.insets = new Insets(0, 0, 15, 0);
         panel.add(staffButton, gbc);
 
+        ChiUniButton addUserButton = new ChiUniButton("Add New User");
+        addUserButton.setFont(new Font("Arial", Font.PLAIN, 16));
+        addUserButton.addActionListener(e -> showAddUserDialog());
+        addUserButton.setPreferredSize(new Dimension(200, 40));
+        gbc.gridy = 4; // Adjust based on your existing buttons
+        gbc.insets = new Insets(0, 0, 15, 0);
+        panel.add(addUserButton, gbc);
+
+
         return panel;
     }
 
@@ -371,6 +402,67 @@ public class GuiMainScreen
     {
         CardLayout cl = (CardLayout) contentPanel.getLayout();
         cl.show(contentPanel, "STAFF");
+    }
+
+    private void showAddUserDialog() {
+        AddUserDialog dialog = new AddUserDialog(mainFrame, this);
+        dialog.setVisible(true);
+    }
+
+    /**
+     * Refreshes all data in the application with a progress indicator.
+     * @param message The message to display in the progress bar
+     */
+    public void refreshData(String message) {
+        // Show progress bar
+        progressBar.showProgress();
+        progressBar.updateMessage(message);
+
+        SwingWorker<Void, String> worker = new SwingWorker<Void, String>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                try {
+                    publish("Refreshing student data...");
+                    studentListPanel.refreshData();
+
+                    publish("Refreshing staff data...");
+                    staffListPanel.refreshData();
+
+                    publish("Checking assignments...");
+                    // Check and update assignments
+                    File staffAssignmentsFile = new File(FilePathHandler.ASSIGNED_STAFF_FILE.getNormalisedPath());
+                    File studentAssignmentsFile = new File(FilePathHandler.ASSIGNED_STUDENTS_FILE.getNormalisedPath());
+
+                    if (!staffAssignmentsFile.exists() || !studentAssignmentsFile.exists()) {
+                        publish("Updating assignments...");
+                        StaffModuleAssignment.generateInitialAssignments();
+                        StudentModuleAssignment.generateInitialAssignments();
+                    }
+
+                    publish("Refresh complete!");
+                    Thread.sleep(500); // Brief pause to show completion message
+                } catch (IOException e) {
+                    publish("Error: " + e.getMessage());
+                    System.err.println("Error refreshing data: " + e.getMessage());
+                }
+                return null;
+            }
+
+            @Override
+            protected void process(java.util.List<String> chunks) {
+                // Update progress message
+                if (chunks != null && !chunks.isEmpty()) {
+                    progressBar.updateMessage(chunks.get(chunks.size() - 1));
+                }
+            }
+
+            @Override
+            protected void done() {
+                // Hide progress bar when complete
+                progressBar.hideProgress();
+            }
+        };
+        worker.execute();
     }
 
     /**

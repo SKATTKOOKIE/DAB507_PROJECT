@@ -19,6 +19,7 @@ public class Staff extends User implements IStaffMember
     @SerializedName("max_modules")
     private int maxModules;
     private String avatar;
+    private static List<Staff> cachedStaff = null;
 
     // Add methods to work with DepartmentId
     public DepartmentId getDepartmentId()
@@ -90,8 +91,8 @@ public class Staff extends User implements IStaffMember
                 guid, weeklyHours, maxModules);
     }
 
-    public static List<Staff> getByDepartment(String departmentName) throws IOException
-    {
+    public static List<Staff> getByDepartment(String departmentName) throws IOException {
+        // Always read fresh from file
         JsonProcessor staffProcessor = new JsonProcessor(FilePathHandler.STAFF_FILE.getNormalisedPath());
         staffProcessor.processFile();
         Staff[] allStaff = new Gson().fromJson(
@@ -99,14 +100,15 @@ public class Staff extends User implements IStaffMember
                 Staff[].class
         );
 
+        cachedStaff = Arrays.asList(allStaff);
+
         // If empty department name, return all staff
-        if (departmentName == null || departmentName.trim().isEmpty())
-        {
-            return Arrays.asList(allStaff);
+        if (departmentName == null || departmentName.trim().isEmpty()) {
+            return cachedStaff;
         }
 
         // Otherwise filter by department name
-        return Arrays.stream(allStaff)
+        return cachedStaff.stream()
                 .filter(staff -> departmentName.equals(staff.getDepartment()))
                 .collect(Collectors.toList());
     }

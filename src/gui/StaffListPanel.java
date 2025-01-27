@@ -11,6 +11,7 @@ import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import business.StaffModuleAssignment;
 import users.Staff;
 import business.Module;
 import business.Course;
@@ -88,27 +89,21 @@ public class StaffListPanel extends ChiUniPanel
         add(scrollPane, BorderLayout.CENTER);
     }
 
-    private void loadStaffData()
-    {
-        SwingWorker<List<Staff>, Void> worker = new SwingWorker<>()
-        {
+    private void loadStaffData() {
+        SwingWorker<List<Staff>, Void> worker = new SwingWorker<>() {
             @Override
-            protected List<Staff> doInBackground() throws Exception
-            {
-                return Staff.getByDepartment("");
+            protected List<Staff> doInBackground() throws Exception {
+                // Force a fresh load from JSON
+                return Staff.getByDepartment("");  // This will read fresh from the file
             }
 
             @Override
-            protected void done()
-            {
-                try
-                {
+            protected void done() {
+                try {
                     allStaff = get();
                     dataLoaded = true;
                     filterStaff(); // Initial display
-                }
-                catch (Exception e)
-                {
+                } catch (Exception e) {
                     handleError("Error loading staff", e);
                 }
             }
@@ -611,4 +606,17 @@ public class StaffListPanel extends ChiUniPanel
                 "Error",
                 JOptionPane.ERROR_MESSAGE);
     }
+
+    public void refreshData() throws IOException {
+        // First regenerate module assignments
+        StaffModuleAssignment.generateInitialAssignments();
+
+        // Force reload of staff data from JSON
+        this.allStaff = null;    // Clear cached data
+        dataLoaded = false;      // Reset the data loaded flag
+
+        // Load fresh data
+        loadStaffData();
+    }
+
 }
