@@ -447,28 +447,23 @@ public class StudentListPanel extends ChiUniPanel
     }
 
     // Helper class for displaying modules in JList
-    private static class ModuleDisplay
-    {
+    private static class ModuleDisplay {
         private final Module module;
 
-        public ModuleDisplay(Object module)
-        {
+        public ModuleDisplay(Object module) {
             this.module = (Module) module;
         }
 
-//        @Override
-//        public String toString() {
-//            String coreIndicator = module.isCore() ? " (Core)" : "";
-//            return String.format("%s - %s%s", module.getCode(), module.getName(), coreIndicator);
-//        }
+        @Override
+        public String toString() {
+            return String.format("%s - %s", module.getCode(), module.getName());
+        }
 
-        public Module getModule()
-        {
+        public Module getModule() {
             return module;
         }
 
-        public String getModuleCode()
-        {
+        public String getModuleCode() {
             return module.getCode();
         }
     }

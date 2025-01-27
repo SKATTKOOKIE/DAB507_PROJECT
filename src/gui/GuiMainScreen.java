@@ -7,6 +7,7 @@ import javax.swing.*;
 
 import business.StaffModuleAssignment;
 import business.StudentModuleAssignment;
+import file_handling.FilePathHandler;
 
 /**
  * Main graphical user interface for the University Management System.
@@ -136,19 +137,28 @@ public class GuiMainScreen
      * initialises application data in a background thread.
      * Checks for existing assignments files and generates initial assignments if needed.
      */
-    private void initialiseData() {
-        // Only check/generate assignments - no need to show loading dialog
-        SwingWorker<Void, Void> worker = new SwingWorker<>() {
+    private void initialiseData()
+    {
+        SwingWorker<Void, Void> worker = new SwingWorker<>()
+        {
             @Override
-            protected Void doInBackground() throws Exception {
-                try {
-                    File assignmentsFile = new File("data/staff_module_assignments.json");
-                    File assignmentsFile2 = new File("data/student_module_assignments.json");
-                    if (!assignmentsFile.exists() || !assignmentsFile2.exists()) {
+            protected Void doInBackground() throws Exception
+            {
+                try
+                {
+                    // Use FilePathHandler enum to get the file paths
+                    FilePathHandler FilePathHandler = null;
+                    File staffAssignmentsFile = new File(FilePathHandler.ASSIGNED_STAFF_FILE.getNormalisedPath());
+                    File studentAssignmentsFile = new File(FilePathHandler.ASSIGNED_STUDENTS_FILE.getNormalisedPath());
+
+                    if (!staffAssignmentsFile.exists() || !studentAssignmentsFile.exists())
+                    {
                         StaffModuleAssignment.generateInitialAssignments();
                         StudentModuleAssignment.generateInitialAssignments();
                     }
-                } catch (IOException e) {
+                }
+                catch (IOException e)
+                {
                     System.err.println("Error checking/generating assignments: " + e.getMessage());
                 }
                 return null;
@@ -158,8 +168,7 @@ public class GuiMainScreen
     }
 
 
-
-/**
+    /**
      * Creates and configures the login panel with username and password fields.
      *
      * @return Configured login panel
