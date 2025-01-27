@@ -3,6 +3,7 @@ package business;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import file_handling.FilePathHandler;
 import file_handling.JsonProcessor;
 import java.io.IOException;
 import java.util.*;
@@ -67,7 +68,7 @@ public class Module {
     }
 
     public static List<Module> getAll() throws IOException {
-        JsonProcessor processor = new JsonProcessor("data/associated_modules.json");
+        JsonProcessor processor = new JsonProcessor(FilePathHandler.MODULES_FILE.getNormalisedPath());
         processor.processFile();
         JsonElement root = (JsonElement) processor.getJsonContent(); // Change JsonObject to JsonElement
 

@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import file_handling.FilePathHandler;
 import file_handling.JsonProcessor;
 import users.Staff;
 
@@ -25,7 +26,7 @@ public class StaffModuleAssignment
     /**
      * The file path where staff module assignments are stored
      */
-    private static final String ASSIGNMENTS_FILE = "data/staff_module_assignments.json";
+    private static final String ASSIGNMENTS_FILE = FilePathHandler.ASSIGNED_STAFF_FILE.getNormalisedPath();
 
     /**
      * The unique identifier of the staff member

@@ -5,6 +5,10 @@ import java.io.File;
 public enum FilePathHandler
 {
     STUDENTS_FILE("data/students.json"),
+    STAFF_FILE("data/staff.json"),
+    COURSES_FILE("data/courses_with_departments.json"),
+    DEPARTMENTS_FILE("data/departments.json"),
+    MODULES_FILE("data/associated_modules.json"),
     ASSIGNED_STUDENTS_FILE("data/student_module_assignments.json"),
     ASSIGNED_STAFF_FILE("data/staff_module_assignments.json");
 
@@ -41,4 +45,4 @@ public enum FilePathHandler
         }
         return result.toString();
     }
-    }
+}

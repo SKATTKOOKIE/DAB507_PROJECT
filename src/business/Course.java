@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import file_handling.FilePathHandler;
 import file_handling.JsonProcessor;
 
 import java.io.IOException;
@@ -21,7 +22,7 @@ public class Course
     private String courseTitle;
     private String courseId;
     private DepartmentId departmentId;
-    private static final String DATA_FILE = "data/courses_with_departments.json";
+    private static final String DATA_FILE = FilePathHandler.COURSES_FILE.getNormalisedPath();
 
     // Default constructor
     public Course()
@@ -89,7 +90,7 @@ public class Course
         }
 
         Gson gson = new GsonBuilder()
-                .registerTypeAdapter(Course.class, new CourseDeserializer(DATA_FILE))
+                .registerTypeAdapter(Course.class, new CourseDeserialiser(DATA_FILE))
                 .create();
 
         List<Course> courses = new ArrayList<>();

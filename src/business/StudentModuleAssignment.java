@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import file_handling.FilePathHandler;
 import file_handling.JsonProcessor;
 import users.Student;
 
@@ -24,7 +25,7 @@ public class StudentModuleAssignment
     /**
      * The file path where student module assignments are stored
      */
-    private static final String ASSIGNMENTS_FILE = "data/student_module_assignments.json";
+    private static final String ASSIGNMENTS_FILE = FilePathHandler.ASSIGNED_STUDENTS_FILE.getNormalisedPath();
 
     /**
      * The unique identifier of the student

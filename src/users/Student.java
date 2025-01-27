@@ -1,6 +1,7 @@
 package users;
 
 import com.google.gson.Gson;
+import file_handling.FilePathHandler;
 import file_handling.JsonProcessor;
 
 import java.io.IOException;
@@ -102,7 +103,7 @@ public class Student extends User implements IStudent
      */
     public static List<Student> getByCourse(String courseName) throws IOException
     {
-        var studentProcessor = new JsonProcessor("data/students.json");
+        var studentProcessor = new JsonProcessor(FilePathHandler.STUDENTS_FILE.getNormalisedPath());
         try
         {
             studentProcessor.processFile();

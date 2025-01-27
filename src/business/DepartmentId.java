@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import file_handling.FilePathHandler;
 import file_handling.JsonProcessor;
 import users.Staff;
 
@@ -45,7 +46,7 @@ public enum DepartmentId
 
     public static class StaffModuleAssignment
     {
-        private static final String ASSIGNMENTS_FILE = "data/staff_module_assignments.json";
+        private static final String ASSIGNMENTS_FILE = FilePathHandler.ASSIGNED_STAFF_FILE.getNormalisedPath();
         private final int staffId;
         private final List<String> moduleIds;
         private final String lastUpdated;
