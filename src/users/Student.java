@@ -104,7 +104,8 @@ public class Student extends User implements IStudent
      * @throws IOException      If there is an error reading or processing the student data file
      * @throws RuntimeException If there is an error processing the JSON file
      */
-    public static List<Student> getByCourse(String courseName) throws IOException {
+    public static List<Student> getByCourse(String courseName) throws IOException
+    {
         // Always read fresh from file
         var studentProcessor = new JsonProcessor(FilePathHandler.STUDENTS_FILE.getNormalisedPath());
         studentProcessor.processFile();
@@ -116,7 +117,8 @@ public class Student extends User implements IStudent
         cachedStudents = Arrays.asList(allStudents);
 
         // If courseName is empty, return all students
-        if (courseName == null || courseName.trim().isEmpty()) {
+        if (courseName == null || courseName.trim().isEmpty())
+        {
             return cachedStudents;
         }
 

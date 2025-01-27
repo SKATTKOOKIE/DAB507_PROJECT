@@ -404,24 +404,30 @@ public class GuiMainScreen
         cl.show(contentPanel, "STAFF");
     }
 
-    private void showAddUserDialog() {
+    private void showAddUserDialog()
+    {
         AddUserDialog dialog = new AddUserDialog(mainFrame, this);
         dialog.setVisible(true);
     }
 
     /**
      * Refreshes all data in the application with a progress indicator.
+     *
      * @param message The message to display in the progress bar
      */
-    public void refreshData(String message) {
+    public void refreshData(String message)
+    {
         // Show progress bar
         progressBar.showProgress();
         progressBar.updateMessage(message);
 
-        SwingWorker<Void, String> worker = new SwingWorker<Void, String>() {
+        SwingWorker<Void, String> worker = new SwingWorker<Void, String>()
+        {
             @Override
-            protected Void doInBackground() throws Exception {
-                try {
+            protected Void doInBackground() throws Exception
+            {
+                try
+                {
                     publish("Refreshing student data...");
                     studentListPanel.refreshData();
 
@@ -433,7 +439,8 @@ public class GuiMainScreen
                     File staffAssignmentsFile = new File(FilePathHandler.ASSIGNED_STAFF_FILE.getNormalisedPath());
                     File studentAssignmentsFile = new File(FilePathHandler.ASSIGNED_STUDENTS_FILE.getNormalisedPath());
 
-                    if (!staffAssignmentsFile.exists() || !studentAssignmentsFile.exists()) {
+                    if (!staffAssignmentsFile.exists() || !studentAssignmentsFile.exists())
+                    {
                         publish("Updating assignments...");
                         StaffModuleAssignment.generateInitialAssignments();
                         StudentModuleAssignment.generateInitialAssignments();
@@ -441,7 +448,9 @@ public class GuiMainScreen
 
                     publish("Refresh complete!");
                     Thread.sleep(500); // Brief pause to show completion message
-                } catch (IOException e) {
+                }
+                catch (IOException e)
+                {
                     publish("Error: " + e.getMessage());
                     System.err.println("Error refreshing data: " + e.getMessage());
                 }
@@ -449,15 +458,18 @@ public class GuiMainScreen
             }
 
             @Override
-            protected void process(java.util.List<String> chunks) {
+            protected void process(java.util.List<String> chunks)
+            {
                 // Update progress message
-                if (chunks != null && !chunks.isEmpty()) {
+                if (chunks != null && !chunks.isEmpty())
+                {
                     progressBar.updateMessage(chunks.get(chunks.size() - 1));
                 }
             }
 
             @Override
-            protected void done() {
+            protected void done()
+            {
                 // Hide progress bar when complete
                 progressBar.hideProgress();
             }

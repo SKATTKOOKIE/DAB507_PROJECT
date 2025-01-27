@@ -89,21 +89,28 @@ public class StaffListPanel extends ChiUniPanel
         add(scrollPane, BorderLayout.CENTER);
     }
 
-    private void loadStaffData() {
-        SwingWorker<List<Staff>, Void> worker = new SwingWorker<>() {
+    private void loadStaffData()
+    {
+        SwingWorker<List<Staff>, Void> worker = new SwingWorker<>()
+        {
             @Override
-            protected List<Staff> doInBackground() throws Exception {
+            protected List<Staff> doInBackground() throws Exception
+            {
                 // Force a fresh load from JSON
                 return Staff.getByDepartment("");  // This will read fresh from the file
             }
 
             @Override
-            protected void done() {
-                try {
+            protected void done()
+            {
+                try
+                {
                     allStaff = get();
                     dataLoaded = true;
                     filterStaff(); // Initial display
-                } catch (Exception e) {
+                }
+                catch (Exception e)
+                {
                     handleError("Error loading staff", e);
                 }
             }
@@ -607,7 +614,8 @@ public class StaffListPanel extends ChiUniPanel
                 JOptionPane.ERROR_MESSAGE);
     }
 
-    public void refreshData() throws IOException {
+    public void refreshData() throws IOException
+    {
         // First regenerate module assignments
         StaffModuleAssignment.generateInitialAssignments();
 

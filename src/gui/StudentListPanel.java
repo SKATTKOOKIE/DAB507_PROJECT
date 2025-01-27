@@ -106,21 +106,28 @@ public class StudentListPanel extends ChiUniPanel
         }
     }
 
-    private void loadStudentData() {
-        SwingWorker<List<Student>, Void> worker = new SwingWorker<>() {
+    private void loadStudentData()
+    {
+        SwingWorker<List<Student>, Void> worker = new SwingWorker<>()
+        {
             @Override
-            protected List<Student> doInBackground() throws Exception {
+            protected List<Student> doInBackground() throws Exception
+            {
                 // Force a fresh load from JSON
                 return Student.getByCourse("");  // This will read fresh from the file
             }
 
             @Override
-            protected void done() {
-                try {
+            protected void done()
+            {
+                try
+                {
                     allStudents = get();
                     dataLoaded = true;
                     filterStudents(); // Initial display
-                } catch (Exception e) {
+                }
+                catch (Exception e)
+                {
                     handleError("Error loading students", e);
                 }
             }
@@ -550,7 +557,8 @@ public class StudentListPanel extends ChiUniPanel
                 JOptionPane.ERROR_MESSAGE);
     }
 
-    public void refreshData() throws IOException {
+    public void refreshData() throws IOException
+    {
         // First regenerate module assignments
         StudentModuleAssignment.generateInitialAssignments();
 
