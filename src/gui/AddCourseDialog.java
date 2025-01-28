@@ -29,7 +29,7 @@ public class AddCourseDialog extends JDialog
         this.mainScreen = mainScreen;
         setLayout(new BorderLayout(10, 10));
 
-        // Initialize components
+        // Initialise components
         this.nameField = new JTextField(20);
         this.codeField = new JTextField(10);
         this.departmentCombo = new JComboBox<>(DepartmentId.values());
