@@ -262,13 +262,17 @@ public class StudentListPanel extends ChiUniPanel
             courseLabel.setFont(new Font("Arial", Font.ITALIC, 12));
             detailsPanel.add(courseLabel);
 
-            // Add view modules button
             ChiUniButton viewModulesBtn = new ChiUniButton("View Modules");
             viewModulesBtn.addActionListener(e -> showModulesDialog(student));
 
+            ChiUniButton timetableBtn = new ChiUniButton("View Timetable");
+            timetableBtn.addActionListener(e -> showTimetableDialog(student));
+
             JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
             buttonPanel.add(viewModulesBtn);
+            buttonPanel.add(timetableBtn);
             detailsPanel.add(buttonPanel);
+
         }
 
         card.add(detailsPanel, BorderLayout.CENTER);
@@ -568,5 +572,168 @@ public class StudentListPanel extends ChiUniPanel
 
         // Load fresh data
         loadStudentData();
+    }
+
+    /**
+     * Shows a dialog displaying the student's timetable organized by terms.
+     *
+     * @param student The student whose timetable should be displayed
+     */
+    private void showTimetableDialog(Student student)
+    {
+        JDialog dialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this),
+                "Timetable - " + student.getFirstName() + " " + student.getLastName(), true);
+
+        ChiUniPanel contentPanel = new ChiUniPanel();
+        contentPanel.setLayout(new BorderLayout(10, 10));
+        contentPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        // Create term selector
+        String[] terms = {"Autumn Term (Sep-Dec)", "Spring Term (Jan-Mar)", "Summer Term (Apr-Jun)"};
+        JComboBox<String> termSelector = new JComboBox<>(terms);
+
+        // Header panel with term selector
+        ChiUniPanel headerPanel = new ChiUniPanel();
+        headerPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        headerPanel.add(new JLabel("Select Term: "));
+        headerPanel.add(termSelector);
+
+        contentPanel.add(headerPanel, BorderLayout.NORTH);
+
+        // Create timetable panel
+        ChiUniPanel timetablePanel = new ChiUniPanel();
+        timetablePanel.setLayout(new GridBagLayout());
+
+        // Create and update the timetable based on selected term
+        updateTimetablePanel(timetablePanel, student, 0); // Start with first term
+
+        // Add listener for term changes
+        termSelector.addActionListener(e ->
+        {
+            updateTimetablePanel(timetablePanel, student, termSelector.getSelectedIndex());
+        });
+
+        // Add timetable to scroll pane
+        JScrollPane scrollPane = new JScrollPane(timetablePanel);
+        contentPanel.add(scrollPane, BorderLayout.CENTER);
+
+        // Add close button
+        ChiUniButton closeButton = new ChiUniButton("Close");
+        closeButton.addActionListener(e -> dialog.dispose());
+
+        ChiUniPanel buttonPanel = new ChiUniPanel();
+        buttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+        buttonPanel.add(closeButton);
+
+        contentPanel.add(buttonPanel, BorderLayout.SOUTH);
+
+        dialog.add(contentPanel);
+        dialog.setSize(800, 600);
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
+    }
+
+    /**
+     * Updates the timetable panel with the schedule for the selected term.
+     *
+     * @param panel     The panel to update
+     * @param student   The student whose timetable is being displayed
+     * @param termIndex The selected term (0=Autumn, 1=Spring, 2=Summer)
+     */
+    private void updateTimetablePanel(JPanel panel, Student student, int termIndex)
+    {
+        panel.removeAll();
+        GridBagConstraints gbc = new GridBagConstraints();
+
+        // Time slots
+        String[] timeSlots = {
+                "09:00 - 10:30",
+                "11:00 - 12:30",
+                "13:30 - 15:00",
+                "15:30 - 17:00"
+        };
+
+        // Days of the week
+        String[] days = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
+
+        // Add header cells for days
+        gbc.gridy = 0;
+        gbc.gridx = 1; // Start at 1 to leave room for time labels
+
+        for (String day : days)
+        {
+            JLabel dayLabel = new JLabel(day);
+            dayLabel.setFont(new Font("Arial", Font.BOLD, 12));
+            dayLabel.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(Color.BLACK),
+                    BorderFactory.createEmptyBorder(5, 5, 5, 5)
+            ));
+            dayLabel.setOpaque(true);
+            dayLabel.setBackground(new Color(200, 200, 200));
+            gbc.gridx++;
+            panel.add(dayLabel, gbc);
+        }
+
+        // Add time slots and create grid
+        for (int timeRow = 0; timeRow < timeSlots.length; timeRow++)
+        {
+            gbc.gridy = timeRow + 1;
+            gbc.gridx = 0;
+
+            // Add time label
+            JLabel timeLabel = new JLabel(timeSlots[timeRow]);
+            timeLabel.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(Color.BLACK),
+                    BorderFactory.createEmptyBorder(5, 5, 5, 5)
+            ));
+            timeLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+            panel.add(timeLabel, gbc);
+
+            // Add cells for each day
+            for (int dayCol = 0; dayCol < days.length; dayCol++)
+            {
+                gbc.gridx = dayCol + 1;
+
+                // Create cell panel
+                JPanel cellPanel = new JPanel();
+                cellPanel.setLayout(new BorderLayout());
+                cellPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                cellPanel.setPreferredSize(new Dimension(120, 60));
+
+                // Here you would check if there's a module scheduled for this time slot
+                // For now, we'll add placeholder text
+                try
+                {
+                    List<String> moduleIds = StudentModuleAssignment.getStudentAssignments(student.getId());
+                    if (!moduleIds.isEmpty())
+                    {
+                        // Get a module for this time slot based on some logic
+                        // This is a simplified example - you'd need to implement proper scheduling logic
+                        if (moduleIds.size() > (timeRow + dayCol) % moduleIds.size())
+                        {
+                            String moduleId = moduleIds.get((timeRow + dayCol) % moduleIds.size());
+                            Module module = Module.getModuleByCode(moduleId);
+                            if (module != null)
+                            {
+                                JLabel moduleLabel = new JLabel("<html>" + module.getName() + "<br>" + module.getCode() + "</html>");
+                                moduleLabel.setFont(new Font("Arial", Font.PLAIN, 10));
+                                moduleLabel.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
+                                cellPanel.add(moduleLabel, BorderLayout.CENTER);
+                                cellPanel.setBackground(new Color(230, 240, 255));
+                            }
+                        }
+                    }
+                }
+                catch (IOException e)
+                {
+                    handleError("Error loading module assignments", e);
+                }
+
+                panel.add(cellPanel, gbc);
+            }
+        }
+
+        panel.revalidate();
+        panel.repaint();
     }
 }

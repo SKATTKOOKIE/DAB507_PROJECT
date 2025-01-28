@@ -104,7 +104,7 @@ public class DepartmentDetailPanel extends ChiUniPanel
     {
         try
         {
-            Department department = new Department(departmentId.getDepartmentName(), departmentId);
+            Department department = new Department(departmentId);
             List<Course> courses = Course.getCoursesByDepartment(department);
 
             // Clear existing content
