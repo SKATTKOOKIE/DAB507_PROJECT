@@ -343,7 +343,7 @@ public class StaffListPanel extends ChiUniPanel
             }
 
             // Load current assignments
-            List<String> assignedModuleIds = DepartmentId.StaffModuleAssignment.getStaffAssignments(staff.getId());
+            List<String> assignedModuleIds = StaffModuleAssignment.getStaffAssignments(staff.getId());
 
             // Add modules to appropriate lists
             allModules.forEach((code, module) ->
@@ -482,7 +482,7 @@ public class StaffListPanel extends ChiUniPanel
             {
                 moduleIds.add(assignedModel.getElementAt(i).getModuleCode());
             }
-            DepartmentId.StaffModuleAssignment.updateStaffAssignments(staffId, moduleIds);
+            StaffModuleAssignment.updateStaffAssignments(staffId, moduleIds);
         }
         catch (IOException e)
         {
