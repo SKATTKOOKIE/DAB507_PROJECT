@@ -158,4 +158,19 @@ public class Module {
                 .filter(module -> module.getCode().startsWith(codePrefix))
                 .collect(Collectors.toList());
     }
+
+    /**
+     * Retrieves a module by its code.
+     *
+     * @param code The code of the module to retrieve
+     * @return The module with the specified code, or null if not found
+     * @throws IOException If there is an error reading the modules file
+     */
+    public static Module getModuleByCode(String code) throws IOException {
+        List<Module> allModules = getAll();
+        return allModules.stream()
+                .filter(module -> module.getCode().equals(code))
+                .findFirst()
+                .orElse(null);
+    }
 }
