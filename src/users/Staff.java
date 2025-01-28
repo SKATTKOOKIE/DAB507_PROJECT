@@ -91,7 +91,8 @@ public class Staff extends User implements IStaffMember
                 guid, weeklyHours, maxModules);
     }
 
-    public static List<Staff> getByDepartment(String departmentName) throws IOException {
+    public static List<Staff> getByDepartment(String departmentName) throws IOException
+    {
         // Always read fresh from file
         JsonProcessor staffProcessor = new JsonProcessor(FilePathHandler.STAFF_FILE.getNormalisedPath());
         staffProcessor.processFile();
@@ -103,7 +104,8 @@ public class Staff extends User implements IStaffMember
         cachedStaff = Arrays.asList(allStaff);
 
         // If empty department name, return all staff
-        if (departmentName == null || departmentName.trim().isEmpty()) {
+        if (departmentName == null || departmentName.trim().isEmpty())
+        {
             return cachedStaff;
         }
 

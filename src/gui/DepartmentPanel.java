@@ -123,4 +123,23 @@ public class DepartmentPanel extends ChiUniPanel
     {
         cardLayout.show(cardsPanel, "DEPARTMENTS_LIST");
     }
+
+    public void refreshData() {
+        // Recreate all department detail panels to refresh their data
+        cardsPanel.removeAll();
+
+        // Recreate and add the main departments list
+        ChiUniPanel departmentsListPanel = createDepartmentsListPanel();
+        cardsPanel.add(departmentsListPanel, "DEPARTMENTS_LIST");
+
+        // Recreate all department detail panels
+        createDepartmentDetailPanels();
+
+        // Show the current panel again
+        cardLayout.show(cardsPanel, "DEPARTMENTS_LIST");
+
+        // Refresh the UI
+        cardsPanel.revalidate();
+        cardsPanel.repaint();
+    }
 }

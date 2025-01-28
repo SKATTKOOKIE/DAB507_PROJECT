@@ -1658,5 +1658,15 @@
     "last_name": "Banik",
     "email": "AB@g.com",
     "department": "Engineering"
+  },
+  {
+    "guid": "78541",
+    "weekly_hours": 37,
+    "max_modules": 6,
+    "id": 152,
+    "first_name": "Jeremy",
+    "last_name": "Hunt",
+    "email": "Jeremy.Hunt@googlemail.co.uk",
+    "department": "Engineering"
   }
 ]

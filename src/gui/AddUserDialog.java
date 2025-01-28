@@ -12,7 +12,6 @@ import file_handling.JsonProcessor;
 import file_handling.FilePathHandler;
 import file_handling.UserDataManager;
 import com.google.gson.JsonArray;
-import com.google.gson.Gson;
 
 import javax.swing.*;
 import java.awt.*;
@@ -38,20 +37,20 @@ public class AddUserDialog extends JDialog
     private final JComboBox<String> courseCombo;
     private List<Course> availableCourses;
 
-    private final GuiMainScreen mainScreen;
-
     // Staff-specific fields
     private final JSpinner weeklyHoursSpinner;
     private final JSpinner maxModulesSpinner;
     private final JComboBox<DepartmentId> departmentCombo;
     private final JTextField guidField;
 
-    public AddUserDialog(Frame owner, GuiMainScreen mainScreen) {  // Modified constructor
+    private final GuiMainScreen mainScreen;
+
+    public AddUserDialog(Frame owner, GuiMainScreen mainScreen)
+    {
         super(owner, "Add New User", true);
         this.mainScreen = mainScreen;  // Initialize the field
         setLayout(new BorderLayout(10, 10));
 
-        // Initialize fields
         this.availableCourses = new ArrayList<>();
         this.courseCombo = new JComboBox<>();
         this.userTypeCombo = new JComboBox<>(new String[]{"Student", "Staff"});
@@ -218,11 +217,16 @@ public class AddUserDialog extends JDialog
         return component;
     }
 
-    private void saveUser() {
-        try {
-            if (userTypeCombo.getSelectedItem().equals("Student")) {
+    private void saveUser()
+    {
+        try
+        {
+            if (userTypeCombo.getSelectedItem().equals("Student"))
+            {
                 saveStudent();
-            } else {
+            }
+            else
+            {
                 saveStaff();
             }
             dispose();
@@ -232,7 +236,9 @@ public class AddUserDialog extends JDialog
 
             // Refresh the main screen data
             mainScreen.refreshData("Refreshing data after adding new user...");
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             JOptionPane.showMessageDialog(this, "Error saving user: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }

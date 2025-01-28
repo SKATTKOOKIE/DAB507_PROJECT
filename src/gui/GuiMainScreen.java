@@ -3,8 +3,12 @@ package gui;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicInteger;
 import javax.swing.*;
+import java.util.List;
 
+import business.Course;
 import business.StaffModuleAssignment;
 import business.StudentModuleAssignment;
 import file_handling.FilePathHandler;
@@ -60,6 +64,8 @@ public class GuiMainScreen
     private JDialog loadingDialog;
 
     private ChiUniProgressBar progressBar;
+
+    private AtomicInteger completedTasks;
 
     /**
      * Administrator username for login
@@ -372,6 +378,14 @@ public class GuiMainScreen
         gbc.insets = new Insets(0, 0, 15, 0);
         panel.add(addUserButton, gbc);
 
+        // In the createWelcomePanel() method, after the addUserButton
+        ChiUniButton addCourseButton = new ChiUniButton("Add New Course");
+        addCourseButton.setFont(new Font("Arial", Font.PLAIN, 16));
+        addCourseButton.addActionListener(e -> showAddCourseDialog());
+        addCourseButton.setPreferredSize(new Dimension(200, 40));
+        gbc.gridy = 5;
+        gbc.insets = new Insets(0, 0, 15, 0);
+        panel.add(addCourseButton, gbc);
 
         return panel;
     }
@@ -404,13 +418,15 @@ public class GuiMainScreen
         cl.show(contentPanel, "STAFF");
     }
 
-    private void showAddUserDialog() {
+    private void showAddUserDialog()
+    {
         AddUserDialog dialog = new AddUserDialog(mainFrame, this);
         dialog.setVisible(true);
     }
 
     /**
      * Refreshes all data in the application with a progress indicator.
+     *
      * @param message The message to display in the progress bar
      */
     public void refreshData(String message) {
@@ -418,18 +434,98 @@ public class GuiMainScreen
         progressBar.showProgress();
         progressBar.updateMessage(message);
 
-        SwingWorker<Void, String> worker = new SwingWorker<Void, String>() {
+        // Create a CountDownLatch to coordinate all refresh operations
+        final int TOTAL_OPERATIONS = 4; // Number of parallel operations
+        CountDownLatch latch = new CountDownLatch(TOTAL_OPERATIONS);
+        AtomicInteger completedTasks = new AtomicInteger(0);
+
+        // Worker for student list refresh
+        SwingWorker<Void, String> studentWorker = new SwingWorker<Void, String>() {
             @Override
             protected Void doInBackground() throws Exception {
                 try {
                     publish("Refreshing student data...");
                     studentListPanel.refreshData();
+                    publish("Student data refresh complete!");
+                } catch (Exception e) {
+                    publish("Error refreshing student data: " + e.getMessage());
+                } finally {
+                    latch.countDown();
+                    completedTasks.incrementAndGet();
+                    updateProgressMessage();
+                }
+                return null;
+            }
 
+            @Override
+            protected void process(List<String> chunks) {
+                if (!chunks.isEmpty()) {
+                    progressBar.updateMessage(chunks.get(chunks.size() - 1));
+                }
+            }
+        };
+
+        // Worker for staff list refresh
+        SwingWorker<Void, String> staffWorker = new SwingWorker<Void, String>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                try {
                     publish("Refreshing staff data...");
                     staffListPanel.refreshData();
+                    publish("Staff data refresh complete!");
+                } catch (Exception e) {
+                    publish("Error refreshing staff data: " + e.getMessage());
+                } finally {
+                    latch.countDown();
+                    completedTasks.incrementAndGet();
+                    updateProgressMessage();
+                }
+                return null;
+            }
 
+            @Override
+            protected void process(List<String> chunks) {
+                if (!chunks.isEmpty()) {
+                    progressBar.updateMessage(chunks.get(chunks.size() - 1));
+                }
+            }
+        };
+
+        // Worker for course data refresh
+        SwingWorker<Void, String> courseWorker = new SwingWorker<Void, String>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                try {
+                    publish("Refreshing course data...");
+                    Course.getAll(); // Force reload course data
+                    SwingUtilities.invokeLater(() -> {
+                        departmentPanel.refreshData();
+                    });
+                    publish("Course data refresh complete!");
+                } catch (Exception e) {
+                    publish("Error refreshing course data: " + e.getMessage());
+                } finally {
+                    latch.countDown();
+                    completedTasks.incrementAndGet();
+                    updateProgressMessage();
+                }
+                return null;
+            }
+
+            @Override
+            protected void process(List<String> chunks) {
+                if (!chunks.isEmpty()) {
+                    progressBar.updateMessage(chunks.get(chunks.size() - 1));
+                }
+            }
+        };
+
+        // Worker for assignments refresh
+        SwingWorker<Void, String> assignmentWorker = new SwingWorker<Void, String>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                try {
                     publish("Checking assignments...");
-                    // Check and update assignments
                     File staffAssignmentsFile = new File(FilePathHandler.ASSIGNED_STAFF_FILE.getNormalisedPath());
                     File studentAssignmentsFile = new File(FilePathHandler.ASSIGNED_STUDENTS_FILE.getNormalisedPath());
 
@@ -438,31 +534,59 @@ public class GuiMainScreen
                         StaffModuleAssignment.generateInitialAssignments();
                         StudentModuleAssignment.generateInitialAssignments();
                     }
-
-                    publish("Refresh complete!");
-                    Thread.sleep(500); // Brief pause to show completion message
+                    publish("Assignments refresh complete!");
                 } catch (IOException e) {
-                    publish("Error: " + e.getMessage());
-                    System.err.println("Error refreshing data: " + e.getMessage());
+                    publish("Error refreshing assignments: " + e.getMessage());
+                } finally {
+                    latch.countDown();
+                    completedTasks.incrementAndGet();
+                    updateProgressMessage();
                 }
                 return null;
             }
 
             @Override
-            protected void process(java.util.List<String> chunks) {
-                // Update progress message
-                if (chunks != null && !chunks.isEmpty()) {
+            protected void process(List<String> chunks) {
+                if (!chunks.isEmpty()) {
                     progressBar.updateMessage(chunks.get(chunks.size() - 1));
                 }
+            }
+        };
+
+        // Final completion worker to handle cleanup
+        SwingWorker<Void, Void> completionWorker = new SwingWorker<Void, Void>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                try {
+                    // Wait for all workers to complete
+                    latch.await();
+                    Thread.sleep(500); // Brief pause to show completion
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+                return null;
             }
 
             @Override
             protected void done() {
-                // Hide progress bar when complete
+                progressBar.updateMessage("All updates complete!");
                 progressBar.hideProgress();
             }
         };
-        worker.execute();
+
+        // Start all workers
+        studentWorker.execute();
+        staffWorker.execute();
+        courseWorker.execute();
+        assignmentWorker.execute();
+        completionWorker.execute();
+    }
+
+    // Helper method to update progress message with completion status
+    private void updateProgressMessage() {
+        int completed = completedTasks.get();
+        int total = 4; // Total number of tasks
+        progressBar.updateMessage(String.format("Completed %d of %d operations...", completed, total));
     }
 
     /**
@@ -511,6 +635,11 @@ public class GuiMainScreen
     {
         CardLayout cl = (CardLayout) contentPanel.getLayout();
         cl.show(contentPanel, "STUDENTS");
+    }
+
+    private void showAddCourseDialog() {
+        AddCourseDialog dialog = new AddCourseDialog(mainFrame, this);
+        dialog.setVisible(true);
     }
 
     /**
