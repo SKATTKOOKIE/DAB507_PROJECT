@@ -16,9 +16,8 @@ import com.google.gson.JsonArray;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
+import java.util.*;
 import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
 
 import gui.templates.*;
 
@@ -43,14 +42,13 @@ public class AddUserDialog extends JDialog
     private final JSpinner weeklyHoursSpinner;
     private final JSpinner maxModulesSpinner;
     private final JComboBox<DepartmentId> departmentCombo;
-    private final JTextField guidField;
 
     private final GuiMainScreen mainScreen;
 
     public AddUserDialog(Frame owner, GuiMainScreen mainScreen)
     {
         super(owner, "Add New User", true);
-        this.mainScreen = mainScreen;  // Initialize the field
+        this.mainScreen = mainScreen;
         setLayout(new BorderLayout(10, 10));
 
         this.availableCourses = new ArrayList<>();
@@ -72,17 +70,14 @@ public class AddUserDialog extends JDialog
         this.weeklyHoursSpinner = new JSpinner(new SpinnerNumberModel(37, 0, 40, 1));
         this.maxModulesSpinner = new JSpinner(new SpinnerNumberModel(4, 1, 8, 1));
         this.departmentCombo = new JComboBox<>(DepartmentId.values());
-        this.guidField = new JTextField(20);
+        // Remove guidField initialisation
 
-        // Load courses before creating the UI
         loadCourses();
-
-        // Setup UI
         setupUI();
 
         pack();
         setLocationRelativeTo(owner);
-        switchUserType(); // Initialize with default selection
+        switchUserType();
     }
 
     private void setupUI()
@@ -133,7 +128,6 @@ public class AddUserDialog extends JDialog
         addFormField(staffPanel, "Weekly Hours:", weeklyHoursSpinner, gbc);
         addFormField(staffPanel, "Max Modules:", maxModulesSpinner, gbc);
         addFormField(staffPanel, "Department:", departmentCombo, gbc);
-        addFormField(staffPanel, "GUID:", guidField, gbc);
 
         dynamicFieldsPanel.add(studentPanel, "STUDENT");
         dynamicFieldsPanel.add(staffPanel, "STAFF");
@@ -219,20 +213,27 @@ public class AddUserDialog extends JDialog
         return component;
     }
 
-    private void saveUser() {
-        try {
-            if (userTypeCombo.getSelectedItem().equals("Student")) {
+    private void saveUser()
+    {
+        try
+        {
+            if (userTypeCombo.getSelectedItem().equals("Student"))
+            {
                 saveStudent();
                 // Refresh only student data
                 mainScreen.refreshSpecificData(DataManager.DataType.STUDENTS);
-            } else {
+            }
+            else
+            {
                 saveStaff();
                 // Refresh only staff data
                 mainScreen.refreshSpecificData(DataManager.DataType.STAFF);
             }
             dispose();
             JOptionPane.showMessageDialog(this, "User saved successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             JOptionPane.showMessageDialog(this,
                     "Error saving user: " + e.getMessage(),
                     "Error",
@@ -299,8 +300,10 @@ public class AddUserDialog extends JDialog
         staff.setEmail(emailField.getText());
         staff.setWeeklyHours((Integer) weeklyHoursSpinner.getValue());
         staff.setMaxModules((Integer) maxModulesSpinner.getValue());
-        staff.setDepartmentId((DepartmentId) departmentCombo.getSelectedItem());
-        staff.setGuid(guidField.getText());
+        staff.setDepartmentId((DepartmentId) Objects.requireNonNull(departmentCombo.getSelectedItem()));
+
+        // Auto-generate GUID using UUID
+        staff.setGuid(UUID.randomUUID().toString());
 
         try
         {

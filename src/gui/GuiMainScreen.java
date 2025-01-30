@@ -291,7 +291,7 @@ public class GuiMainScreen
 
         return panel;
     }
-    
+
     /**
      * Refreshes a specific type of data in the application.
      *
