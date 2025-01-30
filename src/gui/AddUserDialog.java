@@ -3,6 +3,7 @@ package gui;
 import business.StaffModuleAssignment;
 import business.StudentModuleAssignment;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonArray;
 import users.Staff;
 import users.Student;
 import users.StudentType;
@@ -11,7 +12,7 @@ import business.Course;
 import file_handling.JsonProcessor;
 import file_handling.FilePathHandler;
 import file_handling.UserDataManager;
-import com.google.gson.JsonArray;
+import gui.templates.ChiUniDialog;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,9 +20,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
-import gui.templates.*;
-
-public class AddUserDialog extends JDialog
+public class AddUserDialog extends ChiUniDialog
 {
     private final JComboBox<String> userTypeCombo;
     private final JPanel dynamicFieldsPanel;
@@ -43,114 +42,90 @@ public class AddUserDialog extends JDialog
     private final JSpinner maxModulesSpinner;
     private final JComboBox<DepartmentId> departmentCombo;
 
-    private final GuiMainScreen mainScreen;
-
     public AddUserDialog(Frame owner, GuiMainScreen mainScreen)
     {
-        super(owner, "Add New User", true);
-        this.mainScreen = mainScreen;
-        setLayout(new BorderLayout(10, 10));
+        super(owner, "Add New User", mainScreen, true);
 
+        // Initialize fields
         this.availableCourses = new ArrayList<>();
-        this.courseCombo = new JComboBox<>();
         this.userTypeCombo = new JComboBox<>(new String[]{"Student", "Staff"});
         this.cardLayout = new CardLayout();
         this.dynamicFieldsPanel = new JPanel(cardLayout);
 
-        // Initialize common fields
+        // Common fields
         this.firstNameField = new JTextField(20);
         this.lastNameField = new JTextField(20);
         this.emailField = new JTextField(20);
 
-        // Initialize student fields
+        // Student fields
         this.studentTypeCombo = new JComboBox<>(StudentType.values());
         this.genderCombo = new JComboBox<>(new String[]{"Male", "Female", "Other"});
+        this.courseCombo = new JComboBox<>();
 
-        // Initialize staff fields
+        // Staff fields
         this.weeklyHoursSpinner = new JSpinner(new SpinnerNumberModel(37, 0, 40, 1));
         this.maxModulesSpinner = new JSpinner(new SpinnerNumberModel(4, 1, 8, 1));
         this.departmentCombo = new JComboBox<>(DepartmentId.values());
-        // Remove guidField initialisation
 
         loadCourses();
         setupUI();
-
-        pack();
-        setLocationRelativeTo(owner);
+        centerOnOwner();
         switchUserType();
     }
 
     private void setupUI()
     {
-        // Create main panel
-        JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
-        // User type selection
-        JPanel typePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        // User type selection panel
+        JPanel typePanel = createFieldPanel("User Type:", userTypeCombo);
         userTypeCombo.addActionListener(e -> switchUserType());
-        typePanel.add(new JLabel("User Type:"));
-        typePanel.add(userTypeCombo);
         mainPanel.add(typePanel, BorderLayout.NORTH);
 
-        // Common fields
-        JPanel commonPanel = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.WEST;
-        gbc.insets = new Insets(5, 5, 5, 5);
+        // Common fields panel
+        JPanel commonPanel = createFormPanel();
+        GridBagConstraints gbc = createGBC();
 
         addFormField(commonPanel, "First Name:", firstNameField, gbc);
         addFormField(commonPanel, "Last Name:", lastNameField, gbc);
         addFormField(commonPanel, "Email:", emailField, gbc);
 
         // Student-specific fields
-        JPanel studentPanel = new JPanel(new GridBagLayout());
-        gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.WEST;
-        gbc.insets = new Insets(5, 5, 5, 5);
+        JPanel studentPanel = createFormPanel();
+        gbc = createGBC();
 
         addFormField(studentPanel, "Student Type:", studentTypeCombo, gbc);
         addFormField(studentPanel, "Gender:", genderCombo, gbc);
         addFormField(studentPanel, "Course:", courseCombo, gbc);
 
         // Staff-specific fields
-        JPanel staffPanel = new JPanel(new GridBagLayout());
-        gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.WEST;
-        gbc.insets = new Insets(5, 5, 5, 5);
+        JPanel staffPanel = createFormPanel();
+        gbc = createGBC();
 
         addFormField(staffPanel, "Weekly Hours:", weeklyHoursSpinner, gbc);
         addFormField(staffPanel, "Max Modules:", maxModulesSpinner, gbc);
         addFormField(staffPanel, "Department:", departmentCombo, gbc);
 
+        // Add panels to card layout
         dynamicFieldsPanel.add(studentPanel, "STUDENT");
         dynamicFieldsPanel.add(staffPanel, "STAFF");
 
+        // Combine panels
         JPanel contentPanel = new JPanel(new BorderLayout());
         contentPanel.add(commonPanel, BorderLayout.NORTH);
         contentPanel.add(dynamicFieldsPanel, BorderLayout.CENTER);
-
         mainPanel.add(contentPanel, BorderLayout.CENTER);
 
-        // Buttons
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        ChiUniButton saveButton = new ChiUniButton("Save");
-        ChiUniButton cancelButton = new ChiUniButton("Cancel");
+        // Add standard buttons
+        addStandardButtons(this::saveUser);
+    }
 
-        saveButton.addActionListener(e -> saveUser());
-        cancelButton.addActionListener(e -> dispose());
-
-        buttonPanel.add(saveButton);
-        buttonPanel.add(cancelButton);
-
-        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
-        add(mainPanel);
+    private GridBagConstraints createGBC()
+    {
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets(5, 5, 5, 5);
+        return gbc;
     }
 
     private void loadCourses()
@@ -187,11 +162,7 @@ public class AddUserDialog extends JDialog
         }
         catch (IOException e)
         {
-            String errorMsg = "Error loading courses: " + e.getMessage();
-            JOptionPane.showMessageDialog(this,
-                    errorMsg,
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
+            showError("Error loading courses: " + e.getMessage(), "Error");
             courseCombo.addItem("No courses available");
         }
     }
@@ -203,59 +174,44 @@ public class AddUserDialog extends JDialog
         pack();
     }
 
-    private <T extends JComponent> T addFormField(JPanel panel, String label, T component, GridBagConstraints gbc)
-    {
-        gbc.gridx = 0;
-        panel.add(new JLabel(label), gbc);
-        gbc.gridx = 1;
-        panel.add(component, gbc);
-        gbc.gridy++;
-        return component;
-    }
-
     private void saveUser()
     {
         try
         {
+            if (!validateRequiredFields(firstNameField, lastNameField, emailField))
+            {
+                return;
+            }
+
             if (userTypeCombo.getSelectedItem().equals("Student"))
             {
                 saveStudent();
-                // Refresh only student data
                 mainScreen.refreshSpecificData(DataManager.DataType.STUDENTS);
             }
             else
             {
                 saveStaff();
-                // Refresh only staff data
                 mainScreen.refreshSpecificData(DataManager.DataType.STAFF);
             }
+
+            showSuccess("User saved successfully!");
             dispose();
-            JOptionPane.showMessageDialog(this, "User saved successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
         }
         catch (Exception e)
         {
-            JOptionPane.showMessageDialog(this,
-                    "Error saving user: " + e.getMessage(),
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
+            showError("Error saving user: " + e.getMessage(), "Error");
         }
     }
 
     private void saveStudent() throws IOException
     {
-        // Check if course is selected
         Object selectedCourse = courseCombo.getSelectedItem();
         if (selectedCourse == null)
         {
             throw new IOException("Please select a course. If no courses are available, check the courses file.");
         }
 
-        // Validate other required fields before creating student object
-        if (firstNameField.getText().trim().isEmpty() ||
-                lastNameField.getText().trim().isEmpty() ||
-                emailField.getText().trim().isEmpty() ||
-                studentTypeCombo.getSelectedItem() == null ||
-                genderCombo.getSelectedItem() == null)
+        if (studentTypeCombo.getSelectedItem() == null || genderCombo.getSelectedItem() == null)
         {
             throw new IOException("All fields are required. Please fill in all information.");
         }
@@ -271,18 +227,17 @@ public class AddUserDialog extends JDialog
 
         try
         {
-            // First validate and save the student
+            // Validate and save the student
             UserDataManager.validateUser(student);
             UserDataManager.addStudent(student);
 
-            // Get the course code for the selected course
+            // Get course code and generate assignments
             String courseCode = Course.getCourseCodeFromTitle(student.getCourse());
             if (courseCode == null || courseCode.isEmpty())
             {
                 throw new IOException("Could not find course code for the selected course");
             }
 
-            // Generate initial module assignments for the student
             StudentModuleAssignment.generateInitialAssignments(student.getId(), courseCode);
         }
         catch (IllegalArgumentException e)
@@ -295,23 +250,21 @@ public class AddUserDialog extends JDialog
     {
         Staff staff = new Staff();
         staff.setId(getNextStaffId());
-        staff.setFirstName(firstNameField.getText());
-        staff.setLastName(lastNameField.getText());
-        staff.setEmail(emailField.getText());
+        staff.setFirstName(firstNameField.getText().trim());
+        staff.setLastName(lastNameField.getText().trim());
+        staff.setEmail(emailField.getText().trim());
         staff.setWeeklyHours((Integer) weeklyHoursSpinner.getValue());
         staff.setMaxModules((Integer) maxModulesSpinner.getValue());
         staff.setDepartmentId((DepartmentId) Objects.requireNonNull(departmentCombo.getSelectedItem()));
-
-        // Auto-generate GUID using UUID
         staff.setGuid(UUID.randomUUID().toString());
 
         try
         {
-            // First validate and save the staff member
+            // Validate and save the staff member
             UserDataManager.validateUser(staff);
             UserDataManager.addStaff(staff);
 
-            // Generate initial module assignments for the staff member
+            // Generate initial module assignments
             Map<Integer, StaffModuleAssignment> currentAssignments = StaffModuleAssignment.loadAssignments();
             if (!currentAssignments.containsKey(staff.getId()))
             {

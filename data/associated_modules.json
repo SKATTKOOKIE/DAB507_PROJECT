@@ -36864,6 +36864,37 @@
         "I206",
         "698083"
       ]
+    },
+    {
+      "module_name": "Pipe measurement",
+      "module_code": "36d-25",
+      "ac_year": "25",
+      "associated_courses": [
+        "698083",
+        "G400",
+        "I206"
+      ]
+    },
+    {
+      "module_name": "Pipe Measurement 2",
+      "module_code": "545-26",
+      "ac_year": "26",
+      "associated_courses": [
+        "I206",
+        "G400",
+        "698083"
+      ]
+    },
+    {
+      "module_name": "Disney Dancing lvl 2",
+      "module_code": "594-25",
+      "ac_year": "25",
+      "associated_courses": [
+        "C866",
+        "W520",
+        "W5C6",
+        "3D2X"
+      ]
     }
   ],
   "summary": {

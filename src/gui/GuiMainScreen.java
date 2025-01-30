@@ -3,6 +3,7 @@ package gui;
 import java.awt.*;
 import javax.swing.*;
 
+import gui.dialogs.AddModuleDialog;
 import gui.templates.*;
 import gui.panels.*;
 
