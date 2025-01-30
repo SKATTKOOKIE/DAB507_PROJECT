@@ -16,6 +16,8 @@ import users.Staff;
 import business.Module;
 import business.Course;
 
+import gui.templates.*;
+
 /**
  * A panel that displays a filterable grid of staff cards.
  * Each card shows staff information and their avatar image.

@@ -15,6 +15,8 @@ import users.StudentType;
 import business.Module;
 import business.Course;
 
+import gui.templates.*;
+
 /**
  * A panel that displays a filterable grid of student cards.
  * Each card shows student information and provides access to their module details.

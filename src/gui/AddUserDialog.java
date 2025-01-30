@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 
+import gui.templates.*;
+
 public class AddUserDialog extends JDialog
 {
     private final JComboBox<String> userTypeCombo;

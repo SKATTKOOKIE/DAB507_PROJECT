@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import gui.templates.*;
+
 public class DepartmentDetailPanel extends ChiUniPanel
 {
     private final DepartmentId departmentId;

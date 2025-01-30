@@ -6,6 +6,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Arrays;
 
+import gui.templates.*;
+
 public class DepartmentPanel extends ChiUniPanel
 {
     private final CardLayout cardLayout;

@@ -1,5 +1,7 @@
 package gui;
 
+import gui.templates.*;
+
 public class OutputManager
 {
     private static ChiUniTextArea textArea;

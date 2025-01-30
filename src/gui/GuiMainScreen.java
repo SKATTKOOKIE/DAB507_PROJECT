@@ -13,6 +13,8 @@ import business.StaffModuleAssignment;
 import business.StudentModuleAssignment;
 import file_handling.FilePathHandler;
 
+import gui.templates.*;
+
 /**
  * Main graphical user interface for the University Management System.
  * This class manages the primary window of the application, including

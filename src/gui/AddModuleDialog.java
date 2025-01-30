@@ -17,6 +17,8 @@ import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import gui.templates.*;
+
 public class AddModuleDialog extends JDialog
 {
     private final JTextField nameField;
