@@ -109,7 +109,24 @@ public class Student extends User implements IStudent
         // Always read fresh from file
         var studentProcessor = new JsonProcessor(FilePathHandler.STUDENTS_FILE.getNormalisedPath());
         studentProcessor.processFile();
-        Student[] allStudents = new Gson().fromJson(
+
+        // Create a custom GSON instance with field name mapping
+        Gson gson = new com.google.gson.GsonBuilder()
+                .setFieldNamingStrategy(field ->
+                {
+                    if (field.getName().equals("firstName"))
+                    {
+                        return "first_name";
+                    }
+                    if (field.getName().equals("lastName"))
+                    {
+                        return "last_name";
+                    }
+                    return field.getName();
+                })
+                .create();
+
+        Student[] allStudents = gson.fromJson(
                 studentProcessor.getJsonContent().toString(),
                 Student[].class
         );

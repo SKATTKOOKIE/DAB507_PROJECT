@@ -1,7 +1,5 @@
 package users;
 
-import com.google.gson.annotations.SerializedName;
-
 /**
  * Abstract base class representing a user in the system.
  * Contains common attributes and functionality shared by all user types.
@@ -20,16 +18,12 @@ public abstract class User implements IUser
 
     /**
      * User's first name.
-     * Mapped to "first_name" in JSON serialization.
      */
-    @SerializedName("first_name")
     private String firstName;
 
     /**
      * User's last name.
-     * Mapped to "last_name" in JSON serialization.
      */
-    @SerializedName("last_name")
     private String lastName;
 
     /**

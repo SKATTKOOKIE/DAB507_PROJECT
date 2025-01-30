@@ -2,7 +2,6 @@ package users;
 
 import business.DepartmentId;
 import com.google.gson.Gson;
-import com.google.gson.annotations.SerializedName;
 import file_handling.FilePathHandler;
 import file_handling.JsonProcessor;
 
@@ -14,9 +13,7 @@ import java.util.stream.Collectors;
 public class Staff extends User implements IStaffMember
 {
     private String guid;
-    @SerializedName("weekly_hours")
     private int weeklyHours;
-    @SerializedName("max_modules")
     private int maxModules;
     private String avatar;
     private static List<Staff> cachedStaff = null;
@@ -42,7 +39,6 @@ public class Staff extends User implements IStaffMember
         setDepartment(departmentId.getDepartmentName());
     }
 
-    // Original getters and setters
     public String getGuid()
     {
         return guid;
@@ -96,7 +92,32 @@ public class Staff extends User implements IStaffMember
         // Always read fresh from file
         JsonProcessor staffProcessor = new JsonProcessor(FilePathHandler.STAFF_FILE.getNormalisedPath());
         staffProcessor.processFile();
-        Staff[] allStaff = new Gson().fromJson(
+
+        // Create a custom GSON instance with field name mapping
+        Gson gson = new com.google.gson.GsonBuilder()
+                .setFieldNamingStrategy(field ->
+                {
+                    if (field.getName().equals("weeklyHours"))
+                    {
+                        return "weekly_hours";
+                    }
+                    if (field.getName().equals("maxModules"))
+                    {
+                        return "max_modules";
+                    }
+                    if (field.getName().equals("firstName"))
+                    {
+                        return "first_name";
+                    }
+                    if (field.getName().equals("lastName"))
+                    {
+                        return "last_name";
+                    }
+                    return field.getName();
+                })
+                .create();
+
+        Staff[] allStaff = gson.fromJson(
                 staffProcessor.getJsonContent().toString(),
                 Staff[].class
         );
