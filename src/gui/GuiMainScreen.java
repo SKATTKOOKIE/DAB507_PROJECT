@@ -105,8 +105,8 @@ public class GuiMainScreen
         contentPanel = new ChiUniPanel();
         contentPanel.setLayout(new CardLayout());
 
-        // Create login panel
-        loginPanel = createLoginPanel();
+        // Create login panel with success callback
+        loginPanel = new LoginPanel(mainFrame, this::showWelcomePanel);
         contentPanel.add(loginPanel, "LOGIN");
 
         // Create welcome panel
@@ -194,101 +194,6 @@ public class GuiMainScreen
             }
         };
         worker.execute();
-    }
-
-    /**
-     * Creates and configures the login panel with username and password fields.
-     *
-     * @return Configured login panel
-     */
-    private ChiUniPanel createLoginPanel()
-    {
-        ChiUniPanel panel = new ChiUniPanel();
-        panel.setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-
-        // Login title
-        JLabel titleLabel = new JLabel("Admin Login");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        titleLabel.setHorizontalAlignment(JLabel.CENTER);
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.gridwidth = 2;
-        gbc.insets = new Insets(0, 0, 20, 0);
-        panel.add(titleLabel, gbc);
-
-        // Username components
-        JLabel usernameLabel = new JLabel("Username:");
-        usernameLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        gbc.gridwidth = 1;
-        gbc.insets = new Insets(5, 5, 5, 5);
-        panel.add(usernameLabel, gbc);
-
-        JTextField usernameField = new JTextField(20);
-        gbc.gridx = 1;
-        gbc.gridy = 1;
-        panel.add(usernameField, gbc);
-
-        // Password components
-        JLabel passwordLabel = new JLabel("Password:");
-        passwordLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        panel.add(passwordLabel, gbc);
-
-        JPasswordField passwordField = new JPasswordField(20);
-        gbc.gridx = 1;
-        gbc.gridy = 2;
-        panel.add(passwordField, gbc);
-
-        // Login button
-        ChiUniButton loginButton = new ChiUniButton("Login");
-        loginButton.setFont(new Font("Arial", Font.PLAIN, 14));
-        gbc.gridx = 0;
-        gbc.gridy = 3;
-        gbc.gridwidth = 2;
-        gbc.insets = new Insets(20, 5, 5, 5);
-        panel.add(loginButton, gbc);
-
-        // Add action listeners
-        loginButton.addActionListener(e ->
-        {
-            String username = usernameField.getText();
-            String password = new String(passwordField.getPassword());
-
-            if (validateCredentials(username, password))
-            {
-                showWelcomePanel();
-            }
-            else
-            {
-                JOptionPane.showMessageDialog(mainFrame,
-                        "Invalid credentials. Please try again.",
-                        "Login Failed",
-                        JOptionPane.ERROR_MESSAGE);
-                passwordField.setText("");
-            }
-        });
-
-        passwordField.addActionListener(e -> loginButton.doClick());
-
-        return panel;
-    }
-
-    /**
-     * Validates the provided login credentials.
-     *
-     * @param username The entered username
-     * @param password The entered password
-     * @return true if credentials are valid, false otherwise
-     */
-    private boolean validateCredentials(String username, String password)
-    {
-        return ADMIN_USERNAME.equals(username) && ADMIN_PASSWORD.equals(password);
     }
 
     /**
