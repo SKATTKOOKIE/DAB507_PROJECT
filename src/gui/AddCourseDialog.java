@@ -203,8 +203,8 @@ public class AddCourseDialog extends JDialog
                     "Success",
                     JOptionPane.INFORMATION_MESSAGE);
 
-            // Refresh the main screen data
-            mainScreen.refreshData("Refreshing data after adding new course...");
+            // Refresh only course data
+            mainScreen.refreshSpecificData(DataManager.DataType.COURSES);
         }
         catch (Exception e)
         {

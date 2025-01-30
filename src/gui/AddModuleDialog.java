@@ -261,8 +261,8 @@ public class AddModuleDialog extends JDialog
                     "Success",
                     JOptionPane.INFORMATION_MESSAGE);
 
-            // Refresh the main screen data
-            mainScreen.refreshData("Refreshing data after adding new module...");
+            // Refresh only module data
+            mainScreen.refreshSpecificData(DataManager.DataType.MODULES);
         }
         catch (Exception e)
         {

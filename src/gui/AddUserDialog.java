@@ -219,29 +219,24 @@ public class AddUserDialog extends JDialog
         return component;
     }
 
-    private void saveUser()
-    {
-        try
-        {
-            if (userTypeCombo.getSelectedItem().equals("Student"))
-            {
+    private void saveUser() {
+        try {
+            if (userTypeCombo.getSelectedItem().equals("Student")) {
                 saveStudent();
-            }
-            else
-            {
+                // Refresh only student data
+                mainScreen.refreshSpecificData(DataManager.DataType.STUDENTS);
+            } else {
                 saveStaff();
+                // Refresh only staff data
+                mainScreen.refreshSpecificData(DataManager.DataType.STAFF);
             }
             dispose();
-
-            // Show success message
             JOptionPane.showMessageDialog(this, "User saved successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-
-            // Refresh the main screen data
-            mainScreen.refreshData("Refreshing data after adding new user...");
-        }
-        catch (Exception e)
-        {
-            JOptionPane.showMessageDialog(this, "Error saving user: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error saving user: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 

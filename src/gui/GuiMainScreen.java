@@ -12,8 +12,8 @@ import business.Course;
 import business.StaffModuleAssignment;
 import business.StudentModuleAssignment;
 import file_handling.FilePathHandler;
-
 import gui.templates.*;
+
 
 /**
  * Main graphical user interface for the University Management System.
@@ -23,51 +23,15 @@ import gui.templates.*;
  */
 public class GuiMainScreen
 {
-    /**
-     * Main application window
-     */
     private ChiUniFrame mainFrame;
-
-    /**
-     * Text area for displaying output messages
-     */
     private ChiUniTextArea outputArea;
-
-    /**
-     * Panel for displaying and managing departments
-     */
     private DepartmentPanel departmentPanel;
-
-    /**
-     * Welcome screen panel
-     */
-    private ChiUniPanel welcomePanel;
-
-    /**
-     * Main content panel that holds all other panels
-     */
     private ChiUniPanel contentPanel;
-
-    /**
-     * Login screen panel
-     */
-    private ChiUniPanel loginPanel;
-
-    /**
-     * Panel for displaying and managing student lists
-     */
     private StudentListPanel studentListPanel;
-
-    /**
-     * Panel for displaying and managing staff lists
-     */
     private StaffListPanel staffListPanel;
-
-    private JDialog loadingDialog;
-
-    private ChiUniProgressBar progressBar;
-
+    private final ChiUniProgressBar progressBar;
     private AtomicInteger completedTasks;
+    private final DataManager dataManager;
 
     /**
      * Administrator username for login
@@ -87,6 +51,7 @@ public class GuiMainScreen
     {
         initialiseGUI();
         progressBar = new ChiUniProgressBar(mainFrame, "Loading", "Initialising system...");
+        dataManager = new DataManager(studentListPanel, staffListPanel, departmentPanel, progressBar);
         progressBar.showProgress();
         show();
     }
@@ -108,11 +73,11 @@ public class GuiMainScreen
         contentPanel.setLayout(new CardLayout());
 
         // Create login panel with success callback
-        loginPanel = new LoginPanel(mainFrame, this::showWelcomePanel);
+        ChiUniPanel loginPanel = new LoginPanel(mainFrame, this::showWelcomePanel);
         contentPanel.add(loginPanel, "LOGIN");
 
         // Create welcome panel
-        welcomePanel = createWelcomePanel();
+        ChiUniPanel welcomePanel = createWelcomePanel();
         contentPanel.add(welcomePanel, "WELCOME");
 
         studentListPanel = new StudentListPanel();
@@ -143,62 +108,6 @@ public class GuiMainScreen
     }
 
     /**
-     * Initialises application data in a background thread.
-     * Checks for existing assignments files and generates initial assignments if needed.
-     */
-    private void initialiseData()
-    {
-        SwingWorker<Void, String> worker = new SwingWorker<Void, String>()
-        {
-            @Override
-            protected Void doInBackground() throws Exception
-            {
-                try
-                {
-                    publish("Checking file system...");
-                    // Use FilePathHandler enum to get the file paths
-                    File staffAssignmentsFile = new File(FilePathHandler.ASSIGNED_STAFF_FILE.getNormalisedPath());
-                    File studentAssignmentsFile = new File(FilePathHandler.ASSIGNED_STUDENTS_FILE.getNormalisedPath());
-
-                    if (!staffAssignmentsFile.exists() || !studentAssignmentsFile.exists())
-                    {
-                        publish("Generating initial assignments...");
-                        StaffModuleAssignment.generateInitialAssignments();
-                        StudentModuleAssignment.generateInitialAssignments();
-                    }
-
-                    publish("Loading complete!");
-                    Thread.sleep(500); // Brief pause to show completion message
-                }
-                catch (IOException e)
-                {
-                    publish("Error: " + e.getMessage());
-                    System.err.println("Error checking/generating assignments: " + e.getMessage());
-                }
-                return null;
-            }
-
-            @Override
-            protected void process(java.util.List<String> chunks)
-            {
-                // Update progress message
-                if (chunks != null && !chunks.isEmpty())
-                {
-                    progressBar.updateMessage(chunks.get(chunks.size() - 1));
-                }
-            }
-
-            @Override
-            protected void done()
-            {
-                // Hide progress bar when complete
-                progressBar.hideProgress();
-            }
-        };
-        worker.execute();
-    }
-
-    /**
      * Shows the login panel in the main content area.
      */
     private void showLoginPanel()
@@ -209,7 +118,7 @@ public class GuiMainScreen
 
     private void showLoadingDialog()
     {
-        loadingDialog = new JDialog(mainFrame, "Loading", false);
+        JDialog loadingDialog = new JDialog(mainFrame, "Loading", false);
         loadingDialog.setUndecorated(true);
 
         JPanel panel = new JPanel(new BorderLayout(10, 10));
@@ -306,6 +215,8 @@ public class GuiMainScreen
         return panel;
     }
 
+
+
     /**
      * Shows the welcome panel in the main content area.
      */
@@ -347,200 +258,7 @@ public class GuiMainScreen
      */
     public void refreshData(String message)
     {
-        // Show progress bar
-        progressBar.showProgress();
-        progressBar.updateMessage(message);
-
-        // Create a CountDownLatch to coordinate all refresh operations
-        final int TOTAL_OPERATIONS = 4; // Number of parallel operations
-        CountDownLatch latch = new CountDownLatch(TOTAL_OPERATIONS);
-        AtomicInteger completedTasks = new AtomicInteger(0);
-
-        // Worker for student list refresh
-        SwingWorker<Void, String> studentWorker = new SwingWorker<Void, String>()
-        {
-            @Override
-            protected Void doInBackground() throws Exception
-            {
-                try
-                {
-                    publish("Refreshing student data...");
-                    studentListPanel.refreshData();
-                    publish("Student data refresh complete!");
-                }
-                catch (Exception e)
-                {
-                    publish("Error refreshing student data: " + e.getMessage());
-                }
-                finally
-                {
-                    latch.countDown();
-                    completedTasks.incrementAndGet();
-                    updateProgressMessage();
-                }
-                return null;
-            }
-
-            @Override
-            protected void process(List<String> chunks)
-            {
-                if (!chunks.isEmpty())
-                {
-                    progressBar.updateMessage(chunks.get(chunks.size() - 1));
-                }
-            }
-        };
-
-        // Worker for staff list refresh
-        SwingWorker<Void, String> staffWorker = new SwingWorker<Void, String>()
-        {
-            @Override
-            protected Void doInBackground() throws Exception
-            {
-                try
-                {
-                    publish("Refreshing staff data...");
-                    staffListPanel.refreshData();
-                    publish("Staff data refresh complete!");
-                }
-                catch (Exception e)
-                {
-                    publish("Error refreshing staff data: " + e.getMessage());
-                }
-                finally
-                {
-                    latch.countDown();
-                    completedTasks.incrementAndGet();
-                    updateProgressMessage();
-                }
-                return null;
-            }
-
-            @Override
-            protected void process(List<String> chunks)
-            {
-                if (!chunks.isEmpty())
-                {
-                    progressBar.updateMessage(chunks.get(chunks.size() - 1));
-                }
-            }
-        };
-
-        // Worker for course data refresh
-        SwingWorker<Void, String> courseWorker = new SwingWorker<Void, String>()
-        {
-            @Override
-            protected Void doInBackground() throws Exception
-            {
-                try
-                {
-                    publish("Refreshing course data...");
-                    Course.getAll(); // Force reload course data
-                    SwingUtilities.invokeLater(() ->
-                    {
-                        departmentPanel.refreshData();
-                    });
-                    publish("Course data refresh complete!");
-                }
-                catch (Exception e)
-                {
-                    publish("Error refreshing course data: " + e.getMessage());
-                }
-                finally
-                {
-                    latch.countDown();
-                    completedTasks.incrementAndGet();
-                    updateProgressMessage();
-                }
-                return null;
-            }
-
-            @Override
-            protected void process(List<String> chunks)
-            {
-                if (!chunks.isEmpty())
-                {
-                    progressBar.updateMessage(chunks.get(chunks.size() - 1));
-                }
-            }
-        };
-
-        // Worker for assignments refresh
-        SwingWorker<Void, String> assignmentWorker = new SwingWorker<Void, String>()
-        {
-            @Override
-            protected Void doInBackground() throws Exception
-            {
-                try
-                {
-                    publish("Checking assignments...");
-                    File staffAssignmentsFile = new File(FilePathHandler.ASSIGNED_STAFF_FILE.getNormalisedPath());
-                    File studentAssignmentsFile = new File(FilePathHandler.ASSIGNED_STUDENTS_FILE.getNormalisedPath());
-
-                    if (!staffAssignmentsFile.exists() || !studentAssignmentsFile.exists())
-                    {
-                        publish("Updating assignments...");
-                        StaffModuleAssignment.generateInitialAssignments();
-                        StudentModuleAssignment.generateInitialAssignments();
-                    }
-                    publish("Assignments refresh complete!");
-                }
-                catch (IOException e)
-                {
-                    publish("Error refreshing assignments: " + e.getMessage());
-                }
-                finally
-                {
-                    latch.countDown();
-                    completedTasks.incrementAndGet();
-                    updateProgressMessage();
-                }
-                return null;
-            }
-
-            @Override
-            protected void process(List<String> chunks)
-            {
-                if (!chunks.isEmpty())
-                {
-                    progressBar.updateMessage(chunks.get(chunks.size() - 1));
-                }
-            }
-        };
-
-        // Final completion worker to handle cleanup
-        SwingWorker<Void, Void> completionWorker = new SwingWorker<Void, Void>()
-        {
-            @Override
-            protected Void doInBackground() throws Exception
-            {
-                try
-                {
-                    // Wait for all workers to complete
-                    latch.await();
-                    Thread.sleep(500); // Brief pause to show completion
-                }
-                catch (InterruptedException e)
-                {
-                    Thread.currentThread().interrupt();
-                }
-                return null;
-            }
-
-            @Override
-            protected void done()
-            {
-                progressBar.updateMessage("All updates complete!");
-                progressBar.hideProgress();
-            }
-        };
-
-        // Start all workers
-        studentWorker.execute();
-        staffWorker.execute();
-        courseWorker.execute();
-        assignmentWorker.execute();
-        completionWorker.execute();
+        dataManager.refreshData(message);
     }
 
     // Helper method to update progress message with completion status
@@ -573,21 +291,23 @@ public class GuiMainScreen
 
         return panel;
     }
+    
+    /**
+     * Refreshes a specific type of data in the application.
+     *
+     * @param dataType The type of data to refresh
+     */
+    public void refreshSpecificData(DataManager.DataType dataType) {
+        dataManager.refreshSpecificData(dataType);
+    }
 
     /**
-     * Handles and displays error messages to the user.
-     *
-     * @param message The error message to display
-     * @param ex      The exception that occurred
+     * Initialises application data in a background thread.
+     * Checks for existing assignments files and generates initial assignments if needed.
      */
-    private void handleError(String message, Exception ex)
+    private void initialiseData()
     {
-        String errorMessage = message + ": " + ex.getMessage();
-        OutputManager.print("ERROR: " + errorMessage);
-        JOptionPane.showMessageDialog(mainFrame,
-                errorMessage,
-                "Error",
-                JOptionPane.ERROR_MESSAGE);
+        dataManager.initialiseData();
     }
 
     /**
