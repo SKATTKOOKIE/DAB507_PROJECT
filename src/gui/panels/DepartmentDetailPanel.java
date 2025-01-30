@@ -1,4 +1,4 @@
-package gui;
+package gui.panels;
 
 import business.Course;
 import business.Department;

@@ -5,6 +5,9 @@ import business.Module;
 import business.StaffModuleAssignment;
 import business.StudentModuleAssignment;
 import file_handling.FilePathHandler;
+import gui.panels.DepartmentPanel;
+import gui.panels.StaffListPanel;
+import gui.panels.StudentListPanel;
 import gui.templates.*;
 
 import javax.swing.*;
