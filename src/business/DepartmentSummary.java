@@ -60,4 +60,19 @@ public class DepartmentSummary
     {
         System.out.println(getDetailedInfo());
     }
+
+    public DepartmentId getDepartmentId()
+    {
+        return departmentId;
+    }
+
+    public int getStudentCount()
+    {
+        return studentCount;
+    }
+
+    public int getStaffCount()
+    {
+        return staffCount;
+    }
 }
