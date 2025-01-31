@@ -30,7 +30,7 @@ class AddModuleDialogTest
             try
             {
                 dialog = new AddModuleDialog(new Frame(), new GuiMainScreen());
-                initializeFields();
+                initialiseFields();
             }
             catch (Exception e)
             {
@@ -40,7 +40,7 @@ class AddModuleDialogTest
         });
     }
 
-    private void initializeFields() throws Exception
+    private void initialiseFields() throws Exception
     {
         // Access private fields using reflection
         Class<AddModuleDialog> dialogClass = AddModuleDialog.class;
