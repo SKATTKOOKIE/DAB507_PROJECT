@@ -1,9 +1,11 @@
-package gui;
+package gui.dialogs;
 
 import business.StaffModuleAssignment;
 import business.StudentModuleAssignment;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonArray;
+import gui.DataManager;
+import gui.GuiMainScreen;
 import users.Staff;
 import users.Student;
 import users.StudentType;

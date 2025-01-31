@@ -1,4 +1,4 @@
-package gui;
+package gui.dialogs;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -7,6 +7,8 @@ import com.google.gson.JsonObject;
 import file_handling.FilePathHandler;
 import file_handling.JsonProcessor;
 import business.DepartmentId;
+import gui.DataManager;
+import gui.GuiMainScreen;
 import gui.templates.ChiUniButton;
 import gui.templates.ChiUniDialog;
 

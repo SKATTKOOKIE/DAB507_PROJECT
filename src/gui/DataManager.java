@@ -60,10 +60,10 @@ public class DataManager
         String message = "Refreshing " + dataType.toString().toLowerCase() + " data...";
         progressBar.updateMessage(message);
 
-        SwingWorker<Void, String> worker = new SwingWorker<Void, String>()
+        SwingWorker<Void, String> worker = new SwingWorker<>()
         {
             @Override
-            protected Void doInBackground() throws Exception
+            protected Void doInBackground()
             {
                 try
                 {
@@ -122,11 +122,6 @@ public class DataManager
         }
     }
 
-    public void refreshData(String message)
-    {
-        refreshSpecificData(DataType.ALL);
-    }
-
     private void refreshAll() throws Exception
     {
         CountDownLatch latch = new CountDownLatch(TOTAL_OPERATIONS);
@@ -163,13 +158,13 @@ public class DataManager
     private void refreshCourseData() throws IOException
     {
         Course.getAll(); // Force reload course data
-        SwingUtilities.invokeLater(() -> departmentPanel.refreshData());
+        SwingUtilities.invokeLater(departmentPanel::refreshData);
     }
 
     private void refreshModuleData() throws IOException
     {
         Module.getAll(); // Force reload module data
-        SwingUtilities.invokeLater(() -> departmentPanel.refreshData());
+        SwingUtilities.invokeLater(departmentPanel::refreshData);
     }
 
     private void refreshAssignments() throws IOException
@@ -186,10 +181,10 @@ public class DataManager
 
     private void executeWorker(String startMessage, WorkerOperation operation, CountDownLatch latch, String workerName)
     {
-        SwingWorker<Void, String> worker = new SwingWorker<Void, String>()
+        SwingWorker<Void, String> worker = new SwingWorker<>()
         {
             @Override
-            protected Void doInBackground() throws Exception
+            protected Void doInBackground()
             {
                 try
                 {
@@ -237,12 +232,12 @@ public class DataManager
     // Add this method to DataManager class:
 
     /**
-     * Initializes application data in a background thread.
+     * Initialises application data in a background thread.
      * Checks for existing assignments files and generates initial assignments if needed.
      */
     public void initialiseData()
     {
-        SwingWorker<Void, String> worker = new SwingWorker<Void, String>()
+        SwingWorker<Void, String> worker = new SwingWorker<>()
         {
             @Override
             protected Void doInBackground() throws Exception

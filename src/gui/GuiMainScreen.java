@@ -3,26 +3,42 @@ package gui;
 import java.awt.*;
 import javax.swing.*;
 
+import gui.dialogs.AddCourseDialog;
 import gui.dialogs.AddModuleDialog;
+import gui.dialogs.AddUserDialog;
 import gui.templates.*;
 import gui.panels.*;
 
 /**
  * Main graphical user interface for the University Management System.
+ * This class serves as the primary controller for the GUI, managing navigation
+ * between different panels and coordinating user interactions across the application.
+ * <p>
+ * The GUI consists of several main components:
+ * <ul>
+ *   <li>A banner panel displaying the university name</li>
+ *   <li>A login panel for user authentication</li>
+ *   <li>A welcome panel serving as the main navigation hub</li>
+ *   <li>Separate panels for managing departments, students, and staff</li>
+ *   <li>Dialog windows for adding new users, courses, and modules</li>
+ * </ul>
+ * <p>
+ * The class follows a card layout pattern for panel navigation and uses
+ * a DataManager instance to handle data operations.
  */
 public class GuiMainScreen
 {
     private ChiUniFrame mainFrame;
-    private ChiUniTextArea outputArea;
     private DepartmentPanel departmentPanel;
     private ChiUniPanel contentPanel;
     private StudentListPanel studentListPanel;
     private StaffListPanel staffListPanel;
     private final DataManager dataManager;
 
-    private static final String ADMIN_USERNAME = "admin";
-    private static final String ADMIN_PASSWORD = "password";
-
+    /**
+     * Constructs a new GuiMainScreen instance.
+     * Initialises the GUI components and shows a progress bar while loading data.
+     */
     public GuiMainScreen()
     {
         initialiseGUI();
@@ -32,6 +48,9 @@ public class GuiMainScreen
         show();
     }
 
+    /**
+     * Initialises all GUI components and sets up the main frame layout.
+     */
     private void initialiseGUI()
     {
         mainFrame = new ChiUniFrame("University Management System");
@@ -52,8 +71,8 @@ public class GuiMainScreen
         WelcomePanel welcomePanel = new WelcomePanel(this);
         contentPanel.add(welcomePanel, "WELCOME");
 
-        // Initialize other panels
-        initializeOtherPanels();
+        // Initialise other panels
+        initialiseOtherPanels();
 
         mainFrame.addComponent(contentPanel, BorderLayout.CENTER);
         mainFrame.setMinimumSize(new Dimension(1000, 700));
@@ -61,7 +80,10 @@ public class GuiMainScreen
         showLoginPanel();
     }
 
-    private void initializeOtherPanels()
+    /**
+     * Initialises secondary panels (students, departments, staff) and adds navigation buttons.
+     */
+    private void initialiseOtherPanels()
     {
         // Create students panel
         studentListPanel = new StudentListPanel();
@@ -86,6 +108,11 @@ public class GuiMainScreen
         contentPanel.add(staffListPanel, "STAFF");
     }
 
+    /**
+     * Creates and configures the banner panel with university title.
+     *
+     * @return Configured banner panel
+     */
     private ChiUniPanel createBannerPanel()
     {
         ChiUniPanel panel = new ChiUniPanel();
@@ -103,7 +130,9 @@ public class GuiMainScreen
         return panel;
     }
 
-    // Navigation methods made public for WelcomePanel to access
+    /**
+     * Displays the welcome panel and initialises application data.
+     */
     public void showWelcomePanel()
     {
         initialiseData();
@@ -111,63 +140,90 @@ public class GuiMainScreen
         cl.show(contentPanel, "WELCOME");
     }
 
+    /**
+     * Displays the departments management panel.
+     */
     public void showDepartmentsPanel()
     {
         CardLayout cl = (CardLayout) contentPanel.getLayout();
         cl.show(contentPanel, "DEPARTMENTS");
     }
 
+    /**
+     * Displays the student management panel.
+     */
     public void showStudentsPanel()
     {
         CardLayout cl = (CardLayout) contentPanel.getLayout();
         cl.show(contentPanel, "STUDENTS");
     }
 
+    /**
+     * Displays the staff management panel.
+     */
     public void showStaffPanel()
     {
         CardLayout cl = (CardLayout) contentPanel.getLayout();
         cl.show(contentPanel, "STAFF");
     }
 
+    /**
+     * Displays the dialog for adding a new user to the system.
+     */
     public void showAddUserDialog()
     {
         AddUserDialog dialog = new AddUserDialog(mainFrame, this);
         dialog.setVisible(true);
     }
 
+    /**
+     * Displays the dialog for adding a new course to the system.
+     */
     public void showAddCourseDialog()
     {
         AddCourseDialog dialog = new AddCourseDialog(mainFrame, this);
         dialog.setVisible(true);
     }
 
+    /**
+     * Displays the dialog for adding a new module to the system.
+     */
     public void showAddModuleDialog()
     {
         AddModuleDialog dialog = new AddModuleDialog(mainFrame, this);
         dialog.setVisible(true);
     }
 
+    /**
+     * Displays the login panel.
+     */
     private void showLoginPanel()
     {
         CardLayout cl = (CardLayout) contentPanel.getLayout();
         cl.show(contentPanel, "LOGIN");
     }
 
+    /**
+     * Initialises the application data through the DataManager.
+     */
     private void initialiseData()
     {
         dataManager.initialiseData();
     }
 
-    public void refreshData(String message)
-    {
-        dataManager.refreshData(message);
-    }
-
+    /**
+     * Refreshes a specific type of data in the system.
+     *
+     * @param dataType The type of data to refresh (e.g., STUDENTS, STAFF, DEPARTMENTS)
+     */
     public void refreshSpecificData(DataManager.DataType dataType)
     {
         dataManager.refreshSpecificData(dataType);
     }
 
+    /**
+     * Makes the main application window visible.
+     */
     public void show()
     {
         mainFrame.setVisible(true);
