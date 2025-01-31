@@ -1,4 +1,4 @@
-package gui;
+package gui.components.dialogs;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -8,8 +8,15 @@ import file_handling.FilePathHandler;
 import file_handling.JsonProcessor;
 import business.DepartmentId;
 import business.Course;
+import file_handling.validation.AcademicYearFilter;
+import gui.DataManager;
+import gui.GuiMainScreen;
+import gui.templates.ChiUniButton;
+import gui.templates.ChiUniDialog;
+import gui.components.combo.DepartmentComboBox;
 
 import javax.swing.*;
+import javax.swing.text.AbstractDocument;
 import java.awt.*;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -17,107 +24,116 @@ import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class AddModuleDialog extends JDialog
+public class AddModuleDialog extends ChiUniDialog
 {
     private final JTextField nameField;
     private final JTextField codeField;
     private final JTextField acYearField;
-    private final JComboBox<DepartmentId> departmentCombo;
-    private final GuiMainScreen mainScreen;
+    private final DepartmentComboBox departmentCombo;
     private List<String> selectedCourses;
 
     public AddModuleDialog(Frame owner, GuiMainScreen mainScreen)
     {
-        super(owner, "Add New Module", true);
-        this.mainScreen = mainScreen;
-        setLayout(new BorderLayout(10, 10));
+        super(owner, "Add New Module", mainScreen, true);
 
-        // Initialize components
+        // Initialise components
         this.nameField = new JTextField(30);
         this.codeField = new JTextField(10);
         this.acYearField = new JTextField(4);
-        this.departmentCombo = new JComboBox<>(DepartmentId.values());
-        departmentCombo.removeItem(DepartmentId.UNKNOWN);
-        departmentCombo.setSelectedIndex(0);
-        this.selectedCourses = new ArrayList<>();
 
-        // Set current year as default
+        // Initialise department combo with custom renderer
+        this.departmentCombo = new DepartmentComboBox();
+        codeField.setEditable(false);
+
+        // Set current year as default and add input filter
         Calendar cal = Calendar.getInstance();
         String currentYear = String.format("%02d", cal.get(Calendar.YEAR) % 100);
         acYearField.setText(currentYear);
 
-        // Make code field read-only
-        codeField.setEditable(false);
+        // Add academic year filter
+        ((AbstractDocument) acYearField.getDocument()).setDocumentFilter(new AcademicYearFilter());
 
-        // Setup UI
         setupUI();
-
-        // Generate initial code
         generateNewCode();
-
-        // Add department selection listener
         departmentCombo.addActionListener(e -> updateSelectedCourses());
-
-        pack();
-        setLocationRelativeTo(owner);
+        centerOnOwner();
     }
 
     private void setupUI()
     {
-        JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
-        // Form fields
+        // Form panel setup
         JPanel formPanel = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
+        formPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        GridBagConstraints gbc = createGBC();
+
+        // Module Name field
+        JLabel nameLabel = new JLabel("Module Name: ");
+        nameLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(5, 5, 5, 5);
+        formPanel.add(nameLabel, gbc);
 
-        // Add form fields
-        addFormField(formPanel, "Module Name:", nameField, gbc);
+        gbc.gridx = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1.0;
+        formPanel.add(nameField, gbc);
 
-        // Code field panel with generate button
+        // Module Code field with generate button
+        JLabel codeLabel = new JLabel("Module Code: ");
+        codeLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.weightx = 0;
+        gbc.fill = GridBagConstraints.NONE;
+        formPanel.add(codeLabel, gbc);
+
         JPanel codePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
         codePanel.add(codeField);
         ChiUniButton generateButton = new ChiUniButton("Generate New Code");
         generateButton.addActionListener(e -> generateNewCode());
         codePanel.add(generateButton);
 
-        gbc.gridx = 0;
-        gbc.gridy++;
-        formPanel.add(new JLabel("Module Code:"), gbc);
         gbc.gridx = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
         formPanel.add(codePanel, gbc);
 
-        addFormField(formPanel, "Academic Year:", acYearField, gbc);
-        addFormField(formPanel, "Department:", departmentCombo, gbc);
+        // Academic Year field
+        JLabel yearLabel = new JLabel("Academic Year: ");
+        yearLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.fill = GridBagConstraints.NONE;
+        formPanel.add(yearLabel, gbc);
+
+        gbc.gridx = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        formPanel.add(acYearField, gbc);
+
+        // Department field
+        JLabel deptLabel = new JLabel("Department: ");
+        deptLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.fill = GridBagConstraints.NONE;
+        formPanel.add(deptLabel, gbc);
+
+        gbc.gridx = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        formPanel.add(departmentCombo, gbc);
 
         mainPanel.add(formPanel, BorderLayout.CENTER);
-
-        // Buttons
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        ChiUniButton saveButton = new ChiUniButton("Save");
-        ChiUniButton cancelButton = new ChiUniButton("Cancel");
-
-        saveButton.addActionListener(e -> saveModule());
-        cancelButton.addActionListener(e -> dispose());
-
-        buttonPanel.add(saveButton);
-        buttonPanel.add(cancelButton);
-
-        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
-        add(mainPanel);
+        addStandardButtons(this::saveModule);
     }
 
-    private <T extends JComponent> void addFormField(JPanel panel, String label, T component, GridBagConstraints gbc)
+    private GridBagConstraints createGBC()
     {
+        GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        panel.add(new JLabel(label), gbc);
-        gbc.gridx = 1;
-        panel.add(component, gbc);
-        gbc.gridy++;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets(5, 5, 5, 5);
+        return gbc;
     }
 
     private void generateNewCode()
@@ -129,31 +145,26 @@ public class AddModuleDialog extends JDialog
         }
         catch (IOException e)
         {
-            JOptionPane.showMessageDialog(this,
-                    "Error generating module code: " + e.getMessage(),
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
+            showError("Error generating module code: " + e.getMessage(), "Error");
         }
     }
 
     private String generateUniqueCode() throws IOException
     {
-        // Load existing codes
         Set<String> existingCodes = getExistingCodes();
         Random random = new Random();
         String newCode;
 
         do
         {
-            // Generate a 3-character hex string
             StringBuilder code = new StringBuilder();
             for (int i = 0; i < 3; i++)
             {
                 code.append(Integer.toHexString(random.nextInt(16)));
             }
-            // Add year suffix
             newCode = code.toString() + "-" + acYearField.getText();
-        } while (existingCodes.contains(newCode));
+        }
+        while (existingCodes.contains(newCode));
 
         return newCode;
     }
@@ -190,7 +201,6 @@ public class AddModuleDialog extends JDialog
                         })
                         .collect(Collectors.toList());
 
-                // Randomly select up to 4 courses
                 Collections.shuffle(departmentCourses);
                 selectedCourses = departmentCourses.stream()
                         .limit(4)
@@ -200,10 +210,7 @@ public class AddModuleDialog extends JDialog
         }
         catch (IOException e)
         {
-            JOptionPane.showMessageDialog(this,
-                    "Error loading courses: " + e.getMessage(),
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
+            showError("Error loading courses: " + e.getMessage(), "Error");
         }
     }
 
@@ -211,20 +218,19 @@ public class AddModuleDialog extends JDialog
     {
         try
         {
-            // Validate input
-            String name = nameField.getText().trim();
-            String code = codeField.getText().trim();
-            String acYear = acYearField.getText().trim();
-
-            if (name.isEmpty() || code.isEmpty() || acYear.isEmpty())
+            if (!validateRequiredFields(nameField, codeField, acYearField))
             {
-                throw new IllegalArgumentException("All fields are required.");
+                return;
             }
 
             if (selectedCourses.isEmpty())
             {
                 throw new IllegalArgumentException("No courses available for selected department.");
             }
+
+            String name = nameField.getText().trim();
+            String code = codeField.getText().trim();
+            String acYear = acYearField.getText().trim();
 
             // Load existing modules
             JsonProcessor processor = new JsonProcessor(FilePathHandler.MODULES_FILE.getNormalisedPath());
@@ -243,31 +249,21 @@ public class AddModuleDialog extends JDialog
             selectedCourses.forEach(coursesArray::add);
             newModule.add("associated_courses", coursesArray);
 
-            // Add to modules array
+            // Add to modules array and save
             modulesArray.add(newModule);
-
-            // Write back to file
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
             try (FileWriter writer = new FileWriter(FilePathHandler.MODULES_FILE.getNormalisedPath()))
             {
                 gson.toJson(jsonObject, writer);
             }
 
+            showSuccess("Module saved successfully!");
+            mainScreen.refreshSpecificData(DataManager.DataType.MODULES);
             dispose();
-            JOptionPane.showMessageDialog(this,
-                    "Module saved successfully!",
-                    "Success",
-                    JOptionPane.INFORMATION_MESSAGE);
-
-            // Refresh the main screen data
-            mainScreen.refreshData("Refreshing data after adding new module...");
         }
         catch (Exception e)
         {
-            JOptionPane.showMessageDialog(this,
-                    "Error saving module: " + e.getMessage(),
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
+            showError("Error saving module: " + e.getMessage(), "Error");
         }
     }
 }

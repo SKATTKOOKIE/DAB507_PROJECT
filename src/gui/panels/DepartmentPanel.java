@@ -1,10 +1,12 @@
-package gui;
+package gui.panels;
 
 import business.DepartmentId;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.Arrays;
+
+import gui.templates.*;
 
 public class DepartmentPanel extends ChiUniPanel
 {

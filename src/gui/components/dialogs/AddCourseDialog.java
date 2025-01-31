@@ -1,4 +1,4 @@
-package gui;
+package gui.components.dialogs;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -7,6 +7,11 @@ import com.google.gson.JsonObject;
 import file_handling.FilePathHandler;
 import file_handling.JsonProcessor;
 import business.DepartmentId;
+import gui.DataManager;
+import gui.GuiMainScreen;
+import gui.templates.ChiUniButton;
+import gui.templates.ChiUniDialog;
+import gui.components.combo.DepartmentComboBox;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,92 +21,67 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
-public class AddCourseDialog extends JDialog
+public class AddCourseDialog extends ChiUniDialog
 {
     private final JTextField nameField;
     private final JTextField codeField;
-    private final JComboBox<DepartmentId> departmentCombo;
-    private final GuiMainScreen mainScreen;
+    private final DepartmentComboBox departmentCombo;
 
     public AddCourseDialog(Frame owner, GuiMainScreen mainScreen)
     {
-        super(owner, "Add New Course", true);
-        this.mainScreen = mainScreen;
-        setLayout(new BorderLayout(10, 10));
+        super(owner, "Add New Course", mainScreen, true);
 
         // Initialise components
         this.nameField = new JTextField(20);
         this.codeField = new JTextField(10);
-        this.departmentCombo = new JComboBox<>(DepartmentId.values());
-        departmentCombo.removeItem(DepartmentId.UNKNOWN); // Remove UNKNOWN from selection
-        departmentCombo.setSelectedIndex(0);
 
-        // Setup UI
+        // Initialise department combo with custom renderer
+        this.departmentCombo = new DepartmentComboBox();
+
         setupUI();
-
-        // Generate initial code
         generateNewCode();
-
-        pack();
-        setLocationRelativeTo(owner);
+        centerOnOwner();
     }
 
     private void setupUI()
     {
-        // Create main panel
-        JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        // Form panel setup
+        JPanel formPanel = createFormPanel();
 
-        // Form fields
-        JPanel formPanel = new JPanel(new GridBagLayout());
+        // Add form fields
+        addFormField(formPanel, "Course Name:", nameField, createGBC());
+
+        // Code field panel with generate button
+        JPanel codePanel = createFieldPanel("", codeField);
+        codeField.setEditable(false);
+        ChiUniButton generateButton = new ChiUniButton("Generate New Code");
+        generateButton.addActionListener(e -> generateNewCode());
+        codePanel.add(generateButton);
+
+        GridBagConstraints gbc = createGBC();
+        gbc.gridy = 1;
+        formPanel.add(new JLabel("Course Code:"), gbc);
+        gbc.gridx = 1;
+        formPanel.add(codePanel, gbc);
+
+        gbc.gridy = 2;
+        gbc.gridx = 0;
+        addFormField(formPanel, "Department:", departmentCombo, gbc);
+
+        mainPanel.add(formPanel, BorderLayout.CENTER);
+
+        // Add standard save/cancel buttons
+        addStandardButtons(this::saveCourse);
+    }
+
+    private GridBagConstraints createGBC()
+    {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(5, 5, 5, 5);
-
-        addFormField(formPanel, "Course Name:", nameField, gbc);
-
-        // Code field panel with generate button
-        JPanel codePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
-        codeField.setEditable(false); // Make code field read-only
-        codePanel.add(codeField);
-        ChiUniButton generateButton = new ChiUniButton("Generate New Code");
-        generateButton.addActionListener(e -> generateNewCode());
-        codePanel.add(generateButton);
-
-        gbc.gridx = 0;
-        formPanel.add(new JLabel("Course Code:"), gbc);
-        gbc.gridx = 1;
-        formPanel.add(codePanel, gbc);
-        gbc.gridy++;
-
-        addFormField(formPanel, "Department:", departmentCombo, gbc);
-
-        mainPanel.add(formPanel, BorderLayout.CENTER);
-
-        // Buttons
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        ChiUniButton saveButton = new ChiUniButton("Save");
-        ChiUniButton cancelButton = new ChiUniButton("Cancel");
-
-        saveButton.addActionListener(e -> saveCourse());
-        cancelButton.addActionListener(e -> dispose());
-
-        buttonPanel.add(saveButton);
-        buttonPanel.add(cancelButton);
-
-        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
-        add(mainPanel);
-    }
-
-    private <T extends JComponent> void addFormField(JPanel panel, String label, T component, GridBagConstraints gbc)
-    {
-        gbc.gridx = 0;
-        panel.add(new JLabel(label), gbc);
-        gbc.gridx = 1;
-        panel.add(component, gbc);
-        gbc.gridy++;
+        return gbc;
     }
 
     private void generateNewCode()
@@ -113,23 +93,18 @@ public class AddCourseDialog extends JDialog
         }
         catch (IOException e)
         {
-            JOptionPane.showMessageDialog(this,
-                    "Error generating course code: " + e.getMessage(),
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
+            showError(e.getMessage(), "Error Generating Course Code");
         }
     }
 
     private String generateUniqueCode() throws IOException
     {
-        // Load existing codes
         Set<String> existingCodes = getExistingCodes();
         Random random = new Random();
         String newCode;
 
         do
         {
-            // Generate a 6-digit number
             newCode = String.format("%06d", random.nextInt(1000000));
         } while (existingCodes.contains(newCode));
 
@@ -161,9 +136,9 @@ public class AddCourseDialog extends JDialog
             String code = codeField.getText().trim();
             DepartmentId department = (DepartmentId) departmentCombo.getSelectedItem();
 
-            if (name.isEmpty() || code.isEmpty())
+            if (!validateRequiredFields(nameField, codeField))
             {
-                throw new IllegalArgumentException("Course name and code are required.");
+                return;
             }
 
             // Load existing courses
@@ -195,21 +170,14 @@ public class AddCourseDialog extends JDialog
                 gson.toJson(jsonObject, writer);
             }
 
+            // Show success and refresh
+            showSuccess("Course saved successfully!");
+            mainScreen.refreshSpecificData(DataManager.DataType.COURSES);
             dispose();
-            JOptionPane.showMessageDialog(this,
-                    "Course saved successfully!",
-                    "Success",
-                    JOptionPane.INFORMATION_MESSAGE);
-
-            // Refresh the main screen data
-            mainScreen.refreshData("Refreshing data after adding new course...");
         }
         catch (Exception e)
         {
-            JOptionPane.showMessageDialog(this,
-                    "Error saving course: " + e.getMessage(),
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
+            showError("Error saving course: " + e.getMessage(), "Error");
         }
     }
 }

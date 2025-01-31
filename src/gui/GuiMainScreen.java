@@ -1,97 +1,55 @@
 package gui;
 
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicInteger;
 import javax.swing.*;
-import java.util.List;
 
-import business.Course;
-import business.StaffModuleAssignment;
-import business.StudentModuleAssignment;
-import file_handling.FilePathHandler;
+import gui.components.dialogs.AddCourseDialog;
+import gui.components.dialogs.AddModuleDialog;
+import gui.components.dialogs.AddUserDialog;
+import gui.templates.*;
+import gui.panels.*;
 
 /**
  * Main graphical user interface for the University Management System.
- * This class manages the primary window of the application, including
- * the login screen, navigation, and various content panels for departments,
- * students, and staff management.
+ * This class serves as the primary controller for the GUI, managing navigation
+ * between different panels and coordinating user interactions across the application.
+ * <p>
+ * The GUI consists of several main components:
+ * <ul>
+ *   <li>A banner panel displaying the university name</li>
+ *   <li>A login panel for user authentication</li>
+ *   <li>A welcome panel serving as the main navigation hub</li>
+ *   <li>Separate panels for managing departments, students, and staff</li>
+ *   <li>Dialog windows for adding new users, courses, and modules</li>
+ * </ul>
+ * <p>
+ * The class follows a card layout pattern for panel navigation and uses
+ * a DataManager instance to handle data operations.
  */
 public class GuiMainScreen
 {
-    /**
-     * Main application window
-     */
     private ChiUniFrame mainFrame;
-
-    /**
-     * Text area for displaying output messages
-     */
-    private ChiUniTextArea outputArea;
-
-    /**
-     * Panel for displaying and managing departments
-     */
     private DepartmentPanel departmentPanel;
-
-    /**
-     * Welcome screen panel
-     */
-    private ChiUniPanel welcomePanel;
-
-    /**
-     * Main content panel that holds all other panels
-     */
     private ChiUniPanel contentPanel;
-
-    /**
-     * Login screen panel
-     */
-    private ChiUniPanel loginPanel;
-
-    /**
-     * Panel for displaying and managing student lists
-     */
     private StudentListPanel studentListPanel;
-
-    /**
-     * Panel for displaying and managing staff lists
-     */
     private StaffListPanel staffListPanel;
-
-    private JDialog loadingDialog;
-
-    private ChiUniProgressBar progressBar;
-
-    private AtomicInteger completedTasks;
+    private final DataManager dataManager;
 
     /**
-     * Administrator username for login
-     */
-    private static final String ADMIN_USERNAME = "admin";
-
-    /**
-     * Administrator password for login
-     */
-    private static final String ADMIN_PASSWORD = "password";
-
-    /**
-     * Constructs a new GuiMainScreen and initialises all components.
-     * Sets up the main frame, creates all panels, and initialises data.
+     * Constructs a new GuiMainScreen instance.
+     * Initialises the GUI components and shows a progress bar while loading data.
      */
     public GuiMainScreen()
     {
         initialiseGUI();
-        progressBar = new ChiUniProgressBar(mainFrame, "Loading", "Initialising system...");
+        ChiUniProgressBar progressBar = new ChiUniProgressBar(mainFrame, "Loading", "Initialising system...");
+        dataManager = new DataManager(studentListPanel, staffListPanel, departmentPanel, progressBar);
         progressBar.showProgress();
         show();
     }
 
     /**
-     * initialises all GUI components and layouts.
-     * Sets up the main frame, banner, content panels, and navigation buttons.
+     * Initialises all GUI components and sets up the main frame layout.
      */
     private void initialiseGUI()
     {
@@ -106,13 +64,28 @@ public class GuiMainScreen
         contentPanel.setLayout(new CardLayout());
 
         // Create login panel with success callback
-        loginPanel = new LoginPanel(mainFrame, this::showWelcomePanel);
+        ChiUniPanel loginPanel = new LoginPanel(mainFrame, this::showWelcomePanel);
         contentPanel.add(loginPanel, "LOGIN");
 
         // Create welcome panel
-        welcomePanel = createWelcomePanel();
+        WelcomePanel welcomePanel = new WelcomePanel(this);
         contentPanel.add(welcomePanel, "WELCOME");
 
+        // Initialise other panels
+        initialiseOtherPanels();
+
+        mainFrame.addComponent(contentPanel, BorderLayout.CENTER);
+        mainFrame.setMinimumSize(new Dimension(1000, 700));
+
+        showLoginPanel();
+    }
+
+    /**
+     * Initialises secondary panels (students, departments, staff) and adds navigation buttons.
+     */
+    private void initialiseOtherPanels()
+    {
+        // Create students panel
         studentListPanel = new StudentListPanel();
         ChiUniButton studentBackButton = new ChiUniButton("Back to Welcome");
         studentBackButton.addActionListener(e -> showWelcomePanel());
@@ -133,420 +106,6 @@ public class GuiMainScreen
         contentPanel.add(departmentPanel, "DEPARTMENTS");
         contentPanel.add(studentListPanel, "STUDENTS");
         contentPanel.add(staffListPanel, "STAFF");
-
-        mainFrame.addComponent(contentPanel, BorderLayout.CENTER);
-        mainFrame.setMinimumSize(new Dimension(1000, 700));
-
-        showLoginPanel();
-    }
-
-    /**
-     * Initialises application data in a background thread.
-     * Checks for existing assignments files and generates initial assignments if needed.
-     */
-    private void initialiseData()
-    {
-        SwingWorker<Void, String> worker = new SwingWorker<Void, String>()
-        {
-            @Override
-            protected Void doInBackground() throws Exception
-            {
-                try
-                {
-                    publish("Checking file system...");
-                    // Use FilePathHandler enum to get the file paths
-                    File staffAssignmentsFile = new File(FilePathHandler.ASSIGNED_STAFF_FILE.getNormalisedPath());
-                    File studentAssignmentsFile = new File(FilePathHandler.ASSIGNED_STUDENTS_FILE.getNormalisedPath());
-
-                    if (!staffAssignmentsFile.exists() || !studentAssignmentsFile.exists())
-                    {
-                        publish("Generating initial assignments...");
-                        StaffModuleAssignment.generateInitialAssignments();
-                        StudentModuleAssignment.generateInitialAssignments();
-                    }
-
-                    publish("Loading complete!");
-                    Thread.sleep(500); // Brief pause to show completion message
-                }
-                catch (IOException e)
-                {
-                    publish("Error: " + e.getMessage());
-                    System.err.println("Error checking/generating assignments: " + e.getMessage());
-                }
-                return null;
-            }
-
-            @Override
-            protected void process(java.util.List<String> chunks)
-            {
-                // Update progress message
-                if (chunks != null && !chunks.isEmpty())
-                {
-                    progressBar.updateMessage(chunks.get(chunks.size() - 1));
-                }
-            }
-
-            @Override
-            protected void done()
-            {
-                // Hide progress bar when complete
-                progressBar.hideProgress();
-            }
-        };
-        worker.execute();
-    }
-
-    /**
-     * Shows the login panel in the main content area.
-     */
-    private void showLoginPanel()
-    {
-        CardLayout cl = (CardLayout) contentPanel.getLayout();
-        cl.show(contentPanel, "LOGIN");
-    }
-
-    private void showLoadingDialog()
-    {
-        loadingDialog = new JDialog(mainFrame, "Loading", false);
-        loadingDialog.setUndecorated(true);
-
-        JPanel panel = new JPanel(new BorderLayout(10, 10));
-        panel.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(200, 200, 200)),
-                BorderFactory.createEmptyBorder(20, 30, 20, 30)
-        ));
-
-        JLabel loadingLabel = new JLabel("Initializing data...");
-        loadingLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-        panel.add(loadingLabel, BorderLayout.CENTER);
-
-        // Add a simple progress indicator
-        JProgressBar progressBar = new JProgressBar();
-        progressBar.setIndeterminate(true);
-        panel.add(progressBar, BorderLayout.SOUTH);
-
-        loadingDialog.add(panel);
-        loadingDialog.pack();
-        loadingDialog.setLocationRelativeTo(mainFrame);
-        loadingDialog.setVisible(true);
-    }
-
-
-    /**
-     * Creates and configures the welcome panel with navigation buttons.
-     *
-     * @return Configured welcome panel
-     */
-    private ChiUniPanel createWelcomePanel()
-    {
-        ChiUniPanel panel = new ChiUniPanel();
-        panel.setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-
-        // Welcome message
-        JLabel welcomeLabel = new JLabel("Welcome to Chichester University Portal");
-        welcomeLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.insets = new Insets(0, 0, 30, 0);
-        panel.add(welcomeLabel, gbc);
-
-        // Navigation buttons
-        ChiUniButton departmentsButton = new ChiUniButton("View Departments");
-        departmentsButton.setFont(new Font("Arial", Font.PLAIN, 16));
-        departmentsButton.addActionListener(e -> showDepartmentsPanel());
-        departmentsButton.setPreferredSize(new Dimension(200, 40));
-        gbc.gridy = 1;
-        gbc.insets = new Insets(0, 0, 15, 0);
-        panel.add(departmentsButton, gbc);
-
-        ChiUniButton studentsButton = new ChiUniButton("View Students");
-        studentsButton.setFont(new Font("Arial", Font.PLAIN, 16));
-        studentsButton.addActionListener(e -> showStudentsPanel());
-        studentsButton.setPreferredSize(new Dimension(200, 40));
-        gbc.gridy = 2;
-        panel.add(studentsButton, gbc);
-
-        ChiUniButton staffButton = new ChiUniButton("View Staff");
-        staffButton.setFont(new Font("Arial", Font.PLAIN, 16));
-        staffButton.addActionListener(e -> showStaffPanel());
-        staffButton.setPreferredSize(new Dimension(200, 40));
-        gbc.gridy = 3;
-        gbc.insets = new Insets(0, 0, 15, 0);
-        panel.add(staffButton, gbc);
-
-        ChiUniButton addUserButton = new ChiUniButton("Add New User");
-        addUserButton.setFont(new Font("Arial", Font.PLAIN, 16));
-        addUserButton.addActionListener(e -> showAddUserDialog());
-        addUserButton.setPreferredSize(new Dimension(200, 40));
-        gbc.gridy = 4; // Adjust based on your existing buttons
-        gbc.insets = new Insets(0, 0, 15, 0);
-        panel.add(addUserButton, gbc);
-
-        // Add Course Button
-        ChiUniButton addCourseButton = new ChiUniButton("Add New Course");
-        addCourseButton.setFont(new Font("Arial", Font.PLAIN, 16));
-        addCourseButton.addActionListener(e -> showAddCourseDialog());
-        addCourseButton.setPreferredSize(new Dimension(200, 40));
-        gbc.gridy = 5;
-        gbc.insets = new Insets(0, 0, 15, 0);
-        panel.add(addCourseButton, gbc);
-
-        // Add Module button
-        ChiUniButton addModuleButton = new ChiUniButton("Add New Module");
-        addModuleButton.setFont(new Font("Arial", Font.PLAIN, 16));
-        addModuleButton.addActionListener(e -> showAddModuleDialog());
-        addModuleButton.setPreferredSize(new Dimension(200, 40));
-        gbc.gridy = 6;
-        gbc.insets = new Insets(0, 0, 15, 0);
-        panel.add(addModuleButton, gbc);
-
-        return panel;
-    }
-
-    /**
-     * Shows the welcome panel in the main content area.
-     */
-    private void showWelcomePanel()
-    {
-        initialiseData();
-        CardLayout cl = (CardLayout) contentPanel.getLayout();
-        cl.show(contentPanel, "WELCOME");
-    }
-
-    /**
-     * Shows the departments panel in the main content area.
-     */
-    private void showDepartmentsPanel()
-    {
-        CardLayout cl = (CardLayout) contentPanel.getLayout();
-        cl.show(contentPanel, "DEPARTMENTS");
-    }
-
-    /**
-     * Shows the staff panel in the main content area.
-     */
-    private void showStaffPanel()
-    {
-        CardLayout cl = (CardLayout) contentPanel.getLayout();
-        cl.show(contentPanel, "STAFF");
-    }
-
-    private void showAddUserDialog()
-    {
-        AddUserDialog dialog = new AddUserDialog(mainFrame, this);
-        dialog.setVisible(true);
-    }
-
-    /**
-     * Refreshes all data in the application with a progress indicator.
-     *
-     * @param message The message to display in the progress bar
-     */
-    public void refreshData(String message)
-    {
-        // Show progress bar
-        progressBar.showProgress();
-        progressBar.updateMessage(message);
-
-        // Create a CountDownLatch to coordinate all refresh operations
-        final int TOTAL_OPERATIONS = 4; // Number of parallel operations
-        CountDownLatch latch = new CountDownLatch(TOTAL_OPERATIONS);
-        AtomicInteger completedTasks = new AtomicInteger(0);
-
-        // Worker for student list refresh
-        SwingWorker<Void, String> studentWorker = new SwingWorker<Void, String>()
-        {
-            @Override
-            protected Void doInBackground() throws Exception
-            {
-                try
-                {
-                    publish("Refreshing student data...");
-                    studentListPanel.refreshData();
-                    publish("Student data refresh complete!");
-                }
-                catch (Exception e)
-                {
-                    publish("Error refreshing student data: " + e.getMessage());
-                }
-                finally
-                {
-                    latch.countDown();
-                    completedTasks.incrementAndGet();
-                    updateProgressMessage();
-                }
-                return null;
-            }
-
-            @Override
-            protected void process(List<String> chunks)
-            {
-                if (!chunks.isEmpty())
-                {
-                    progressBar.updateMessage(chunks.get(chunks.size() - 1));
-                }
-            }
-        };
-
-        // Worker for staff list refresh
-        SwingWorker<Void, String> staffWorker = new SwingWorker<Void, String>()
-        {
-            @Override
-            protected Void doInBackground() throws Exception
-            {
-                try
-                {
-                    publish("Refreshing staff data...");
-                    staffListPanel.refreshData();
-                    publish("Staff data refresh complete!");
-                }
-                catch (Exception e)
-                {
-                    publish("Error refreshing staff data: " + e.getMessage());
-                }
-                finally
-                {
-                    latch.countDown();
-                    completedTasks.incrementAndGet();
-                    updateProgressMessage();
-                }
-                return null;
-            }
-
-            @Override
-            protected void process(List<String> chunks)
-            {
-                if (!chunks.isEmpty())
-                {
-                    progressBar.updateMessage(chunks.get(chunks.size() - 1));
-                }
-            }
-        };
-
-        // Worker for course data refresh
-        SwingWorker<Void, String> courseWorker = new SwingWorker<Void, String>()
-        {
-            @Override
-            protected Void doInBackground() throws Exception
-            {
-                try
-                {
-                    publish("Refreshing course data...");
-                    Course.getAll(); // Force reload course data
-                    SwingUtilities.invokeLater(() ->
-                    {
-                        departmentPanel.refreshData();
-                    });
-                    publish("Course data refresh complete!");
-                }
-                catch (Exception e)
-                {
-                    publish("Error refreshing course data: " + e.getMessage());
-                }
-                finally
-                {
-                    latch.countDown();
-                    completedTasks.incrementAndGet();
-                    updateProgressMessage();
-                }
-                return null;
-            }
-
-            @Override
-            protected void process(List<String> chunks)
-            {
-                if (!chunks.isEmpty())
-                {
-                    progressBar.updateMessage(chunks.get(chunks.size() - 1));
-                }
-            }
-        };
-
-        // Worker for assignments refresh
-        SwingWorker<Void, String> assignmentWorker = new SwingWorker<Void, String>()
-        {
-            @Override
-            protected Void doInBackground() throws Exception
-            {
-                try
-                {
-                    publish("Checking assignments...");
-                    File staffAssignmentsFile = new File(FilePathHandler.ASSIGNED_STAFF_FILE.getNormalisedPath());
-                    File studentAssignmentsFile = new File(FilePathHandler.ASSIGNED_STUDENTS_FILE.getNormalisedPath());
-
-                    if (!staffAssignmentsFile.exists() || !studentAssignmentsFile.exists())
-                    {
-                        publish("Updating assignments...");
-                        StaffModuleAssignment.generateInitialAssignments();
-                        StudentModuleAssignment.generateInitialAssignments();
-                    }
-                    publish("Assignments refresh complete!");
-                }
-                catch (IOException e)
-                {
-                    publish("Error refreshing assignments: " + e.getMessage());
-                }
-                finally
-                {
-                    latch.countDown();
-                    completedTasks.incrementAndGet();
-                    updateProgressMessage();
-                }
-                return null;
-            }
-
-            @Override
-            protected void process(List<String> chunks)
-            {
-                if (!chunks.isEmpty())
-                {
-                    progressBar.updateMessage(chunks.get(chunks.size() - 1));
-                }
-            }
-        };
-
-        // Final completion worker to handle cleanup
-        SwingWorker<Void, Void> completionWorker = new SwingWorker<Void, Void>()
-        {
-            @Override
-            protected Void doInBackground() throws Exception
-            {
-                try
-                {
-                    // Wait for all workers to complete
-                    latch.await();
-                    Thread.sleep(500); // Brief pause to show completion
-                }
-                catch (InterruptedException e)
-                {
-                    Thread.currentThread().interrupt();
-                }
-                return null;
-            }
-
-            @Override
-            protected void done()
-            {
-                progressBar.updateMessage("All updates complete!");
-                progressBar.hideProgress();
-            }
-        };
-
-        // Start all workers
-        studentWorker.execute();
-        staffWorker.execute();
-        courseWorker.execute();
-        assignmentWorker.execute();
-        completionWorker.execute();
-    }
-
-    // Helper method to update progress message with completion status
-    private void updateProgressMessage()
-    {
-        int completed = completedTasks.get();
-        int total = 4; // Total number of tasks
-        progressBar.updateMessage(String.format("Completed %d of %d operations...", completed, total));
     }
 
     /**
@@ -558,7 +117,7 @@ public class GuiMainScreen
     {
         ChiUniPanel panel = new ChiUniPanel();
         panel.setLayout(new BorderLayout());
-        panel.setBackground(new Color(0, 48, 87)); // University blue color
+        panel.setBackground(new Color(0, 48, 87));
         panel.setPreferredSize(new Dimension(mainFrame.getWidth(), 80));
 
         JLabel titleLabel = new JLabel("Chichester University Portal");
@@ -568,45 +127,98 @@ public class GuiMainScreen
         titleLabel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
 
         panel.add(titleLabel, BorderLayout.CENTER);
-
         return panel;
     }
 
     /**
-     * Handles and displays error messages to the user.
-     *
-     * @param message The error message to display
-     * @param ex      The exception that occurred
+     * Displays the welcome panel and initialises application data.
      */
-    private void handleError(String message, Exception ex)
+    public void showWelcomePanel()
     {
-        String errorMessage = message + ": " + ex.getMessage();
-        OutputManager.print("ERROR: " + errorMessage);
-        JOptionPane.showMessageDialog(mainFrame,
-                errorMessage,
-                "Error",
-                JOptionPane.ERROR_MESSAGE);
+        initialiseData();
+        CardLayout cl = (CardLayout) contentPanel.getLayout();
+        cl.show(contentPanel, "WELCOME");
     }
 
     /**
-     * Shows the students panel in the main content area.
+     * Displays the departments management panel.
      */
-    private void showStudentsPanel()
+    public void showDepartmentsPanel()
+    {
+        CardLayout cl = (CardLayout) contentPanel.getLayout();
+        cl.show(contentPanel, "DEPARTMENTS");
+    }
+
+    /**
+     * Displays the student management panel.
+     */
+    public void showStudentsPanel()
     {
         CardLayout cl = (CardLayout) contentPanel.getLayout();
         cl.show(contentPanel, "STUDENTS");
     }
 
-    private void showAddCourseDialog()
+    /**
+     * Displays the staff management panel.
+     */
+    public void showStaffPanel()
+    {
+        CardLayout cl = (CardLayout) contentPanel.getLayout();
+        cl.show(contentPanel, "STAFF");
+    }
+
+    /**
+     * Displays the dialog for adding a new user to the system.
+     */
+    public void showAddUserDialog()
+    {
+        AddUserDialog dialog = new AddUserDialog(mainFrame, this);
+        dialog.setVisible(true);
+    }
+
+    /**
+     * Displays the dialog for adding a new course to the system.
+     */
+    public void showAddCourseDialog()
     {
         AddCourseDialog dialog = new AddCourseDialog(mainFrame, this);
         dialog.setVisible(true);
     }
 
-    private void showAddModuleDialog()
+    /**
+     * Displays the dialog for adding a new module to the system.
+     */
+    public void showAddModuleDialog()
     {
         AddModuleDialog dialog = new AddModuleDialog(mainFrame, this);
         dialog.setVisible(true);
+    }
+
+    /**
+     * Displays the login panel.
+     */
+    private void showLoginPanel()
+    {
+        CardLayout cl = (CardLayout) contentPanel.getLayout();
+        cl.show(contentPanel, "LOGIN");
+    }
+
+    /**
+     * Initialises the application data through the DataManager.
+     */
+    private void initialiseData()
+    {
+        dataManager.initialiseData();
+    }
+
+    /**
+     * Refreshes a specific type of data in the system.
+     *
+     * @param dataType The type of data to refresh (e.g., STUDENTS, STAFF, DEPARTMENTS)
+     */
+    public void refreshSpecificData(DataManager.DataType dataType)
+    {
+        dataManager.refreshSpecificData(dataType);
     }
 
     /**

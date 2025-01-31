@@ -1,4 +1,4 @@
-package gui;
+package gui.panels;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,6 +14,8 @@ import users.Student;
 import users.StudentType;
 import business.Module;
 import business.Course;
+
+import gui.templates.*;
 
 /**
  * A panel that displays a filterable grid of student cards.

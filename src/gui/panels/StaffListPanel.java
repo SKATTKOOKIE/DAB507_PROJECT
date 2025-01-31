@@ -1,4 +1,4 @@
-package gui;
+package gui.panels;
 
 import business.DepartmentId;
 
@@ -15,6 +15,8 @@ import business.StaffModuleAssignment;
 import users.Staff;
 import business.Module;
 import business.Course;
+
+import gui.templates.*;
 
 /**
  * A panel that displays a filterable grid of staff cards.

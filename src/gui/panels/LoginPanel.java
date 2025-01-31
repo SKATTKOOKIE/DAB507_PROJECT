@@ -1,7 +1,9 @@
-package gui;
+package gui.panels;
 
 import javax.swing.*;
 import java.awt.*;
+
+import gui.templates.*;
 
 /**
  * Login panel for the University Management System.

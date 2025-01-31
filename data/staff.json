@@ -1668,5 +1668,25 @@
     "last_name": "Hunt",
     "email": "Jeremy.Hunt@googlemail.co.uk",
     "department": "Engineering"
+  },
+  {
+    "guid": "fsefsdfs",
+    "weekly_hours": 37,
+    "max_modules": 6,
+    "id": 153,
+    "first_name": "Brandon",
+    "last_name": "Hinton",
+    "email": "brandon.hinton",
+    "department": "Fine Art"
+  },
+  {
+    "guid": "6ac4d621-cde0-464a-9692-8aaa0c048bbb",
+    "weekly_hours": 37,
+    "max_modules": 5,
+    "id": 154,
+    "first_name": "Gary",
+    "last_name": "Scott",
+    "email": "G.Scott@gmail.com",
+    "department": "Engineering"
   }
 ]

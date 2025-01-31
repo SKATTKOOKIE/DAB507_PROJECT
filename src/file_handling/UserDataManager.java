@@ -2,7 +2,7 @@ package file_handling;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
+import com.google.gson.FieldNamingPolicy;
 import com.google.gson.JsonElement;
 import users.Staff;
 import users.Student;
@@ -15,7 +15,10 @@ import java.util.List;
 
 public class UserDataManager
 {
-    private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    private static final Gson gson = new GsonBuilder()
+            .setPrettyPrinting()
+            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+            .create();
 
     public static void addStudent(Student newStudent) throws IOException
     {
