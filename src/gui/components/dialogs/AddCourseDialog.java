@@ -1,4 +1,4 @@
-package gui.dialogs;
+package gui.components.dialogs;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -11,6 +11,7 @@ import gui.DataManager;
 import gui.GuiMainScreen;
 import gui.templates.ChiUniButton;
 import gui.templates.ChiUniDialog;
+import gui.components.combo.DepartmentComboBox;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,27 +21,30 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
-public class AddCourseDialog extends ChiUniDialog {
+public class AddCourseDialog extends ChiUniDialog
+{
     private final JTextField nameField;
     private final JTextField codeField;
-    private final JComboBox<DepartmentId> departmentCombo;
+    private final DepartmentComboBox departmentCombo;
 
-    public AddCourseDialog(Frame owner, GuiMainScreen mainScreen) {
+    public AddCourseDialog(Frame owner, GuiMainScreen mainScreen)
+    {
         super(owner, "Add New Course", mainScreen, true);
 
-        // Initialize components
+        // Initialise components
         this.nameField = new JTextField(20);
         this.codeField = new JTextField(10);
-        this.departmentCombo = new JComboBox<>(DepartmentId.values());
-        departmentCombo.removeItem(DepartmentId.UNKNOWN);
-        departmentCombo.setSelectedIndex(0);
+
+        // Initialise department combo with custom renderer
+        this.departmentCombo = new DepartmentComboBox();
 
         setupUI();
         generateNewCode();
         centerOnOwner();
     }
 
-    private void setupUI() {
+    private void setupUI()
+    {
         // Form panel setup
         JPanel formPanel = createFormPanel();
 
@@ -70,7 +74,8 @@ public class AddCourseDialog extends ChiUniDialog {
         addStandardButtons(this::saveCourse);
     }
 
-    private GridBagConstraints createGBC() {
+    private GridBagConstraints createGBC()
+    {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -79,49 +84,60 @@ public class AddCourseDialog extends ChiUniDialog {
         return gbc;
     }
 
-    private void generateNewCode() {
-        try {
+    private void generateNewCode()
+    {
+        try
+        {
             String newCode = generateUniqueCode();
             codeField.setText(newCode);
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             showError(e.getMessage(), "Error Generating Course Code");
         }
     }
 
-    private String generateUniqueCode() throws IOException {
+    private String generateUniqueCode() throws IOException
+    {
         Set<String> existingCodes = getExistingCodes();
         Random random = new Random();
         String newCode;
 
-        do {
+        do
+        {
             newCode = String.format("%06d", random.nextInt(1000000));
         } while (existingCodes.contains(newCode));
 
         return newCode;
     }
 
-    private Set<String> getExistingCodes() throws IOException {
+    private Set<String> getExistingCodes() throws IOException
+    {
         Set<String> codes = new HashSet<>();
         JsonProcessor processor = new JsonProcessor(FilePathHandler.COURSES_FILE.getNormalisedPath());
         processor.processFile();
         JsonObject jsonObject = (JsonObject) processor.getJsonContent();
         JsonArray coursesArray = jsonObject.getAsJsonArray("courses");
 
-        for (int i = 0; i < coursesArray.size(); i++) {
+        for (int i = 0; i < coursesArray.size(); i++)
+        {
             JsonObject course = coursesArray.get(i).getAsJsonObject();
             codes.add(course.get("code").getAsString());
         }
         return codes;
     }
 
-    private void saveCourse() {
-        try {
+    private void saveCourse()
+    {
+        try
+        {
             // Validate input
             String name = nameField.getText().trim();
             String code = codeField.getText().trim();
             DepartmentId department = (DepartmentId) departmentCombo.getSelectedItem();
 
-            if (!validateRequiredFields(nameField, codeField)) {
+            if (!validateRequiredFields(nameField, codeField))
+            {
                 return;
             }
 
@@ -135,9 +151,12 @@ public class AddCourseDialog extends ChiUniDialog {
             JsonObject newCourse = new JsonObject();
             newCourse.addProperty("name", name);
             newCourse.addProperty("code", code);
-            if (department != null) {
+            if (department != null)
+            {
                 newCourse.addProperty("department", department.getDepartmentName());
-            } else {
+            }
+            else
+            {
                 newCourse.add("department", null);
             }
 
@@ -146,7 +165,8 @@ public class AddCourseDialog extends ChiUniDialog {
 
             // Write back to file
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
-            try (FileWriter writer = new FileWriter(FilePathHandler.COURSES_FILE.getNormalisedPath())) {
+            try (FileWriter writer = new FileWriter(FilePathHandler.COURSES_FILE.getNormalisedPath()))
+            {
                 gson.toJson(jsonObject, writer);
             }
 
@@ -154,7 +174,9 @@ public class AddCourseDialog extends ChiUniDialog {
             showSuccess("Course saved successfully!");
             mainScreen.refreshSpecificData(DataManager.DataType.COURSES);
             dispose();
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             showError("Error saving course: " + e.getMessage(), "Error");
         }
     }

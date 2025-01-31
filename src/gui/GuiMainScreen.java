@@ -3,9 +3,9 @@ package gui;
 import java.awt.*;
 import javax.swing.*;
 
-import gui.dialogs.AddCourseDialog;
-import gui.dialogs.AddModuleDialog;
-import gui.dialogs.AddUserDialog;
+import gui.components.dialogs.AddCourseDialog;
+import gui.components.dialogs.AddModuleDialog;
+import gui.components.dialogs.AddUserDialog;
 import gui.templates.*;
 import gui.panels.*;
 

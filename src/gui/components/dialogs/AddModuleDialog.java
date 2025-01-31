@@ -1,4 +1,4 @@
-package gui.dialogs;
+package gui.components.dialogs;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -13,6 +13,7 @@ import gui.DataManager;
 import gui.GuiMainScreen;
 import gui.templates.ChiUniButton;
 import gui.templates.ChiUniDialog;
+import gui.components.combo.DepartmentComboBox;
 
 import javax.swing.*;
 import javax.swing.text.AbstractDocument;
@@ -28,23 +29,20 @@ public class AddModuleDialog extends ChiUniDialog
     private final JTextField nameField;
     private final JTextField codeField;
     private final JTextField acYearField;
-    private final JComboBox<DepartmentId> departmentCombo;
+    private final DepartmentComboBox departmentCombo;
     private List<String> selectedCourses;
 
     public AddModuleDialog(Frame owner, GuiMainScreen mainScreen)
     {
         super(owner, "Add New Module", mainScreen, true);
 
-        // Initialize components
+        // Initialise components
         this.nameField = new JTextField(30);
         this.codeField = new JTextField(10);
         this.acYearField = new JTextField(4);
-        this.departmentCombo = new JComboBox<>(DepartmentId.values());
-        this.selectedCourses = new ArrayList<>();
 
-        // Initial setup
-        departmentCombo.removeItem(DepartmentId.UNKNOWN);
-        departmentCombo.setSelectedIndex(0);
+        // Initialise department combo with custom renderer
+        this.departmentCombo = new DepartmentComboBox();
         codeField.setEditable(false);
 
         // Set current year as default and add input filter
@@ -61,6 +59,7 @@ public class AddModuleDialog extends ChiUniDialog
         centerOnOwner();
     }
 
+    // Rest of the class remains the same...
     private void setupUI()
     {
         // Form panel setup

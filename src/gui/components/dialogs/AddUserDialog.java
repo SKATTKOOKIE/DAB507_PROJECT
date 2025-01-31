@@ -1,18 +1,16 @@
-package gui.dialogs;
+package gui.components.dialogs;
 
 import business.StaffModuleAssignment;
 import business.StudentModuleAssignment;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonArray;
 import gui.DataManager;
 import gui.GuiMainScreen;
+import gui.components.combo.CourseComboBox;
+import gui.components.combo.DepartmentComboBox;
+import gui.components.combo.StudentTypeComboBox;
+import gui.templates.ChiUniStringComboBox;
 import users.Staff;
 import users.Student;
-import users.StudentType;
-import business.DepartmentId;
 import business.Course;
-import file_handling.JsonProcessor;
-import file_handling.FilePathHandler;
 import file_handling.UserDataManager;
 import gui.templates.ChiUniDialog;
 
@@ -24,7 +22,6 @@ import java.util.List;
 
 public class AddUserDialog extends ChiUniDialog
 {
-    private final JComboBox<String> userTypeCombo;
     private final JPanel dynamicFieldsPanel;
     private final CardLayout cardLayout;
 
@@ -34,23 +31,26 @@ public class AddUserDialog extends ChiUniDialog
     private final JTextField emailField;
 
     // Student-specific fields
-    private final JComboBox<StudentType> studentTypeCombo;
-    private final JComboBox<String> genderCombo;
-    private final JComboBox<String> courseCombo;
-    private List<Course> availableCourses;
+    private final ChiUniStringComboBox userTypeCombo;
+    private final StudentTypeComboBox studentTypeCombo;
+    private final ChiUniStringComboBox genderCombo;
+    private final CourseComboBox courseCombo;
+    private final DepartmentComboBox departmentCombo;
 
     // Staff-specific fields
     private final JSpinner weeklyHoursSpinner;
     private final JSpinner maxModulesSpinner;
-    private final JComboBox<DepartmentId> departmentCombo;
 
     public AddUserDialog(Frame owner, GuiMainScreen mainScreen)
     {
         super(owner, "Add New User", mainScreen, true);
 
-        // Initialize fields
-        this.availableCourses = new ArrayList<>();
-        this.userTypeCombo = new JComboBox<>(new String[]{"Student", "Staff"});
+        // Initialize field
+        this.userTypeCombo = new ChiUniStringComboBox(new String[]{"Student", "Staff"});
+        this.studentTypeCombo = new StudentTypeComboBox();
+        this.genderCombo = new ChiUniStringComboBox(new String[]{"Male", "Female", "Other"});
+        this.courseCombo = new CourseComboBox();
+        this.departmentCombo = new DepartmentComboBox();
         this.cardLayout = new CardLayout();
         this.dynamicFieldsPanel = new JPanel(cardLayout);
 
@@ -59,17 +59,10 @@ public class AddUserDialog extends ChiUniDialog
         this.lastNameField = new JTextField(20);
         this.emailField = new JTextField(20);
 
-        // Student fields
-        this.studentTypeCombo = new JComboBox<>(StudentType.values());
-        this.genderCombo = new JComboBox<>(new String[]{"Male", "Female", "Other"});
-        this.courseCombo = new JComboBox<>();
-
         // Staff fields
         this.weeklyHoursSpinner = new JSpinner(new SpinnerNumberModel(37, 0, 40, 1));
         this.maxModulesSpinner = new JSpinner(new SpinnerNumberModel(4, 1, 8, 1));
-        this.departmentCombo = new JComboBox<>(DepartmentId.values());
 
-        loadCourses();
         setupUI();
         centerOnOwner();
         switchUserType();
@@ -130,48 +123,9 @@ public class AddUserDialog extends ChiUniDialog
         return gbc;
     }
 
-    private void loadCourses()
-    {
-        try
-        {
-            JsonProcessor processor = new JsonProcessor(FilePathHandler.COURSES_FILE.getNormalisedPath());
-            processor.processFile();
-            JsonObject jsonObject = (JsonObject) processor.getJsonContent();
-
-            JsonArray coursesArray = jsonObject.getAsJsonArray("courses");
-            if (coursesArray != null && coursesArray.size() > 0)
-            {
-                courseCombo.removeAllItems();
-                for (int i = 0; i < coursesArray.size(); i++)
-                {
-                    JsonObject courseObj = coursesArray.get(i).getAsJsonObject();
-                    String courseName = courseObj.get("name").getAsString();
-                    if (courseName != null && !courseName.trim().isEmpty())
-                    {
-                        courseCombo.addItem(courseName);
-                    }
-                }
-
-                if (courseCombo.getItemCount() > 0)
-                {
-                    courseCombo.setSelectedIndex(0);
-                }
-            }
-            else
-            {
-                throw new IOException("No courses found in the courses file");
-            }
-        }
-        catch (IOException e)
-        {
-            showError("Error loading courses: " + e.getMessage(), "Error");
-            courseCombo.addItem("No courses available");
-        }
-    }
-
     private void switchUserType()
     {
-        String selectedType = (String) userTypeCombo.getSelectedItem();
+        String selectedType = userTypeCombo.getSelectedString();
         cardLayout.show(dynamicFieldsPanel, selectedType.toUpperCase());
         pack();
     }
@@ -207,13 +161,13 @@ public class AddUserDialog extends ChiUniDialog
 
     private void saveStudent() throws IOException
     {
-        Object selectedCourse = courseCombo.getSelectedItem();
+        String selectedCourse = courseCombo.getSelectedCourseName();
         if (selectedCourse == null)
         {
             throw new IOException("Please select a course. If no courses are available, check the courses file.");
         }
 
-        if (studentTypeCombo.getSelectedItem() == null || genderCombo.getSelectedItem() == null)
+        if (studentTypeCombo.getSelectedStudentType() == null || genderCombo.getSelectedString() == null)
         {
             throw new IOException("All fields are required. Please fill in all information.");
         }
@@ -223,9 +177,9 @@ public class AddUserDialog extends ChiUniDialog
         student.setFirstName(firstNameField.getText().trim());
         student.setLastName(lastNameField.getText().trim());
         student.setEmail(emailField.getText().trim());
-        student.setType(studentTypeCombo.getSelectedItem().toString());
-        student.setGender(genderCombo.getSelectedItem().toString());
-        student.setCourse(selectedCourse.toString());
+        student.setType(studentTypeCombo.getSelectedStudentType().toString());
+        student.setGender(genderCombo.getSelectedString());
+        student.setCourse(selectedCourse);
 
         try
         {
@@ -257,7 +211,7 @@ public class AddUserDialog extends ChiUniDialog
         staff.setEmail(emailField.getText().trim());
         staff.setWeeklyHours((Integer) weeklyHoursSpinner.getValue());
         staff.setMaxModules((Integer) maxModulesSpinner.getValue());
-        staff.setDepartmentId((DepartmentId) Objects.requireNonNull(departmentCombo.getSelectedItem()));
+        staff.setDepartmentId(departmentCombo.getSelectedDepartment());
         staff.setGuid(UUID.randomUUID().toString());
 
         try

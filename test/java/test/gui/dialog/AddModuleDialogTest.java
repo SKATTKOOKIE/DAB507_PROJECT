@@ -1,6 +1,6 @@
 package gui.dialog;
 
-import gui.dialogs.AddModuleDialog;
+import gui.components.dialogs.AddModuleDialog;
 import gui.GuiMainScreen;
 import business.DepartmentId;
 import org.junit.jupiter.api.BeforeEach;
