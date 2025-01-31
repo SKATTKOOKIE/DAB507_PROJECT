@@ -59,7 +59,6 @@ public class AddModuleDialog extends ChiUniDialog
         centerOnOwner();
     }
 
-    // Rest of the class remains the same...
     private void setupUI()
     {
         // Form panel setup
@@ -67,7 +66,6 @@ public class AddModuleDialog extends ChiUniDialog
         formPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         GridBagConstraints gbc = createGBC();
 
-        // Add form fields with proper spacing
         // Module Name field
         JLabel nameLabel = new JLabel("Module Name: ");
         nameLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
