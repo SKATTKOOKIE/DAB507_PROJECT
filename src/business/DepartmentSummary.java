@@ -1,11 +1,12 @@
 package business;
 
+import business.interfaces.IDepartmentSummary;
 import users.Student;
 import users.Staff;
 
 import java.util.List;
 
-public class DepartmentSummary
+public class DepartmentSummary implements IDepartmentSummary
 {
     private final DepartmentId departmentId;
     private final int studentCount;
