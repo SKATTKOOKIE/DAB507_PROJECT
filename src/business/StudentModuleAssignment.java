@@ -1,5 +1,6 @@
 package business;
 
+import business.interfaces.IStudentModuleAssignment;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
  * including functionality to generate initial assignments for new students
  * and update existing assignments.
  */
-public class StudentModuleAssignment
+public class StudentModuleAssignment implements IStudentModuleAssignment
 {
     /**
      * The file path where student module assignments are stored

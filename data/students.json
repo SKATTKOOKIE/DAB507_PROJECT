@@ -9061,5 +9061,14 @@
     "last_name": "Crowley",
     "email": "p.crowley@gmail.com",
     "course": "BSc (Hons) Computing for Business"
+  },
+  {
+    "gender": "Female",
+    "type": "Full time",
+    "id": 1008,
+    "first_name": "Catherine",
+    "last_name": "Brown",
+    "email": "cat.brown@aol.co.uk",
+    "course": "BA (Hons) Music"
   }
 ]
