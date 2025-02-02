@@ -5,20 +5,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import business.Module;
-
+import business.interfaces.IDepartment;
 import users.Student;
 import users.Staff;
 
-import users.Student;
-import users.Staff;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-
-public class Department
+public class Department implements IDepartment
 {
     private final DepartmentId departmentId;
     private List<Module> modules;
