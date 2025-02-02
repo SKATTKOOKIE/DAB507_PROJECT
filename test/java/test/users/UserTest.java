@@ -7,11 +7,17 @@ import java.io.PrintStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Test class for the abstract User class.
+ * Verifies the functionality of the User class and its interaction with the IUser interface.
+ */
 @DisplayName("User Abstract Class Tests")
 class UserTest
 {
 
-    // Concrete implementation of User for testing
+    /**
+     * Concrete implementation of User for testing purposes.
+     */
     private static class TestUser extends User
     {
         @Override
@@ -21,9 +27,20 @@ class UserTest
         }
     }
 
+    /**
+     * The TestUser instance used for testing.
+     */
     private TestUser user;
 
-    // Test constants
+    /**
+     * Test data constants:
+     * - TEST_ID: The ID value used for testing.
+     * - TEST_FIRST_NAME: The first name value used for testing.
+     * - TEST_LAST_NAME: The last name value used for testing.
+     * - TEST_EMAIL: The email value used for testing.
+     * - TEST_DEPARTMENT: The department value used for testing.
+     * - TEST_COURSE: The course value used for testing.
+     */
     private static final int TEST_ID = 1;
     private static final String TEST_FIRST_NAME = "Jane";
     private static final String TEST_LAST_NAME = "Doe";
@@ -31,10 +48,18 @@ class UserTest
     private static final String TEST_DEPARTMENT = "Computer Science";
     private static final String TEST_COURSE = "Software Engineering";
 
-    // Console output capture
+    /**
+     * Output streams for capturing console output:
+     * - outputStream: ByteArrayOutputStream to capture the output.
+     * - originalOut: The original System.out PrintStream.
+     */
     private final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
     private final PrintStream originalOut = System.out;
 
+    /**
+     * Sets up the test environment before each test method.
+     * Redirects System.out to capture console output and initialises the TestUser instance.
+     */
     @BeforeEach
     void setup()
     {
@@ -52,12 +77,21 @@ class UserTest
         System.out.println("✓ Test setup completed");
     }
 
+    /**
+     * Cleans up the test environment after each test method.
+     * Restores System.out to the original PrintStream.
+     */
     @AfterEach
     void cleanup()
     {
         System.setOut(originalOut);
     }
 
+    /**
+     * Prints the header for a test.
+     *
+     * @param testName The name of the test.
+     */
     private void printTestHeader(String testName)
     {
         System.setOut(originalOut);
@@ -65,6 +99,11 @@ class UserTest
         System.setOut(new PrintStream(outputStream));
     }
 
+    /**
+     * Prints the success message for a test.
+     *
+     * @param testName The name of the test.
+     */
     private void printTestSuccess(String testName)
     {
         System.setOut(originalOut);
@@ -72,11 +111,18 @@ class UserTest
         System.setOut(new PrintStream(outputStream));
     }
 
+    /**
+     * Nested test class for testing basic property functionality.
+     */
     @Nested
     @DisplayName("Basic Property Tests")
     class BasicPropertyTests
     {
 
+        /**
+         * Tests the getter methods of the User class.
+         * Verifies that the getter methods return the expected values.
+         */
         @Test
         @DisplayName("Getter methods should return correct values")
         void testGetters()
@@ -93,6 +139,10 @@ class UserTest
             printTestSuccess("getter methods");
         }
 
+        /**
+         * Tests the setter methods of the User class.
+         * Verifies that the setter methods update the values correctly.
+         */
         @Test
         @DisplayName("Setter methods should update values")
         void testSetters()
@@ -122,6 +172,10 @@ class UserTest
             printTestSuccess("setter methods");
         }
 
+        /**
+         * Tests the handling of null values in the User class.
+         * Verifies that the properties handle null values correctly.
+         */
         @Test
         @DisplayName("Properties should handle null values")
         void testNullHandling()
@@ -141,11 +195,18 @@ class UserTest
         }
     }
 
+    /**
+     * Nested test class for testing string representation functionality.
+     */
     @Nested
     @DisplayName("String Representation Tests")
     class StringRepresentationTests
     {
 
+        /**
+         * Tests the toString method of the User class with complete data.
+         * Verifies that the toString method includes all the properties.
+         */
         @Test
         @DisplayName("toString should include all properties")
         void testToString()
@@ -164,6 +225,10 @@ class UserTest
             printTestSuccess("toString complete data");
         }
 
+        /**
+         * Tests the toString method of the User class with null values.
+         * Verifies that the toString method handles null values correctly.
+         */
         @Test
         @DisplayName("toString should handle null values")
         void testToStringWithNulls()
@@ -184,11 +249,18 @@ class UserTest
         }
     }
 
+    /**
+     * Nested test class for testing interface implementation functionality.
+     */
     @Nested
     @DisplayName("Interface Implementation Tests")
     class InterfaceTests
     {
 
+        /**
+         * Tests the implementation of the IUser interface in the User class.
+         * Verifies that the User class implements the IUser interface correctly.
+         */
         @Test
         @DisplayName("User should implement IUser interface")
         void testInterfaceImplementation()
@@ -209,6 +281,10 @@ class UserTest
             printTestSuccess("interface implementation");
         }
 
+        /**
+         * Tests the implementation of the abstract method in the User class.
+         * Verifies that the abstract method is implemented correctly in the TestUser subclass.
+         */
         @Test
         @DisplayName("Abstract method implementation should work")
         void testAbstractMethod()
