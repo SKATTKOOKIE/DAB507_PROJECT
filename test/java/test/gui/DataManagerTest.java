@@ -15,19 +15,38 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Test class for the DataManager class.
+ * Verifies the behavior of data refresh operations and error handling.
+ */
 @DisplayName("DataManager Class Tests")
 class DataManagerTest
 {
+
+    /**
+     * The DataManager instance under test.
+     */
     private DataManager dataManager;
+
+    /**
+     * Test properties:
+     * - studentListPanel: Mock implementation of StudentListPanel for testing.
+     * - staffListPanel: Mock implementation of StaffListPanel for testing.
+     * - departmentPanel: Mock implementation of DepartmentPanel for testing.
+     * - progressBar: Mock implementation of ChiUniProgressBar for testing.
+     * - outputStream: ByteArrayOutputStream to capture console output during tests.
+     * - originalOut: Stores the original System.out PrintStream to restore after tests.
+     */
     private TestStudentListPanel studentListPanel;
     private TestStaffListPanel staffListPanel;
     private TestDepartmentPanel departmentPanel;
     private TestProgressBar progressBar;
-
     private final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
     private final PrintStream originalOut = System.out;
 
-    // Test implementation of panels
+    /**
+     * Mock implementation of StudentListPanel for testing.
+     */
     static class TestStudentListPanel extends StudentListPanel
     {
         private boolean refreshCalled = false;
@@ -60,6 +79,9 @@ class DataManagerTest
         }
     }
 
+    /**
+     * Mock implementation of StaffListPanel for testing.
+     */
     static class TestStaffListPanel extends StaffListPanel
     {
         private boolean refreshCalled = false;
@@ -81,6 +103,9 @@ class DataManagerTest
         }
     }
 
+    /**
+     * Mock implementation of DepartmentPanel for testing.
+     */
     static class TestDepartmentPanel extends DepartmentPanel
     {
         private boolean refreshCalled = false;
@@ -102,6 +127,9 @@ class DataManagerTest
         }
     }
 
+    /**
+     * Mock implementation of ChiUniProgressBar for testing.
+     */
     static class TestProgressBar extends ChiUniProgressBar
     {
         private boolean isVisible = false;
@@ -147,6 +175,10 @@ class DataManagerTest
         }
     }
 
+    /**
+     * Sets up the test environment before each test method.
+     * Initialises the DataManager instance and mock objects.
+     */
     @BeforeEach
     void setup()
     {
@@ -169,6 +201,10 @@ class DataManagerTest
         System.out.println("✓ Test setup completed");
     }
 
+    /**
+     * Cleans up the test environment after each test method.
+     * Resets the mock objects and restores the original console output.
+     */
     @AfterEach
     void cleanup()
     {
@@ -179,12 +215,21 @@ class DataManagerTest
         progressBar.reset();
     }
 
+    /**
+     * Prints a message indicating the completion of all tests.
+     */
     @AfterAll
     static void teardown()
     {
         System.out.println("\n=== DataManager Tests Completed Successfully ===");
     }
 
+    /**
+     * Prints the result of a test.
+     *
+     * @param testName The name of the test.
+     * @param passed   Indicates whether the test passed or failed.
+     */
     private void printTestResult(String testName, boolean passed)
     {
         System.setOut(originalOut);
@@ -192,11 +237,19 @@ class DataManagerTest
         System.setOut(new PrintStream(outputStream));
     }
 
+    /**
+     * Nested test class for specific data refresh tests.
+     */
     @Nested
     @DisplayName("Specific Data Refresh Tests")
     class SpecificDataRefreshTests
     {
 
+        /**
+         * Tests the refresh of student data.
+         *
+         * @throws InterruptedException if the test is interrupted.
+         */
         @Test
         @DisplayName("refreshSpecificData should handle STUDENTS refresh")
         void testRefreshStudentData() throws InterruptedException
@@ -231,6 +284,11 @@ class DataManagerTest
             printTestResult("Student data refresh", completed);
         }
 
+        /**
+         * Tests the refresh of staff data.
+         *
+         * @throws InterruptedException if the test is interrupted.
+         */
         @Test
         @DisplayName("refreshSpecificData should handle STAFF refresh")
         void testRefreshStaffData() throws InterruptedException
@@ -265,11 +323,19 @@ class DataManagerTest
         }
     }
 
+    /**
+     * Nested test class for error handling tests.
+     */
     @Nested
     @DisplayName("Error Handling Tests")
     class ErrorHandlingTests
     {
 
+        /**
+         * Tests error handling during data refresh.
+         *
+         * @throws InterruptedException if the test is interrupted.
+         */
         @Test
         @DisplayName("Should handle exceptions during data refresh")
         void testRefreshDataWithError() throws InterruptedException
@@ -305,11 +371,19 @@ class DataManagerTest
         }
     }
 
+    /**
+     * Nested test class for progress tracking tests.
+     */
     @Nested
     @DisplayName("Progress Tracking Tests")
     class ProgressTrackingTests
     {
 
+        /**
+         * Tests progress tracking during operations.
+         *
+         * @throws InterruptedException if the test is interrupted.
+         */
         @Test
         @DisplayName("Should update progress bar during operations")
         void testProgressTracking() throws InterruptedException
