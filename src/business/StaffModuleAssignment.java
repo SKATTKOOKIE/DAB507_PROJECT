@@ -1,5 +1,6 @@
 package business;
 
+import business.interfaces.IStaffModuleAssignment;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -21,7 +22,7 @@ import users.Staff;
  * including functionality to generate initial random assignments and update
  * existing assignments.
  */
-public class StaffModuleAssignment
+public class StaffModuleAssignment implements IStaffModuleAssignment
 {
     /**
      * The file path where staff module assignments are stored
