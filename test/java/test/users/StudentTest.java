@@ -9,12 +9,21 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Test class for the Student class.
+ * Verifies the functionality of the Student class methods and properties.
+ */
 @DisplayName("Student Class Tests")
 class StudentTest
 {
+    /**
+     * The Student instance used for testing.
+     */
     private Student student;
 
-    // Test constants
+    /**
+     * Test data constants.
+     */
     private static final int TEST_ID = 1;
     private static final String TEST_FIRST_NAME = "John";
     private static final String TEST_LAST_NAME = "Doe";
@@ -23,10 +32,15 @@ class StudentTest
     private static final String TEST_TYPE = "Full-Time";
     private static final String TEST_COURSE = "Computer Science";
 
-    // Console output capture
+    /**
+     * Output streams for capturing console output.
+     */
     private final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
     private final PrintStream originalOut = System.out;
 
+    /**
+     * Sets up the test environment before each test method.
+     */
     @BeforeEach
     void setup()
     {
@@ -45,12 +59,20 @@ class StudentTest
         System.out.println("✓ Test setup completed");
     }
 
+    /**
+     * Cleans up the test environment after each test method.
+     */
     @AfterEach
     void cleanup()
     {
         System.setOut(originalOut);
     }
 
+    /**
+     * Prints the test header.
+     *
+     * @param testName the name of the test
+     */
     private void printTestHeader(String testName)
     {
         System.setOut(originalOut);
@@ -58,6 +80,11 @@ class StudentTest
         System.setOut(new PrintStream(outputStream));
     }
 
+    /**
+     * Prints the test success message.
+     *
+     * @param testName the name of the test
+     */
     private void printTestSuccess(String testName)
     {
         System.setOut(originalOut);
@@ -65,11 +92,16 @@ class StudentTest
         System.setOut(new PrintStream(outputStream));
     }
 
+    /**
+     * Nested test class for basic properties tests.
+     */
     @Nested
     @DisplayName("Basic Properties Tests")
     class BasicPropertiesTests
     {
-
+        /**
+         * Tests the getter methods.
+         */
         @Test
         @DisplayName("Getter methods should return correct values")
         void testGetters()
@@ -87,6 +119,9 @@ class StudentTest
             printTestSuccess("getter methods");
         }
 
+        /**
+         * Tests the setter methods.
+         */
         @Test
         @DisplayName("Setter methods should update values")
         void testSetters()
@@ -120,11 +155,16 @@ class StudentTest
         }
     }
 
+    /**
+     * Nested test class for toString method tests.
+     */
     @Nested
     @DisplayName("toString Method Tests")
     class ToStringTests
     {
-
+        /**
+         * Tests the toString method with complete data.
+         */
         @Test
         @DisplayName("toString should include all properties")
         void testToStringComplete()
@@ -143,6 +183,9 @@ class StudentTest
             printTestSuccess("toString complete data");
         }
 
+        /**
+         * Tests the toString method with null values.
+         */
         @Test
         @DisplayName("toString should handle null values")
         void testToStringWithNulls()
@@ -165,11 +208,16 @@ class StudentTest
         }
     }
 
+    /**
+     * Nested test class for data retrieval tests.
+     */
     @Nested
     @DisplayName("Data Retrieval Tests")
     class DataRetrievalTests
     {
-
+        /**
+         * Tests the getByCourse method with a null course.
+         */
         @Test
         @DisplayName("getByCourse should handle null course")
         void testGetByNullCourse()
@@ -185,6 +233,9 @@ class StudentTest
             printTestSuccess("getByCourse null");
         }
 
+        /**
+         * Tests the getByCourse method with an empty course name.
+         */
         @Test
         @DisplayName("getByCourse should handle empty course name")
         void testGetByEmptyCourse()
@@ -200,6 +251,9 @@ class StudentTest
             printTestSuccess("getByCourse empty string");
         }
 
+        /**
+         * Tests the getByCourse method with a valid course.
+         */
         @Test
         @DisplayName("getByCourse should filter by course")
         void testGetByValidCourse()
@@ -218,11 +272,16 @@ class StudentTest
         }
     }
 
+    /**
+     * Nested test class for print methods tests.
+     */
     @Nested
     @DisplayName("Print Methods Tests")
     class PrintMethodsTests
     {
-
+        /**
+         * Tests the printDetailedInfo method output.
+         */
         @Test
         @DisplayName("printDetailedInfo should output all information")
         void testPrintDetailedInfo()
@@ -242,6 +301,9 @@ class StudentTest
             printTestSuccess("printDetailedInfo");
         }
 
+        /**
+         * Tests the printDetailedInfo method with null values.
+         */
         @Test
         @DisplayName("printDetailedInfo should handle null values")
         void testPrintDetailedInfoWithNulls()
