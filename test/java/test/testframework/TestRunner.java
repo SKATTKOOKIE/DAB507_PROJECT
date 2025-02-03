@@ -9,26 +9,31 @@ import java.util.List;
 /**
  * Custom test runner for executing test methods and reporting results.
  */
-public class TestRunner {
+public class TestRunner
+{
     private final ByteArrayOutputStream outputStream;
     private final PrintStream originalOut;
     private int passedTests = 0;
     private int failedTests = 0;
     private final List<String> failureMessages = new ArrayList<>();
 
-    public TestRunner(ByteArrayOutputStream outputStream, PrintStream originalOut) {
+    public TestRunner(ByteArrayOutputStream outputStream, PrintStream originalOut)
+    {
         this.outputStream = outputStream;
         this.originalOut = originalOut;
     }
 
-    public void runTests(Object testClass) {
+    public void runTests(Object testClass)
+    {
         originalOut.println("=== Starting Tests for " + testClass.getClass().getSimpleName() + " ===\n");
 
         Method[] methods = testClass.getClass().getDeclaredMethods();
 
         // Run all test methods
-        for (Method method : methods) {
-            if (method.getName().startsWith("test")) {
+        for (Method method : methods)
+        {
+            if (method.getName().startsWith("test"))
+            {
                 runTestMethod(testClass, method);
             }
         }
@@ -37,8 +42,10 @@ public class TestRunner {
         printSummary();
     }
 
-    private void runTestMethod(Object testClass, Method method) {
-        try {
+    private void runTestMethod(Object testClass, Method method)
+    {
+        try
+        {
             // Call setup before each test method
             callSetupMethod(testClass);
 
@@ -50,7 +57,9 @@ public class TestRunner {
 
             // Call cleanup after each test method
             callCleanupMethod(testClass);
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             failedTests++;
             String failureMessage = "✗ " + method.getName() + " FAILED: " +
                     getRootCause(e).getMessage();
@@ -58,49 +67,64 @@ public class TestRunner {
             originalOut.println(failureMessage);
 
             // Still try to cleanup even if test failed
-            try {
+            try
+            {
                 callCleanupMethod(testClass);
-            } catch (Exception ignored) {
+            }
+            catch (Exception ignored)
+            {
                 // Ignore cleanup failures after test failure
             }
         }
     }
 
-    private void callSetupMethod(Object testClass) {
-        try {
+    private void callSetupMethod(Object testClass)
+    {
+        try
+        {
             Method setupMethod = testClass.getClass().getDeclaredMethod("setup");
             setupMethod.setAccessible(true);
             setupMethod.invoke(testClass);
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             originalOut.println("Warning: Setup method failed: " + e.getMessage());
         }
     }
 
-    private void callCleanupMethod(Object testClass) {
-        try {
+    private void callCleanupMethod(Object testClass)
+    {
+        try
+        {
             Method cleanupMethod = testClass.getClass().getDeclaredMethod("cleanup");
             cleanupMethod.setAccessible(true);
             cleanupMethod.invoke(testClass);
-        } catch (Exception ignored) {
+        }
+        catch (Exception ignored)
+        {
             // Ignore cleanup failures
         }
     }
 
-    private void printSummary() {
+    private void printSummary()
+    {
         originalOut.println("\n=== Test Summary ===");
         originalOut.println("Passed: " + passedTests);
         originalOut.println("Failed: " + failedTests);
         originalOut.println("Total: " + (passedTests + failedTests));
 
-        if (!failureMessages.isEmpty()) {
+        if (!failureMessages.isEmpty())
+        {
             originalOut.println("\nFailures:");
             failureMessages.forEach(originalOut::println);
         }
     }
 
-    private Throwable getRootCause(Exception e) {
+    private Throwable getRootCause(Exception e)
+    {
         Throwable cause = e;
-        while (cause.getCause() != null) {
+        while (cause.getCause() != null)
+        {
             cause = cause.getCause();
         }
         return cause;

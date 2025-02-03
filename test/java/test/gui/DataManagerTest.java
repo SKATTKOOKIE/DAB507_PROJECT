@@ -1,52 +1,24 @@
 package gui;
 
+import testframework.*;
 import gui.panels.DepartmentPanel;
 import gui.panels.StaffListPanel;
 import gui.panels.StudentListPanel;
 import gui.templates.ChiUniProgressBar;
-import org.junit.jupiter.api.*;
 
 import javax.swing.*;
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-/**
- * Test class for the DataManager class.
- * Verifies the behavior of data refresh operations and error handling.
- */
-@DisplayName("DataManager Class Tests")
-class DataManagerTest
+public class DataManagerTest extends BaseTest
 {
-
-    /**
-     * The DataManager instance under test.
-     */
     private DataManager dataManager;
-
-    /**
-     * Test properties:
-     * - studentListPanel: Mock implementation of StudentListPanel for testing.
-     * - staffListPanel: Mock implementation of StaffListPanel for testing.
-     * - departmentPanel: Mock implementation of DepartmentPanel for testing.
-     * - progressBar: Mock implementation of ChiUniProgressBar for testing.
-     * - outputStream: ByteArrayOutputStream to capture console output during tests.
-     * - originalOut: Stores the original System.out PrintStream to restore after tests.
-     */
     private TestStudentListPanel studentListPanel;
     private TestStaffListPanel staffListPanel;
     private TestDepartmentPanel departmentPanel;
     private TestProgressBar progressBar;
-    private final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-    private final PrintStream originalOut = System.out;
 
-    /**
-     * Mock implementation of StudentListPanel for testing.
-     */
     static class TestStudentListPanel extends StudentListPanel
     {
         private boolean refreshCalled = false;
@@ -79,9 +51,6 @@ class DataManagerTest
         }
     }
 
-    /**
-     * Mock implementation of StaffListPanel for testing.
-     */
     static class TestStaffListPanel extends StaffListPanel
     {
         private boolean refreshCalled = false;
@@ -103,9 +72,6 @@ class DataManagerTest
         }
     }
 
-    /**
-     * Mock implementation of DepartmentPanel for testing.
-     */
     static class TestDepartmentPanel extends DepartmentPanel
     {
         private boolean refreshCalled = false;
@@ -127,9 +93,6 @@ class DataManagerTest
         }
     }
 
-    /**
-     * Mock implementation of ChiUniProgressBar for testing.
-     */
     static class TestProgressBar extends ChiUniProgressBar
     {
         private boolean isVisible = false;
@@ -175,17 +138,10 @@ class DataManagerTest
         }
     }
 
-    /**
-     * Sets up the test environment before each test method.
-     * Initialises the DataManager instance and mock objects.
-     */
-    @BeforeEach
-    void setup()
+    @Override
+    protected void setup()
     {
-        System.setOut(new PrintStream(outputStream));
-        outputStream.reset();
-        System.out.println("\n=== Starting DataManager Test ===");
-
+        super.setup();
         studentListPanel = new TestStudentListPanel();
         staffListPanel = new TestStaffListPanel();
         departmentPanel = new TestDepartmentPanel();
@@ -197,229 +153,142 @@ class DataManagerTest
                 departmentPanel,
                 progressBar
         );
-
-        System.out.println("✓ Test setup completed");
     }
 
-    /**
-     * Cleans up the test environment after each test method.
-     * Resets the mock objects and restores the original console output.
-     */
-    @AfterEach
-    void cleanup()
+    @Override
+    protected void cleanup()
     {
-        System.setOut(originalOut);
+        super.cleanup();
         studentListPanel.reset();
         staffListPanel.reset();
         departmentPanel.reset();
         progressBar.reset();
     }
 
-    /**
-     * Prints a message indicating the completion of all tests.
-     */
-    @AfterAll
-    static void teardown()
+    public void testRefreshStudentData() throws InterruptedException
     {
-        System.out.println("\n=== DataManager Tests Completed Successfully ===");
+        CountDownLatch latch = new CountDownLatch(1);
+
+        Thread checkThread = new Thread(() ->
+        {
+            while (!studentListPanel.wasRefreshCalled())
+            {
+                try
+                {
+                    Thread.sleep(100);
+                }
+                catch (InterruptedException e)
+                {
+                    break;
+                }
+            }
+            latch.countDown();
+        });
+        checkThread.start();
+
+        dataManager.refreshSpecificData(DataManager.DataType.STUDENTS);
+
+        boolean completed = latch.await(2, TimeUnit.SECONDS);
+        Assert.assertTrue(completed, "Student data refresh should complete");
+        Assert.assertTrue(progressBar.isProgressVisible(), "Progress bar should be shown");
+        Assert.assertTrue(studentListPanel.wasRefreshCalled(), "Student list refresh should be called");
     }
 
-    /**
-     * Prints the result of a test.
-     *
-     * @param testName The name of the test.
-     * @param passed   Indicates whether the test passed or failed.
-     */
-    private void printTestResult(String testName, boolean passed)
+    public void testRefreshStaffData() throws InterruptedException
     {
-        System.setOut(originalOut);
-        System.out.printf("%s %s%n", passed ? "✓" : "✗", testName);
-        System.setOut(new PrintStream(outputStream));
+        CountDownLatch latch = new CountDownLatch(1);
+
+        Thread checkThread = new Thread(() ->
+        {
+            while (!staffListPanel.wasRefreshCalled())
+            {
+                try
+                {
+                    Thread.sleep(100);
+                }
+                catch (InterruptedException e)
+                {
+                    break;
+                }
+            }
+            latch.countDown();
+        });
+        checkThread.start();
+
+        dataManager.refreshSpecificData(DataManager.DataType.STAFF);
+
+        boolean completed = latch.await(2, TimeUnit.SECONDS);
+        Assert.assertTrue(completed, "Staff data refresh should complete");
+        Assert.assertTrue(progressBar.isProgressVisible(), "Progress bar should be shown");
+        Assert.assertTrue(staffListPanel.wasRefreshCalled(), "Staff list refresh should be called");
     }
 
-    /**
-     * Nested test class for specific data refresh tests.
-     */
-    @Nested
-    @DisplayName("Specific Data Refresh Tests")
-    class SpecificDataRefreshTests
+    public void testRefreshDataWithError() throws InterruptedException
     {
+        CountDownLatch latch = new CountDownLatch(1);
+        studentListPanel.setExceptionToThrow(new RuntimeException("Test error"));
 
-        /**
-         * Tests the refresh of student data.
-         *
-         * @throws InterruptedException if the test is interrupted.
-         */
-        @Test
-        @DisplayName("refreshSpecificData should handle STUDENTS refresh")
-        void testRefreshStudentData() throws InterruptedException
+        Thread checkThread = new Thread(() ->
         {
-            CountDownLatch latch = new CountDownLatch(1);
-
-            // Create a separate thread to check when refresh is called
-            Thread checkThread = new Thread(() ->
+            while (!progressBar.getCurrentMessage().contains("Error"))
             {
-                while (!studentListPanel.wasRefreshCalled())
+                try
                 {
-                    try
-                    {
-                        Thread.sleep(100);
-                    }
-                    catch (InterruptedException e)
-                    {
-                        break;
-                    }
+                    Thread.sleep(100);
                 }
-                latch.countDown();
-            });
-            checkThread.start();
-
-            dataManager.refreshSpecificData(DataManager.DataType.STUDENTS);
-
-            boolean completed = latch.await(2, TimeUnit.SECONDS);
-            assertTrue(completed, "Student data refresh should complete");
-            assertTrue(progressBar.isProgressVisible(), "Progress bar should be shown");
-            assertTrue(studentListPanel.wasRefreshCalled(), "Student list refresh should be called");
-
-            printTestResult("Student data refresh", completed);
-        }
-
-        /**
-         * Tests the refresh of staff data.
-         *
-         * @throws InterruptedException if the test is interrupted.
-         */
-        @Test
-        @DisplayName("refreshSpecificData should handle STAFF refresh")
-        void testRefreshStaffData() throws InterruptedException
-        {
-            CountDownLatch latch = new CountDownLatch(1);
-
-            Thread checkThread = new Thread(() ->
-            {
-                while (!staffListPanel.wasRefreshCalled())
+                catch (InterruptedException e)
                 {
-                    try
-                    {
-                        Thread.sleep(100);
-                    }
-                    catch (InterruptedException e)
-                    {
-                        break;
-                    }
+                    break;
                 }
-                latch.countDown();
-            });
-            checkThread.start();
+            }
+            latch.countDown();
+        });
+        checkThread.start();
 
-            dataManager.refreshSpecificData(DataManager.DataType.STAFF);
+        dataManager.refreshSpecificData(DataManager.DataType.STUDENTS);
 
-            boolean completed = latch.await(2, TimeUnit.SECONDS);
-            assertTrue(completed, "Staff data refresh should complete");
-            assertTrue(progressBar.isProgressVisible(), "Progress bar should be shown");
-            assertTrue(staffListPanel.wasRefreshCalled(), "Staff list refresh should be called");
-
-            printTestResult("Staff data refresh", completed);
-        }
+        boolean completed = latch.await(2, TimeUnit.SECONDS);
+        Assert.assertTrue(completed, "Error handling should complete");
+        Assert.assertTrue(progressBar.getCurrentMessage().contains("Error"),
+                "Progress bar should show error message");
     }
 
-    /**
-     * Nested test class for error handling tests.
-     */
-    @Nested
-    @DisplayName("Error Handling Tests")
-    class ErrorHandlingTests
+    public void testProgressTracking() throws InterruptedException
     {
+        AtomicBoolean messageUpdated = new AtomicBoolean(false);
+        CountDownLatch latch = new CountDownLatch(1);
 
-        /**
-         * Tests error handling during data refresh.
-         *
-         * @throws InterruptedException if the test is interrupted.
-         */
-        @Test
-        @DisplayName("Should handle exceptions during data refresh")
-        void testRefreshDataWithError() throws InterruptedException
+        Thread checkThread = new Thread(() ->
         {
-            CountDownLatch latch = new CountDownLatch(1);
-            studentListPanel.setExceptionToThrow(new RuntimeException("Test error"));
-
-            Thread checkThread = new Thread(() ->
+            while (!messageUpdated.get())
             {
-                while (!progressBar.getCurrentMessage().contains("Error"))
+                if (!progressBar.getCurrentMessage().isEmpty())
                 {
-                    try
-                    {
-                        Thread.sleep(100);
-                    }
-                    catch (InterruptedException e)
-                    {
-                        break;
-                    }
+                    messageUpdated.set(true);
+                    latch.countDown();
                 }
-                latch.countDown();
-            });
-            checkThread.start();
+                try
+                {
+                    Thread.sleep(100);
+                }
+                catch (InterruptedException e)
+                {
+                    break;
+                }
+            }
+        });
+        checkThread.start();
 
-            dataManager.refreshSpecificData(DataManager.DataType.STUDENTS);
+        dataManager.refreshSpecificData(DataManager.DataType.STUDENTS);
 
-            boolean completed = latch.await(2, TimeUnit.SECONDS);
-            assertTrue(completed, "Error handling should complete");
-            assertTrue(progressBar.getCurrentMessage().contains("Error"),
-                    "Progress bar should show error message");
-
-            printTestResult("Error handling", completed);
-        }
+        boolean completed = latch.await(2, TimeUnit.SECONDS);
+        Assert.assertTrue(completed, "Progress tracking should work");
+        Assert.assertFalse(progressBar.getCurrentMessage().isEmpty(),
+                "Progress bar should show messages");
     }
 
-    /**
-     * Nested test class for progress tracking tests.
-     */
-    @Nested
-    @DisplayName("Progress Tracking Tests")
-    class ProgressTrackingTests
+    public static void main(String[] args)
     {
-
-        /**
-         * Tests progress tracking during operations.
-         *
-         * @throws InterruptedException if the test is interrupted.
-         */
-        @Test
-        @DisplayName("Should update progress bar during operations")
-        void testProgressTracking() throws InterruptedException
-        {
-            AtomicBoolean messageUpdated = new AtomicBoolean(false);
-            CountDownLatch latch = new CountDownLatch(1);
-
-            Thread checkThread = new Thread(() ->
-            {
-                while (!messageUpdated.get())
-                {
-                    if (!progressBar.getCurrentMessage().isEmpty())
-                    {
-                        messageUpdated.set(true);
-                        latch.countDown();
-                    }
-                    try
-                    {
-                        Thread.sleep(100);
-                    }
-                    catch (InterruptedException e)
-                    {
-                        break;
-                    }
-                }
-            });
-            checkThread.start();
-
-            dataManager.refreshSpecificData(DataManager.DataType.STUDENTS);
-
-            boolean completed = latch.await(2, TimeUnit.SECONDS);
-            assertTrue(completed, "Progress tracking should work");
-            assertFalse(progressBar.getCurrentMessage().isEmpty(),
-                    "Progress bar should show messages");
-
-            printTestResult("Progress tracking", completed);
-        }
+        new DataManagerTest().runTests();
     }
 }
