@@ -6,6 +6,7 @@ import javax.swing.*;
 import gui.components.dialogs.AddCourseDialog;
 import gui.components.dialogs.AddModuleDialog;
 import gui.components.dialogs.AddUserDialog;
+import gui.interfaces.UniversityManagementGui;
 import gui.templates.*;
 import gui.panels.*;
 
@@ -26,7 +27,7 @@ import gui.panels.*;
  * The class follows a card layout pattern for panel navigation and uses
  * a DataManager instance to handle data operations.
  */
-public class GuiMainScreen
+public class GuiMainScreen implements UniversityManagementGui
 {
     private ChiUniFrame mainFrame;
     private DepartmentPanel departmentPanel;

@@ -1,5 +1,6 @@
 package business;
 
+import business.interfaces.ICourse;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -17,7 +18,7 @@ import java.util.stream.Collectors;
  * Represents a course in the system.
  * Contains course-related data and operations, with integration to Department functionality.
  */
-public class Course
+public class Course implements ICourse
 {
     private String courseTitle;
     private String courseId;

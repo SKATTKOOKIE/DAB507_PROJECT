@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonSyntaxException;
+import file_handling.interfaces.IJsonProcessor;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -14,7 +15,7 @@ import java.util.List;
  * Handles both JSON arrays and objects at the root level.
  * This class is final to prevent further inheritance.
  */
-public final class JsonProcessor extends FileProcessor
+public final class JsonProcessor extends FileProcessor implements IJsonProcessor
 {
     private JsonArray jsonArray;
     private JsonObject jsonObject;
@@ -30,6 +31,17 @@ public final class JsonProcessor extends FileProcessor
     {
         super(filePath);
         this.gson = new Gson();
+    }
+
+    /**
+     * Gets the path of the file being processed.
+     *
+     * @return String representing the file path
+     */
+    @Override
+    public String getFilePath()
+    {
+        return this.filePath;
     }
 
     /**
@@ -51,7 +63,7 @@ public final class JsonProcessor extends FileProcessor
      * @throws IllegalArgumentException if file is not a JSON file
      */
     @Override
-    protected void validateFile()
+    public void validateFile()
     {
         if (!filePath.endsWith(".json"))
         {
@@ -66,7 +78,7 @@ public final class JsonProcessor extends FileProcessor
      * @throws IOException if file reading operations fail
      */
     @Override
-    protected void readFile() throws IOException
+    public void readFile() throws IOException
     {
         try (FileReader reader = new FileReader(filePath))
         {
@@ -91,7 +103,7 @@ public final class JsonProcessor extends FileProcessor
      * Additional parsing operations if needed after initial read.
      */
     @Override
-    protected void parseContent()
+    public void parseContent()
     {
         // Additional parsing if needed
     }
@@ -104,6 +116,7 @@ public final class JsonProcessor extends FileProcessor
      * @return List of objects of type T
      * @throws IllegalStateException if the JSON content is not an array
      */
+    @Override
     public <T> List<T> parseJsonToList(Class<T> classOfT)
     {
         if (!isArray)
@@ -121,10 +134,20 @@ public final class JsonProcessor extends FileProcessor
      *
      * @return Object containing the parsed content (either JsonArray or JsonObject)
      */
+    @Override
     public Object getJsonContent()
     {
         return isArray ? jsonArray : jsonObject;
     }
 
-
+    /**
+     * Checks if the parsed JSON content is an array.
+     *
+     * @return true if the content is a JSON array, false if it's a JSON object
+     */
+    @Override
+    public boolean isArrayContent()
+    {
+        return isArray;
+    }
 }

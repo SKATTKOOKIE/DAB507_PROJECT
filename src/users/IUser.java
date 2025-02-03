@@ -100,4 +100,13 @@ public interface IUser
      * or administrative purposes.
      */
     void printDetailedInfo();
+
+    /**
+     * Returns a string representation of the user.
+     * Includes all base user information in a human-readable format.
+     *
+     * @return A string containing the user's ID, full name, email, and department
+     * in the format: "ID: [id], Name: [firstName] [lastName], Email: [email], Department: [department]"
+     */
+    String toString();
 }
