@@ -1,24 +1,14 @@
 package business;
 
-import org.junit.jupiter.api.*;
+import testframework.*;
 import users.Student;
 import users.Staff;
-
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-@DisplayName("Department Class Tests")
-class DepartmentTest
+public class DepartmentTest extends BaseTest
 {
     private Department department;
-    private final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-    private final PrintStream originalOut = System.out;
-
-    // Test constants
     private static final String TEST_DEPARTMENT_NAME = "Engineering Computing and Design";
     private static final DepartmentId TEST_DEPARTMENT_ID = DepartmentId.fromString(TEST_DEPARTMENT_NAME);
     private static final Module TEST_MODULE = new Module("Programming 101", "CS101", "2023", Arrays.asList("BSCS", "BSIT"));
@@ -26,204 +16,140 @@ class DepartmentTest
     private static final Student TEST_STUDENT = new Student();
     private static final Staff TEST_STAFF = new Staff();
 
-    @BeforeEach
-    void setup()
+    @Override
+    protected void setup()
     {
-        System.setOut(new PrintStream(outputStream));
-        outputStream.reset();
-        System.out.println("\n=== Starting Department Test ===");
-
+        super.setup();
         department = new Department(TEST_DEPARTMENT_ID);
         TEST_COURSE.setCourseId("BSCS");
         TEST_COURSE.setCourseTitle("Bachelor of Science in Computer Science");
         TEST_COURSE.setDepartmentId(TEST_DEPARTMENT_ID);
-
-        System.out.println("✓ Test setup completed");
     }
 
-    @AfterEach
-    void cleanup()
+    public void testNullDepartmentIdConstructor()
     {
-        System.setOut(originalOut);
+        Department nullDepartment = new Department((DepartmentId) null);
+        Assert.assertEquals(DepartmentId.UNKNOWN, nullDepartment.getDepartmentId(),
+                "Null department should return UNKNOWN");
     }
 
-    @AfterAll
-    static void teardown()
+    public void testStringConstructor()
     {
-        System.out.println("\n=== Department Tests Completed Successfully ===");
+        Department stringDepartment = new Department(TEST_DEPARTMENT_NAME);
+        Assert.assertEquals(TEST_DEPARTMENT_NAME, stringDepartment.getName(),
+                "Department name should match constructor input");
     }
 
-    private void printTestResult(String testName, boolean passed)
+    public void testGetters()
     {
-        System.setOut(originalOut);
-        if (passed)
-        {
-            System.out.printf("✓ %s passed%n", testName);
-        }
-        else
-        {
-            System.out.printf("✗ %s failed%n", testName);
-        }
-        System.setOut(new PrintStream(outputStream));
+        Assert.assertEquals(TEST_DEPARTMENT_ID, department.getDepartmentId(),
+                "Department ID should match");
+        Assert.assertEquals(TEST_DEPARTMENT_NAME, department.getName(),
+                "Department name should match");
+        Assert.assertTrue(department.getModules().isEmpty(),
+                "Initial modules list should be empty");
     }
 
-    @Nested
-    @DisplayName("Basic Properties Tests")
-    class BasicPropertiesTests
+    public void testModuleManagement()
     {
+        department.addModule(TEST_MODULE);
+        Assert.assertEquals(1, department.getModules().size(),
+                "Department should have one module");
+        Assert.assertTrue(department.getModules().contains(TEST_MODULE),
+                "Department should contain test module");
 
-        @Test
-        @DisplayName("Department constructor should handle null DepartmentId")
-        void testNullDepartmentIdConstructor()
-        {
-            Department nullDepartment = new Department((DepartmentId) null);
-            assertEquals(DepartmentId.UNKNOWN, nullDepartment.getDepartmentId());
-            printTestResult("Null DepartmentId constructor", true);
-        }
+        Module csModule = new Module("CS Module", "CS102", "2023", Arrays.asList("BSCS"));
+        Module itModule = new Module("IT Module", "IT101", "2023", Arrays.asList("BSIT"));
 
-        @Test
-        @DisplayName("String constructor should create valid department")
-        void testStringConstructor()
-        {
-            Department stringDepartment = new Department(TEST_DEPARTMENT_NAME);
-            assertEquals(TEST_DEPARTMENT_NAME, stringDepartment.getName());
-            printTestResult("String constructor", true);
-        }
+        department.addModule(csModule);
+        department.addModule(itModule);
 
-        @Test
-        @DisplayName("Department getters should return correct values")
-        void testGetters()
-        {
-            assertEquals(TEST_DEPARTMENT_ID, department.getDepartmentId());
-            assertEquals(TEST_DEPARTMENT_NAME, department.getName());
-            assertTrue(department.getModules().isEmpty());
-            printTestResult("Department getters", true);
-        }
+        List<Module> csModules = department.getModulesByCode("CS");
+        Assert.assertEquals(2, csModules.size(),
+                "Should find two CS modules");
+        Assert.assertTrue(csModules.contains(csModule) && csModules.contains(TEST_MODULE),
+                "Should contain both CS modules");
     }
 
-    @Nested
-    @DisplayName("Module Management Tests")
-    class ModuleManagementTests
+    public void testCourseManagement()
     {
+        Course otherCourse = new Course();
+        otherCourse.setDepartmentId(DepartmentId.fromString("Physics"));
+        List<Course> allCourses = Arrays.asList(TEST_COURSE, otherCourse);
 
-        @Test
-        @DisplayName("addModule should add module to department")
-        void testAddModule()
-        {
-            department.addModule(TEST_MODULE);
-            assertEquals(1, department.getModules().size());
-            assertTrue(department.getModules().contains(TEST_MODULE));
-            printTestResult("Add module", true);
-        }
-
-        @Test
-        @DisplayName("getModulesByCode should return correct modules")
-        void testGetModulesByCode()
-        {
-            Module csModule = new Module("CS Module", "CS101", "2023", Arrays.asList("BSCS"));
-            Module itModule = new Module("IT Module", "IT101", "2023", Arrays.asList("BSIT"));
-
-            department.addModule(csModule);
-            department.addModule(itModule);
-
-            List<Module> csModules = department.getModulesByCode("CS");
-            assertEquals(1, csModules.size());
-            assertTrue(csModules.contains(csModule));
-
-            printTestResult("Get modules by code", true);
-        }
+        List<Course> departmentCourses = department.getCourses(allCourses);
+        Assert.assertEquals(1, departmentCourses.size(),
+                "Should find one department course");
+        Assert.assertTrue(departmentCourses.contains(TEST_COURSE),
+                "Should contain the test course");
     }
 
-    @Nested
-    @DisplayName("Course Management Tests")
-    class CourseManagementTests
+    public void testDepartmentSummary()
     {
+        List<Student> students = Arrays.asList(TEST_STUDENT);
+        List<Staff> staff = Arrays.asList(TEST_STAFF);
+        List<Course> courses = Arrays.asList(TEST_COURSE);
 
-        @Test
-        @DisplayName("getCourses should return department courses")
-        void testGetCourses()
-        {
-            Course otherCourse = new Course();
-            otherCourse.setDepartmentId(DepartmentId.fromString("Physics"));
-            List<Course> allCourses = Arrays.asList(TEST_COURSE, otherCourse);
+        DepartmentSummary summary = department.createSummary(students, staff, courses);
 
-            List<Course> departmentCourses = department.getCourses(allCourses);
-            assertEquals(1, departmentCourses.size());
-            assertTrue(departmentCourses.contains(TEST_COURSE));
+        Assert.assertEquals(TEST_DEPARTMENT_ID, summary.getDepartmentId(),
+                "Summary department ID should match");
+        Assert.assertEquals(1, summary.getStudentCount(),
+                "Should have one student");
+        Assert.assertEquals(1, summary.getStaffCount(),
+                "Should have one staff member");
 
-            printTestResult("Get department courses", true);
-        }
+        String basicSummary = summary.getBasicSummary();
+        Assert.assertTrue(basicSummary.contains(TEST_DEPARTMENT_NAME),
+                "Basic summary should contain department name");
+        Assert.assertTrue(basicSummary.contains("Total Students: 1"),
+                "Basic summary should show student count");
+        Assert.assertTrue(basicSummary.contains("Total Staff: 1"),
+                "Basic summary should show staff count");
+
+        String detailedInfo = summary.getDetailedInfo();
+        Assert.assertTrue(detailedInfo.contains(TEST_DEPARTMENT_NAME),
+                "Detailed info should contain department name");
+        Assert.assertTrue(detailedInfo.contains(TEST_STUDENT.toString()),
+                "Detailed info should contain student info");
+        Assert.assertTrue(detailedInfo.contains(TEST_STAFF.toString()),
+                "Detailed info should contain staff info");
+        Assert.assertTrue(detailedInfo.contains(TEST_COURSE.toString()),
+                "Detailed info should contain course info");
     }
 
-    @Nested
-    @DisplayName("Department Summary Tests")
-    class DepartmentSummaryTests
+    public void testObjectOverrides()
     {
+        department.addModule(TEST_MODULE);
+        String result = department.toString();
 
-        @Test
-        @DisplayName("createSummary should generate correct summary")
-        void testCreateSummary()
-        {
-            List<Student> students = Arrays.asList(TEST_STUDENT);
-            List<Staff> staff = Arrays.asList(TEST_STAFF);
-            List<Course> courses = Arrays.asList(TEST_COURSE);
+        Assert.assertTrue(result.contains(TEST_DEPARTMENT_NAME),
+                "toString should contain department name");
+        Assert.assertTrue(result.contains(TEST_DEPARTMENT_ID.toString()),
+                "toString should contain department ID");
+        Assert.assertTrue(result.contains("Number of modules: 1"),
+                "toString should show module count");
 
-            DepartmentSummary summary = department.createSummary(students, staff, courses);
+        Department sameDepartment = new Department(TEST_DEPARTMENT_ID);
+        Department differentDepartment = new Department("Physics");
 
-            assertEquals(TEST_DEPARTMENT_ID, summary.getDepartmentId());
-            assertEquals(1, summary.getStudentCount());
-            assertEquals(1, summary.getStaffCount());
+        Assert.assertTrue(department.equals(department),
+                "Department should equal itself");
+        Assert.assertTrue(department.equals(sameDepartment),
+                "Department should equal same department");
+        Assert.assertFalse(department.equals(differentDepartment),
+                "Department should not equal different department");
+        Assert.assertFalse(department.equals(null),
+                "Department should not equal null");
+        Assert.assertFalse(department.equals("Not a department"),
+                "Department should not equal non-department");
 
-            String basicSummary = summary.getBasicSummary();
-            assertTrue(basicSummary.contains(TEST_DEPARTMENT_NAME));
-            assertTrue(basicSummary.contains("Total Students: 1"));
-            assertTrue(basicSummary.contains("Total Staff: 1"));
-
-            String detailedInfo = summary.getDetailedInfo();
-            assertTrue(detailedInfo.contains(TEST_DEPARTMENT_NAME));
-            assertTrue(detailedInfo.contains(TEST_STUDENT.toString()));
-            assertTrue(detailedInfo.contains(TEST_STAFF.toString()));
-            assertTrue(detailedInfo.contains(TEST_COURSE.toString()));
-
-            printTestResult("Create department summary", true);
-        }
+        Assert.assertTrue(department.hashCode() == sameDepartment.hashCode(),
+                "Equal departments should have same hash code");
     }
 
-    @Nested
-    @DisplayName("Object Override Tests")
-    class ObjectOverrideTests
+    public static void main(String[] args)
     {
-
-        @Test
-        @DisplayName("toString should include department properties")
-        void testToString()
-        {
-            department.addModule(TEST_MODULE);
-            String result = department.toString();
-
-            assertTrue(result.contains(TEST_DEPARTMENT_NAME));
-            assertTrue(result.contains(TEST_DEPARTMENT_ID.toString()));
-            assertTrue(result.contains("Number of modules: 1"));
-
-            printTestResult("toString", true);
-        }
-
-        @Test
-        @DisplayName("equals and hashCode should be consistent")
-        void testEqualsAndHashCode()
-        {
-            Department sameDepartment = new Department(TEST_DEPARTMENT_ID);
-            Department differentDepartment = new Department("Physics");
-
-            assertEquals(department, department);
-            assertEquals(department, sameDepartment);
-            assertNotEquals(department, differentDepartment);
-            assertNotEquals(department, null);
-            assertNotEquals(department, "Not a department");
-
-            assertEquals(department.hashCode(), sameDepartment.hashCode());
-
-            printTestResult("equals and hashCode", true);
-        }
+        new DepartmentTest().runTests();
     }
 }
