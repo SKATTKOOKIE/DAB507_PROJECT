@@ -46,5 +46,12 @@ public class Assert
         }
     }
 
-    // Add more assertion methods as needed
+    public static void assertNotEquals(Object expected, Object actual, String message)
+    {
+        if (expected.equals(actual))
+        {
+            throw new AssertionError(message +
+                    " - Expected different value than: " + expected);
+        }
+    }
 }

@@ -1,46 +1,72 @@
 package gui.dialog;
 
+import testframework.*;
 import gui.components.dialogs.AddCourseDialog;
 import gui.GuiMainScreen;
 import business.DepartmentId;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.lang.reflect.Field;
 
-class AddCourseDialogTest
+public class AddCourseDialogTest extends BaseTest
 {
     private static final String TEST_COURSE_NAME = "Test Course";
     private AddCourseDialog dialog;
     private JTextField nameField;
     private JTextField codeField;
     private JComboBox<DepartmentId> departmentCombo;
+    private GuiMainScreen mainScreen;
 
-    @BeforeEach
-    void setup() throws Exception
+    @Override
+    protected void cleanup()
     {
-        SwingUtilities.invokeAndWait(() ->
+        super.cleanup();
+        if (dialog != null)
         {
-            try
+            SwingUtilities.invokeLater(() ->
             {
-                dialog = new AddCourseDialog(new Frame(), new GuiMainScreen());
-                initialiseFields();
-            }
-            catch (Exception e)
+                dialog.dispose();
+            });
+        }
+        if (mainScreen != null)
+        {
+            SwingUtilities.invokeLater(() ->
             {
-                e.printStackTrace();
-                fail("Failed to create dialog: " + e.getMessage());
-            }
-        });
+                mainScreen.dispose();
+            });
+        }
+    }
+
+    @Override
+    protected void setup()
+    {
+        super.setup();
+        try
+        {
+            SwingUtilities.invokeAndWait(() ->
+            {
+                try
+                {
+                    mainScreen = new GuiMainScreen();
+                    dialog = new AddCourseDialog(new Frame(), mainScreen);
+                    initialiseFields();
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                    Assert.assertTrue(false, "Failed to create dialog: " + e.getMessage());
+                }
+            });
+        }
+        catch (Exception e)
+        {
+            Assert.assertTrue(false, "Setup failed: " + e.getMessage());
+        }
     }
 
     private void initialiseFields() throws Exception
     {
-        // Access private fields using reflection
         Class<AddCourseDialog> dialogClass = AddCourseDialog.class;
 
         Field nameFieldRef = dialogClass.getDeclaredField("nameField");
@@ -56,42 +82,35 @@ class AddCourseDialogTest
         departmentCombo = (JComboBox<DepartmentId>) deptComboRef.get(dialog);
     }
 
-    @Test
-    void courseCreationShouldSetFieldsCorrectly() throws Exception
+    public void testCourseCreation() throws Exception
     {
         SwingUtilities.invokeAndWait(() ->
         {
             nameField.setText(TEST_COURSE_NAME);
             departmentCombo.setSelectedIndex(0);
 
-            assertEquals(TEST_COURSE_NAME, nameField.getText(),
+            Assert.assertEquals(TEST_COURSE_NAME, nameField.getText(),
                     "Course name field should contain the test name");
-            assertNotNull(departmentCombo.getSelectedItem(),
+            Assert.assertNotNull(departmentCombo.getSelectedItem(),
                     "Department combo box should have a selection");
-
-            System.out.println("✓ Course creation test passed");
         });
     }
 
-    @Test
-    void courseCodeShouldBeGenerated() throws Exception
+    public void testCourseCodeGeneration() throws Exception
     {
         SwingUtilities.invokeAndWait(() ->
         {
-            // Test initial code generation
-            assertFalse(codeField.getText().isEmpty(),
+            Assert.assertFalse(codeField.getText().isEmpty(),
                     "Course code should be automatically generated");
-            assertEquals(6, codeField.getText().length(),
+            Assert.assertEquals(6, codeField.getText().length(),
                     "Course code should be 6 digits long");
-            assertTrue(codeField.getText().matches("\\d{6}"),
+            Assert.assertTrue(codeField.getText().matches("\\d{6}"),
                     "Course code should contain only digits");
-            assertFalse(codeField.isEditable(),
+            Assert.assertFalse(codeField.isEditable(),
                     "Course code field should not be editable");
 
-            // Store the initial code
             String initialCode = codeField.getText();
 
-            // Simulate clicking the generate button to get a new code
             for (Component comp : dialog.getContentPane().getComponents())
             {
                 if (comp instanceof JPanel)
@@ -100,13 +119,10 @@ class AddCourseDialogTest
                 }
             }
 
-            // Verify new code is different
-            assertNotEquals(initialCode, codeField.getText(),
+            Assert.assertNotEquals(initialCode, codeField.getText(),
                     "New generated code should be different from initial code");
-            assertTrue(codeField.getText().matches("\\d{6}"),
+            Assert.assertTrue(codeField.getText().matches("\\d{6}"),
                     "New code should also be 6 digits");
-
-            System.out.println("✓ Course code generation test passed");
         });
     }
 
@@ -126,21 +142,21 @@ class AddCourseDialogTest
         }
     }
 
-    @Test
-    void dialogShouldHandleEmptyFields() throws Exception
+    public void testEmptyFieldsHandling() throws Exception
     {
         SwingUtilities.invokeAndWait(() ->
         {
             nameField.setText("");
 
-            // Try to trigger save (you'll need to expose this method or find another way to trigger it)
-            // For now, we can at least verify the state of required fields
-            assertTrue(nameField.getText().isEmpty(),
+            Assert.assertTrue(nameField.getText().isEmpty(),
                     "Name field should be empty for this test");
-            assertFalse(codeField.getText().isEmpty(),
+            Assert.assertFalse(codeField.getText().isEmpty(),
                     "Code field should still have generated code");
-
-            System.out.println("✓ Empty fields handling test passed");
         });
+    }
+
+    public static void main(String[] args)
+    {
+        new AddCourseDialogTest().runTests();
     }
 }

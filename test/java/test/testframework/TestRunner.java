@@ -40,6 +40,7 @@ public class TestRunner
 
         // Print final summary to original output
         printSummary();
+        System.exit(0);
     }
 
     private void runTestMethod(Object testClass, Method method)
