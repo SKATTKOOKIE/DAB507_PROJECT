@@ -1,48 +1,74 @@
 package gui.dialog;
 
+import testframework.*;
 import gui.components.dialogs.AddModuleDialog;
 import gui.GuiMainScreen;
 import business.DepartmentId;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.lang.reflect.Field;
 
-class AddModuleDialogTest
+public class AddModuleDialogTest extends BaseTest
 {
     private static final String TEST_MODULE_NAME = "Test Module";
     private static final String TEST_YEAR = "25";
     private AddModuleDialog dialog;
+    private GuiMainScreen mainScreen;
     private JTextField nameField;
     private JTextField codeField;
     private JTextField acYearField;
     private JComboBox<DepartmentId> departmentCombo;
 
-    @BeforeEach
-    void setup() throws Exception
+    @Override
+    protected void cleanup()
     {
-        SwingUtilities.invokeAndWait(() ->
+        super.cleanup();
+        if (dialog != null)
         {
-            try
+            SwingUtilities.invokeLater(() ->
             {
-                dialog = new AddModuleDialog(new Frame(), new GuiMainScreen());
-                initialiseFields();
-            }
-            catch (Exception e)
+                dialog.dispose();
+            });
+        }
+        if (mainScreen != null)
+        {
+            SwingUtilities.invokeLater(() ->
             {
-                e.printStackTrace();
-                fail("Failed to create dialog: " + e.getMessage());
-            }
-        });
+                mainScreen.dispose();
+            });
+        }
+    }
+
+    @Override
+    protected void setup()
+    {
+        super.setup();
+        try
+        {
+            SwingUtilities.invokeAndWait(() ->
+            {
+                try
+                {
+                    mainScreen = new GuiMainScreen();
+                    dialog = new AddModuleDialog(new Frame(), mainScreen);
+                    initialiseFields();
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                    Assert.assertTrue(false, "Failed to create dialog: " + e.getMessage());
+                }
+            });
+        }
+        catch (Exception e)
+        {
+            Assert.assertTrue(false, "Setup failed: " + e.getMessage());
+        }
     }
 
     private void initialiseFields() throws Exception
     {
-        // Access private fields using reflection
         Class<AddModuleDialog> dialogClass = AddModuleDialog.class;
 
         Field nameFieldRef = dialogClass.getDeclaredField("nameField");
@@ -61,45 +87,35 @@ class AddModuleDialogTest
         departmentCombo = (JComboBox<DepartmentId>) deptComboRef.get(dialog);
     }
 
-    @Test
-    void academicYearShouldRejectInvalidInputs() throws Exception
+    public void testAcademicYearValidation() throws Exception
     {
         SwingUtilities.invokeAndWait(() ->
         {
-            // Clear the field first
             acYearField.setText("");
-            assertEquals("", acYearField.getText(), "Field should start empty");
+            Assert.assertTrue(acYearField.getText().isEmpty(), "Field should start empty");
 
-            // Test non-numeric input
             acYearField.setText("ab");
-            assertEquals("", acYearField.getText(), "Field should reject letters");
+            Assert.assertTrue(acYearField.getText().isEmpty(), "Field should reject letters");
 
-            // Test symbols
             acYearField.setText("@#");
-            assertEquals("", acYearField.getText(), "Field should reject symbols");
+            Assert.assertTrue(acYearField.getText().isEmpty(), "Field should reject symbols");
 
-            // Test year below minimum
             acYearField.setText("17");
-            assertNotEquals("17", acYearField.getText(), "Field should reject years below 18");
+            Assert.assertNotEquals("17", acYearField.getText(), "Field should reject years below 18");
 
-            // Test valid years
             acYearField.setText("25");
-            assertEquals("25", acYearField.getText(), "Field should accept valid year 25");
+            Assert.assertEquals("25", acYearField.getText(), "Field should accept valid year 25");
 
             acYearField.setText("99");
-            assertEquals("99", acYearField.getText(), "Field should accept valid year 99");
+            Assert.assertEquals("99", acYearField.getText(), "Field should accept valid year 99");
 
-            // Test partial input
             acYearField.setText("");
             acYearField.setText("2");
-            assertEquals("2", acYearField.getText(), "Field should accept single digit");
-
-            System.out.println("✓ Academic year validation test passed");
+            Assert.assertEquals("2", acYearField.getText(), "Field should accept single digit");
         });
     }
 
-    @Test
-    void moduleCreationShouldSetFieldsCorrectly() throws Exception
+    public void testModuleCreation() throws Exception
     {
         SwingUtilities.invokeAndWait(() ->
         {
@@ -107,30 +123,30 @@ class AddModuleDialogTest
             acYearField.setText(TEST_YEAR);
             departmentCombo.setSelectedIndex(0);
 
-            assertEquals(TEST_MODULE_NAME, nameField.getText(),
+            Assert.assertEquals(TEST_MODULE_NAME, nameField.getText(),
                     "Module name field should contain the test name");
-            assertEquals(TEST_YEAR, acYearField.getText(),
+            Assert.assertEquals(TEST_YEAR, acYearField.getText(),
                     "Academic year field should contain the test year");
-            assertNotNull(departmentCombo.getSelectedItem(),
+            Assert.assertNotNull(departmentCombo.getSelectedItem(),
                     "Department combo box should have a selection");
-
-            System.out.println("✓ Module creation test passed");
         });
     }
 
-    @Test
-    void moduleCodeShouldBeGenerated() throws Exception
+    public void testModuleCodeGeneration() throws Exception
     {
         SwingUtilities.invokeAndWait(() ->
         {
-            assertFalse(codeField.getText().isEmpty(),
+            Assert.assertFalse(codeField.getText().isEmpty(),
                     "Module code should be automatically generated");
-            assertTrue(codeField.getText().contains("-"),
+            Assert.assertTrue(codeField.getText().contains("-"),
                     "Module code should contain a hyphen");
-            assertFalse(codeField.isEditable(),
+            Assert.assertFalse(codeField.isEditable(),
                     "Module code field should not be editable");
-
-            System.out.println("✓ Module code generation test passed");
         });
+    }
+
+    public static void main(String[] args)
+    {
+        new AddModuleDialogTest().runTests();
     }
 }
