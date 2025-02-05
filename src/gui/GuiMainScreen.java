@@ -49,6 +49,14 @@ public class GuiMainScreen implements UniversityManagementGui
         show();
     }
 
+    public void dispose()
+    {
+        if (mainFrame != null)
+        {
+            mainFrame.dispose();
+        }
+    }
+
     /**
      * Initialises all GUI components and sets up the main frame layout.
      */

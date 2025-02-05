@@ -1,29 +1,18 @@
 package users;
 
-import org.junit.jupiter.api.*;
+import testframework.*;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 /**
- * Test class for the Student class.
- * Verifies the functionality of the Student class methods and properties.
+ * Refactored Student test class using the custom testing framework
  */
-@DisplayName("Student Class Tests")
-class StudentTest
+public class StudentTest extends BaseTest
 {
-    /**
-     * The Student instance used for testing.
-     */
     private Student student;
 
-    /**
-     * Test data constants.
-     */
+    // Test constants
     private static final int TEST_ID = 1;
     private static final String TEST_FIRST_NAME = "John";
     private static final String TEST_LAST_NAME = "Doe";
@@ -32,21 +21,10 @@ class StudentTest
     private static final String TEST_TYPE = "Full-Time";
     private static final String TEST_COURSE = "Computer Science";
 
-    /**
-     * Output streams for capturing console output.
-     */
-    private final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-    private final PrintStream originalOut = System.out;
-
-    /**
-     * Sets up the test environment before each test method.
-     */
-    @BeforeEach
-    void setup()
+    @Override
+    protected void setup()
     {
-        System.setOut(new PrintStream(outputStream));
-        System.out.println("\n=== Starting Test ===");
-
+        super.setup();
         student = new Student();
         student.setId(TEST_ID);
         student.setFirstName(TEST_FIRST_NAME);
@@ -55,279 +33,132 @@ class StudentTest
         student.setGender(TEST_GENDER);
         student.setType(TEST_TYPE);
         student.setCourse(TEST_COURSE);
-
-        System.out.println("✓ Test setup completed");
     }
 
-    /**
-     * Cleans up the test environment after each test method.
-     */
-    @AfterEach
-    void cleanup()
+    // Basic Properties Tests
+    public void testGetters()
     {
-        System.setOut(originalOut);
+        Assert.assertEquals(TEST_ID, student.getId(), "ID should match");
+        Assert.assertEquals(TEST_FIRST_NAME, student.getFirstName(), "First name should match");
+        Assert.assertEquals(TEST_LAST_NAME, student.getLastName(), "Last name should match");
+        Assert.assertEquals(TEST_EMAIL, student.getEmail(), "Email should match");
+        Assert.assertEquals(TEST_GENDER, student.getGender(), "Gender should match");
+        Assert.assertEquals(TEST_TYPE, student.getType(), "Type should match");
+        Assert.assertEquals(TEST_COURSE, student.getCourse(), "Course should match");
     }
 
-    /**
-     * Prints the test header.
-     *
-     * @param testName the name of the test
-     */
-    private void printTestHeader(String testName)
+    public void testSetters()
     {
-        System.setOut(originalOut);
-        System.out.println("\nTesting " + testName + "...");
-        System.setOut(new PrintStream(outputStream));
+        Student newStudent = new Student();
+
+        newStudent.setId(TEST_ID);
+        Assert.assertEquals(TEST_ID, newStudent.getId(), "ID should be updated");
+
+        newStudent.setFirstName(TEST_FIRST_NAME);
+        Assert.assertEquals(TEST_FIRST_NAME, newStudent.getFirstName(), "First name should be updated");
+
+        newStudent.setLastName(TEST_LAST_NAME);
+        Assert.assertEquals(TEST_LAST_NAME, newStudent.getLastName(), "Last name should be updated");
+
+        newStudent.setEmail(TEST_EMAIL);
+        Assert.assertEquals(TEST_EMAIL, newStudent.getEmail(), "Email should be updated");
+
+        newStudent.setGender(TEST_GENDER);
+        Assert.assertEquals(TEST_GENDER, newStudent.getGender(), "Gender should be updated");
+
+        newStudent.setType(TEST_TYPE);
+        Assert.assertEquals(TEST_TYPE, newStudent.getType(), "Type should be updated");
+
+        newStudent.setCourse(TEST_COURSE);
+        Assert.assertEquals(TEST_COURSE, newStudent.getCourse(), "Course should be updated");
     }
 
-    /**
-     * Prints the test success message.
-     *
-     * @param testName the name of the test
-     */
-    private void printTestSuccess(String testName)
+    // ToString Tests
+    public void testToStringComplete()
     {
-        System.setOut(originalOut);
-        System.out.println("✓ " + testName + " test passed");
-        System.setOut(new PrintStream(outputStream));
+        String result = student.toString();
+
+        Assert.assertTrue(result.contains("ID: " + TEST_ID), "toString should contain ID");
+        Assert.assertTrue(result.contains("Name: " + TEST_FIRST_NAME + " " + TEST_LAST_NAME),
+                "toString should contain full name");
+        Assert.assertTrue(result.contains("Email: " + TEST_EMAIL), "toString should contain email");
+        Assert.assertTrue(result.contains("Gender: " + TEST_GENDER), "toString should contain gender");
+        Assert.assertTrue(result.contains("Type: " + TEST_TYPE), "toString should contain type");
     }
 
-    /**
-     * Nested test class for basic properties tests.
-     */
-    @Nested
-    @DisplayName("Basic Properties Tests")
-    class BasicPropertiesTests
+    public void testToStringWithNulls()
     {
-        /**
-         * Tests the getter methods.
-         */
-        @Test
-        @DisplayName("Getter methods should return correct values")
-        void testGetters()
+        Student nullStudent = new Student();
+        nullStudent.setId(TEST_ID);
+
+        String result = nullStudent.toString();
+
+        Assert.assertTrue(result.contains("ID: " + TEST_ID), "toString should contain ID");
+        Assert.assertTrue(result.contains("Name: null null"), "toString should display null for missing names");
+        Assert.assertTrue(result.contains("Email: null"), "toString should display null for missing email");
+        Assert.assertTrue(result.contains("Department: null"), "toString should display null for missing department");
+        Assert.assertTrue(result.contains("Gender: null"), "toString should display null for missing gender");
+        Assert.assertTrue(result.contains("Type: null"), "toString should display null for missing type");
+    }
+
+    // Data Retrieval Tests
+    public void testGetByNullCourse() throws IOException
+    {
+        List<Student> students = Student.getByCourse(null);
+        Assert.assertNotNull(students, "Student list should not be null");
+    }
+
+    public void testGetByEmptyCourse() throws IOException
+    {
+        List<Student> students = Student.getByCourse("");
+        Assert.assertNotNull(students, "Student list should not be null");
+    }
+
+    public void testGetByValidCourse() throws IOException
+    {
+        List<Student> students = Student.getByCourse(TEST_COURSE);
+        Assert.assertNotNull(students, "Student list should not be null");
+        for (Student s : students)
         {
-            printTestHeader("getter methods");
-
-            assertEquals(TEST_ID, student.getId(), "ID should match");
-            assertEquals(TEST_FIRST_NAME, student.getFirstName(), "First name should match");
-            assertEquals(TEST_LAST_NAME, student.getLastName(), "Last name should match");
-            assertEquals(TEST_EMAIL, student.getEmail(), "Email should match");
-            assertEquals(TEST_GENDER, student.getGender(), "Gender should match");
-            assertEquals(TEST_TYPE, student.getType(), "Type should match");
-            assertEquals(TEST_COURSE, student.getCourse(), "Course should match");
-
-            printTestSuccess("getter methods");
-        }
-
-        /**
-         * Tests the setter methods.
-         */
-        @Test
-        @DisplayName("Setter methods should update values")
-        void testSetters()
-        {
-            printTestHeader("setter methods");
-
-            Student newStudent = new Student();
-
-            newStudent.setId(TEST_ID);
-            assertEquals(TEST_ID, newStudent.getId(), "ID should be updated");
-
-            newStudent.setFirstName(TEST_FIRST_NAME);
-            assertEquals(TEST_FIRST_NAME, newStudent.getFirstName(), "First name should be updated");
-
-            newStudent.setLastName(TEST_LAST_NAME);
-            assertEquals(TEST_LAST_NAME, newStudent.getLastName(), "Last name should be updated");
-
-            newStudent.setEmail(TEST_EMAIL);
-            assertEquals(TEST_EMAIL, newStudent.getEmail(), "Email should be updated");
-
-            newStudent.setGender(TEST_GENDER);
-            assertEquals(TEST_GENDER, newStudent.getGender(), "Gender should be updated");
-
-            newStudent.setType(TEST_TYPE);
-            assertEquals(TEST_TYPE, newStudent.getType(), "Type should be updated");
-
-            newStudent.setCourse(TEST_COURSE);
-            assertEquals(TEST_COURSE, newStudent.getCourse(), "Course should be updated");
-
-            printTestSuccess("setter methods");
+            Assert.assertEquals(TEST_COURSE, s.getCourse(), "All students should be from test course");
         }
     }
 
-    /**
-     * Nested test class for toString method tests.
-     */
-    @Nested
-    @DisplayName("toString Method Tests")
-    class ToStringTests
+    // Print Methods Tests
+    public void testPrintDetailedInfo()
     {
-        /**
-         * Tests the toString method with complete data.
-         */
-        @Test
-        @DisplayName("toString should include all properties")
-        void testToStringComplete()
-        {
-            printTestHeader("toString with complete data");
+        outputStream.reset();
+        student.printDetailedInfo();
+        String output = outputStream.toString();
 
-            String result = student.toString();
-
-            assertTrue(result.contains("ID: " + TEST_ID), "toString should contain ID");
-            assertTrue(result.contains("Name: " + TEST_FIRST_NAME + " " + TEST_LAST_NAME),
-                    "toString should contain full name");
-            assertTrue(result.contains("Email: " + TEST_EMAIL), "toString should contain email");
-            assertTrue(result.contains("Gender: " + TEST_GENDER), "toString should contain gender");
-            assertTrue(result.contains("Type: " + TEST_TYPE), "toString should contain type");
-
-            printTestSuccess("toString complete data");
-        }
-
-        /**
-         * Tests the toString method with null values.
-         */
-        @Test
-        @DisplayName("toString should handle null values")
-        void testToStringWithNulls()
-        {
-            printTestHeader("toString with null values");
-
-            Student nullStudent = new Student();
-            nullStudent.setId(TEST_ID); // ID should never be null
-
-            String result = nullStudent.toString();
-
-            assertTrue(result.contains("ID: " + TEST_ID), "toString should contain ID");
-            assertTrue(result.contains("Name: null null"), "toString should display null for missing names");
-            assertTrue(result.contains("Email: null"), "toString should display null for missing email");
-            assertTrue(result.contains("Department: null"), "toString should display null for missing department");
-            assertTrue(result.contains("Gender: null"), "toString should display null for missing gender");
-            assertTrue(result.contains("Type: null"), "toString should display null for missing type");
-
-            printTestSuccess("toString null values");
-        }
+        Assert.assertTrue(output.contains(TEST_FIRST_NAME), "Output should contain first name");
+        Assert.assertTrue(output.contains(TEST_LAST_NAME), "Output should contain last name");
+        Assert.assertTrue(output.contains(String.valueOf(TEST_ID)), "Output should contain ID");
+        Assert.assertTrue(output.contains(TEST_TYPE), "Output should contain type");
+        Assert.assertTrue(output.contains(TEST_EMAIL), "Output should contain email");
     }
 
-    /**
-     * Nested test class for data retrieval tests.
-     */
-    @Nested
-    @DisplayName("Data Retrieval Tests")
-    class DataRetrievalTests
+    public void testPrintDetailedInfoWithNulls()
     {
-        /**
-         * Tests the getByCourse method with a null course.
-         */
-        @Test
-        @DisplayName("getByCourse should handle null course")
-        void testGetByNullCourse()
-        {
-            printTestHeader("getByCourse with null");
+        outputStream.reset();
+        Student nullStudent = new Student();
+        nullStudent.setId(TEST_ID);
 
-            assertDoesNotThrow(() ->
-            {
-                List<Student> students = Student.getByCourse(null);
-                assertNotNull(students, "Student list should not be null");
-            }, "getByCourse should handle null course");
+        nullStudent.printDetailedInfo();
+        String output = outputStream.toString();
 
-            printTestSuccess("getByCourse null");
-        }
+        Assert.assertTrue(output.contains(String.valueOf(TEST_ID)), "Output should contain ID");
+        Assert.assertTrue(output.contains("null"), "Output should contain null for missing values");
 
-        /**
-         * Tests the getByCourse method with an empty course name.
-         */
-        @Test
-        @DisplayName("getByCourse should handle empty course name")
-        void testGetByEmptyCourse()
-        {
-            printTestHeader("getByCourse with empty string");
-
-            assertDoesNotThrow(() ->
-            {
-                List<Student> students = Student.getByCourse("");
-                assertNotNull(students, "Student list should not be null");
-            }, "getByCourse should handle empty course name");
-
-            printTestSuccess("getByCourse empty string");
-        }
-
-        /**
-         * Tests the getByCourse method with a valid course.
-         */
-        @Test
-        @DisplayName("getByCourse should filter by course")
-        void testGetByValidCourse()
-        {
-            printTestHeader("getByCourse with valid course");
-
-            assertDoesNotThrow(() ->
-            {
-                List<Student> students = Student.getByCourse(TEST_COURSE);
-                assertNotNull(students, "Student list should not be null");
-                students.forEach(s -> assertEquals(TEST_COURSE, s.getCourse(),
-                        "All students should be from test course"));
-            }, "getByCourse should handle valid course name");
-
-            printTestSuccess("getByCourse valid course");
-        }
+        String[] lines = output.split("\n");
+        Assert.assertTrue(lines.length >= 3, "Output should have at least 3 lines");
+        Assert.assertTrue(lines[0].contains(String.valueOf(TEST_ID)), "First line should contain ID");
+        Assert.assertTrue(lines[1].contains("Type:"), "Second line should contain Type label");
+        Assert.assertTrue(lines[2].contains("Email:"), "Third line should contain Email label");
     }
 
-    /**
-     * Nested test class for print methods tests.
-     */
-    @Nested
-    @DisplayName("Print Methods Tests")
-    class PrintMethodsTests
+    public static void main(String[] args)
     {
-        /**
-         * Tests the printDetailedInfo method output.
-         */
-        @Test
-        @DisplayName("printDetailedInfo should output all information")
-        void testPrintDetailedInfo()
-        {
-            printTestHeader("printDetailedInfo output");
-            outputStream.reset(); // Clear previous output
-
-            student.printDetailedInfo();
-            String output = outputStream.toString();
-
-            assertTrue(output.contains(TEST_FIRST_NAME), "Output should contain first name");
-            assertTrue(output.contains(TEST_LAST_NAME), "Output should contain last name");
-            assertTrue(output.contains(String.valueOf(TEST_ID)), "Output should contain ID");
-            assertTrue(output.contains(TEST_TYPE), "Output should contain type");
-            assertTrue(output.contains(TEST_EMAIL), "Output should contain email");
-
-            printTestSuccess("printDetailedInfo");
-        }
-
-        /**
-         * Tests the printDetailedInfo method with null values.
-         */
-        @Test
-        @DisplayName("printDetailedInfo should handle null values")
-        void testPrintDetailedInfoWithNulls()
-        {
-            printTestHeader("printDetailedInfo with null values");
-            outputStream.reset();
-
-            Student nullStudent = new Student();
-            nullStudent.setId(TEST_ID); // ID should never be null
-
-            nullStudent.printDetailedInfo();
-            String output = outputStream.toString();
-
-            assertTrue(output.contains(String.valueOf(TEST_ID)), "Output should contain ID");
-            assertTrue(output.contains("null"), "Output should contain null for missing values");
-
-            // Verify output format
-            String[] lines = output.split("\n");
-            assertTrue(lines.length >= 3, "Output should have at least 3 lines");
-            assertTrue(lines[0].contains(String.valueOf(TEST_ID)), "First line should contain ID");
-            assertTrue(lines[1].contains("Type:"), "Second line should contain Type label");
-            assertTrue(lines[2].contains("Email:"), "Third line should contain Email label");
-
-            printTestSuccess("printDetailedInfo null values");
-        }
+        new StudentTest().runTests();
     }
 }

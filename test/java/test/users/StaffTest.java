@@ -1,25 +1,15 @@
 package users;
 
 import business.DepartmentId;
-import org.junit.jupiter.api.*;
+import testframework.*;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-/**
- * Test class for the Staff class.
- * Verifies the functionality of Staff-specific properties, department handling, data retrieval, and output formatting.
- */
-@DisplayName("Staff Class Tests")
-class StaffTest
+public class StaffTest extends BaseTest
 {
     private Staff staff;
 
-    // Test constants grouped together
     private static final int TEST_ID = 1;
     private static final String TEST_FIRST_NAME = "John";
     private static final String TEST_LAST_NAME = "Smith";
@@ -30,19 +20,10 @@ class StaffTest
     private static final String TEST_AVATAR = "avatar.png";
     private static final DepartmentId TEST_DEPARTMENT = DepartmentId.ECD;
 
-    // Output capture streams
-    private final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-    private final PrintStream originalOut = System.out;
-
-    /**
-     * Setup method to initialize test data and redirect output.
-     */
-    @BeforeEach
-    void setup()
+    @Override
+    protected void setup()
     {
-        System.setOut(new PrintStream(outputStream));
-        System.out.println("\n=== Starting Staff Test ===");
-
+        super.setup();
         staff = new Staff();
         staff.setId(TEST_ID);
         staff.setFirstName(TEST_FIRST_NAME);
@@ -53,266 +34,115 @@ class StaffTest
         staff.setMaxModules(TEST_MAX_MODULES);
         staff.setAvatar(TEST_AVATAR);
         staff.setDepartmentId(TEST_DEPARTMENT);
-
-        System.out.println("✓ Test setup completed");
     }
 
-    /**
-     * Cleanup method to restore original output stream.
-     */
-    @AfterEach
-    void cleanup()
+    // Basic Properties Tests
+    public void testGetters()
     {
-        System.setOut(originalOut);
+        Assert.assertEquals(TEST_GUID, staff.getGuid(), "GUID should match");
+        Assert.assertEquals(TEST_WEEKLY_HOURS, staff.getWeeklyHours(), "Weekly hours should match");
+        Assert.assertEquals(TEST_MAX_MODULES, staff.getMaxModules(), "Max modules should match");
+        Assert.assertEquals(TEST_AVATAR, staff.getAvatar(), "Avatar should match");
+        Assert.assertEquals(TEST_DEPARTMENT, staff.getDepartmentId(), "Department should match");
+        Assert.assertEquals(TEST_DEPARTMENT.getDepartmentName(), staff.getDepartment(), "Department name should match");
     }
 
-    /**
-     * Utility method to print test header.
-     *
-     * @param testName the name of the test
-     */
-    private void printTestHeader(String testName)
+    public void testSetters()
     {
-        System.setOut(originalOut);
-        System.out.println("\nTesting " + testName + "...");
-        System.setOut(new PrintStream(outputStream));
+        Staff newStaff = new Staff();
+
+        newStaff.setGuid(TEST_GUID);
+        Assert.assertEquals(TEST_GUID, newStaff.getGuid(), "GUID should be updated");
+
+        newStaff.setWeeklyHours(TEST_WEEKLY_HOURS);
+        Assert.assertEquals(TEST_WEEKLY_HOURS, newStaff.getWeeklyHours(), "Weekly hours should be updated");
+
+        newStaff.setMaxModules(TEST_MAX_MODULES);
+        Assert.assertEquals(TEST_MAX_MODULES, newStaff.getMaxModules(), "Max modules should be updated");
+
+        newStaff.setAvatar(TEST_AVATAR);
+        Assert.assertEquals(TEST_AVATAR, newStaff.getAvatar(), "Avatar should be updated");
+
+        newStaff.setDepartmentId(TEST_DEPARTMENT);
+        Assert.assertEquals(TEST_DEPARTMENT, newStaff.getDepartmentId(), "Department should be updated");
     }
 
-    /**
-     * Utility method to print test success message.
-     *
-     * @param testName the name of the test
-     */
-    private void printTestSuccess(String testName)
+    // Department Tests
+    public void testGetDepartmentIdWithNull()
     {
-        System.setOut(originalOut);
-        System.out.println("✓ " + testName + " test passed");
-        System.setOut(new PrintStream(outputStream));
+        Staff nullDeptStaff = new Staff();
+        Assert.assertEquals(DepartmentId.UNKNOWN, nullDeptStaff.getDepartmentId(), "Null department should return UNKNOWN");
     }
 
-    /**
-     * Nested test class for Staff-specific properties.
-     */
-    @Nested
-    @DisplayName("Basic Properties Tests")
-    class BasicPropertiesTests
+    public void testGetDepartmentIdWithEmpty()
     {
-        /**
-         * Test Staff-specific getter methods.
-         */
-        @Test
-        @DisplayName("Staff-specific getters should return correct values")
-        void testGetters()
-        {
-            printTestHeader("staff-specific getters");
-
-            assertEquals(TEST_GUID, staff.getGuid(), "GUID should match");
-            assertEquals(TEST_WEEKLY_HOURS, staff.getWeeklyHours(), "Weekly hours should match");
-            assertEquals(TEST_MAX_MODULES, staff.getMaxModules(), "Max modules should match");
-            assertEquals(TEST_AVATAR, staff.getAvatar(), "Avatar should match");
-            assertEquals(TEST_DEPARTMENT, staff.getDepartmentId(), "Department should match");
-            assertEquals(TEST_DEPARTMENT.getDepartmentName(), staff.getDepartment(), "Department name should match");
-
-            printTestSuccess("staff-specific getters");
-        }
-
-        /**
-         * Test Staff-specific setter methods.
-         */
-        @Test
-        @DisplayName("Staff-specific setters should update values")
-        void testSetters()
-        {
-            printTestHeader("staff-specific setters");
-
-            Staff newStaff = new Staff();
-
-            newStaff.setGuid(TEST_GUID);
-            assertEquals(TEST_GUID, newStaff.getGuid(), "GUID should be updated");
-
-            newStaff.setWeeklyHours(TEST_WEEKLY_HOURS);
-            assertEquals(TEST_WEEKLY_HOURS, newStaff.getWeeklyHours(), "Weekly hours should be updated");
-
-            newStaff.setMaxModules(TEST_MAX_MODULES);
-            assertEquals(TEST_MAX_MODULES, newStaff.getMaxModules(), "Max modules should be updated");
-
-            newStaff.setAvatar(TEST_AVATAR);
-            assertEquals(TEST_AVATAR, newStaff.getAvatar(), "Avatar should be updated");
-
-            newStaff.setDepartmentId(TEST_DEPARTMENT);
-            assertEquals(TEST_DEPARTMENT, newStaff.getDepartmentId(), "Department should be updated");
-
-            printTestSuccess("staff-specific setters");
-        }
+        Staff emptyDeptStaff = new Staff();
+        emptyDeptStaff.setDepartment("");
+        Assert.assertEquals(DepartmentId.UNKNOWN, emptyDeptStaff.getDepartmentId(), "Empty department should return UNKNOWN");
     }
 
-    /**
-     * Nested test class for department handling.
-     */
-    @Nested
-    @DisplayName("Department Handling Tests")
-    class DepartmentTests
+    public void testGetDepartmentIdWithInvalid()
     {
-        /**
-         * Test getDepartmentId method with null department.
-         */
-        @Test
-        @DisplayName("getDepartmentId should handle null department")
-        void testGetDepartmentIdWithNull()
-        {
-            printTestHeader("getDepartmentId with null");
-
-            Staff nullDeptStaff = new Staff();
-            assertEquals(DepartmentId.UNKNOWN, nullDeptStaff.getDepartmentId(), "Null department should return UNKNOWN");
-
-            printTestSuccess("getDepartmentId null handling");
-        }
-
-        /**
-         * Test getDepartmentId method with empty department.
-         */
-        @Test
-        @DisplayName("getDepartmentId should handle empty department")
-        void testGetDepartmentIdWithEmpty()
-        {
-            printTestHeader("getDepartmentId with empty string");
-
-            Staff emptyDeptStaff = new Staff();
-            emptyDeptStaff.setDepartment("");
-            assertEquals(DepartmentId.UNKNOWN, emptyDeptStaff.getDepartmentId(), "Empty department should return UNKNOWN");
-
-            printTestSuccess("getDepartmentId empty handling");
-        }
-
-        /**
-         * Test getDepartmentId method with invalid department.
-         */
-        @Test
-        @DisplayName("getDepartmentId should handle invalid department")
-        void testGetDepartmentIdWithInvalid()
-        {
-            printTestHeader("getDepartmentId with invalid department");
-
-            Staff invalidDeptStaff = new Staff();
-            invalidDeptStaff.setDepartment("Invalid Department");
-            assertEquals(DepartmentId.UNKNOWN, invalidDeptStaff.getDepartmentId(), "Invalid department should return UNKNOWN");
-
-            printTestSuccess("getDepartmentId invalid handling");
-        }
+        Staff invalidDeptStaff = new Staff();
+        invalidDeptStaff.setDepartment("Invalid Department");
+        Assert.assertEquals(DepartmentId.UNKNOWN, invalidDeptStaff.getDepartmentId(), "Invalid department should return UNKNOWN");
     }
 
-    /**
-     * Nested test class for data retrieval methods.
-     */
-    @Nested
-    @DisplayName("Data Retrieval Tests")
-    class DataRetrievalTests
+    // Data Retrieval Tests
+    public void testGetByNullDepartment() throws IOException
     {
-        /**
-         * Test getByDepartment method with null department.
-         */
-        @Test
-        @DisplayName("getByDepartment should handle null department")
-        void testGetByNullDepartment()
-        {
-            printTestHeader("getByDepartment with null");
-
-            assertDoesNotThrow(() ->
-            {
-                List<Staff> staffList = Staff.getByDepartment(null);
-                assertNotNull(staffList, "Staff list should not be null");
-            }, "getByDepartment should handle null department");
-
-            printTestSuccess("getByDepartment null handling");
-        }
-
-        /**
-         * Test getByDepartment method with empty department.
-         */
-        @Test
-        @DisplayName("getByDepartment should handle empty department")
-        void testGetByEmptyDepartment()
-        {
-            printTestHeader("getByDepartment with empty string");
-
-            assertDoesNotThrow(() ->
-            {
-                List<Staff> staffList = Staff.getByDepartment("");
-                assertNotNull(staffList, "Staff list should not be null");
-            }, "getByDepartment should handle empty department");
-
-            printTestSuccess("getByDepartment empty handling");
-        }
-
-        /**
-         * Test getByDepartmentId method with UNKNOWN department.
-         */
-        @Test
-        @DisplayName("getByDepartmentId should handle UNKNOWN department")
-        void testGetByUnknownDepartment()
-        {
-            printTestHeader("getByDepartmentId with UNKNOWN");
-
-            assertDoesNotThrow(() ->
-            {
-                List<Staff> staffList = Staff.getByDepartmentId(DepartmentId.UNKNOWN);
-                assertNotNull(staffList, "Staff list should not be null");
-            }, "getByDepartmentId should handle UNKNOWN department");
-
-            printTestSuccess("getByDepartmentId UNKNOWN handling");
-        }
+        List<Staff> staffList = Staff.getByDepartment(null);
+        Assert.assertNotNull(staffList, "Staff list should not be null");
     }
 
-    /**
-     * Nested test class for output formatting.
-     */
-    @Nested
-    @DisplayName("Output Format Tests")
-    class OutputTests
+    public void testGetByEmptyDepartment() throws IOException
     {
-        /**
-         * Test toString method output.
-         */
-        @Test
-        @DisplayName("toString should include all properties")
-        void testToString()
-        {
-            printTestHeader("toString output");
+        List<Staff> staffList = Staff.getByDepartment("");
+        Assert.assertNotNull(staffList, "Staff list should not be null");
+    }
 
-            String result = staff.toString();
+    public void testGetByUnknownDepartment() throws IOException
+    {
+        List<Staff> staffList = Staff.getByDepartmentId(DepartmentId.UNKNOWN);
+        Assert.assertNotNull(staffList, "Staff list should not be null");
+    }
 
-            assertTrue(result.contains("ID: " + TEST_ID), "toString should contain ID");
-            assertTrue(result.contains("Name: " + TEST_FIRST_NAME + " " + TEST_LAST_NAME), "toString should contain full name");
-            assertTrue(result.contains("Email: " + TEST_EMAIL), "toString should contain email");
-            assertTrue(result.contains("GUID: " + TEST_GUID), "toString should contain GUID");
-            assertTrue(result.contains("Weekly Hours: " + TEST_WEEKLY_HOURS), "toString should contain weekly hours");
-            assertTrue(result.contains("Max Modules: " + TEST_MAX_MODULES), "toString should contain max modules");
+    // Output Format Tests
+    public void testToString()
+    {
+        String result = staff.toString();
 
-            printTestSuccess("toString");
-        }
+        Assert.assertTrue(result.contains("ID: " + TEST_ID), "toString should contain ID");
+        Assert.assertTrue(result.contains("Name: " + TEST_FIRST_NAME + " " + TEST_LAST_NAME),
+                "toString should contain full name");
+        Assert.assertTrue(result.contains("Email: " + TEST_EMAIL), "toString should contain email");
+        Assert.assertTrue(result.contains("GUID: " + TEST_GUID), "toString should contain GUID");
+        Assert.assertTrue(result.contains("Weekly Hours: " + TEST_WEEKLY_HOURS),
+                "toString should contain weekly hours");
+        Assert.assertTrue(result.contains("Max Modules: " + TEST_MAX_MODULES),
+                "toString should contain max modules");
+    }
 
-        /**
-         * Test printDetailedInfo method output.
-         */
-        @Test
-        @DisplayName("printDetailedInfo should display all information")
-        void testPrintDetailedInfo()
-        {
-            printTestHeader("printDetailedInfo output");
-            outputStream.reset();
+    public void testPrintDetailedInfo()
+    {
+        outputStream.reset();
+        staff.printDetailedInfo();
+        String output = outputStream.toString();
 
-            staff.printDetailedInfo();
-            String output = outputStream.toString();
+        Assert.assertTrue(output.contains(TEST_FIRST_NAME), "Output should contain first name");
+        Assert.assertTrue(output.contains(TEST_LAST_NAME), "Output should contain last name");
+        Assert.assertTrue(output.contains(String.valueOf(TEST_ID)), "Output should contain ID");
+        Assert.assertTrue(output.contains(TEST_DEPARTMENT.getDepartmentName()),
+                "Output should contain department name");
+        Assert.assertTrue(output.contains(String.valueOf(TEST_WEEKLY_HOURS)),
+                "Output should contain weekly hours");
+        Assert.assertTrue(output.contains(String.valueOf(TEST_MAX_MODULES)),
+                "Output should contain max modules");
+        Assert.assertTrue(output.contains(TEST_EMAIL), "Output should contain email");
+    }
 
-            assertTrue(output.contains(TEST_FIRST_NAME), "Output should contain first name");
-            assertTrue(output.contains(TEST_LAST_NAME), "Output should contain last name");
-            assertTrue(output.contains(String.valueOf(TEST_ID)), "Output should contain ID");
-            assertTrue(output.contains(TEST_DEPARTMENT.getDepartmentName()), "Output should contain department name");
-            assertTrue(output.contains(String.valueOf(TEST_WEEKLY_HOURS)), "Output should contain weekly hours");
-            assertTrue(output.contains(String.valueOf(TEST_MAX_MODULES)), "Output should contain max modules");
-            assertTrue(output.contains(TEST_EMAIL), "Output should contain email");
-
-            printTestSuccess("printDetailedInfo");
-        }
+    public static void main(String[] args)
+    {
+        new StaffTest().runTests();
     }
 }
