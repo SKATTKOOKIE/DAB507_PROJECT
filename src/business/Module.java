@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  * The class provides functionality for:
  * <ul>
  *   <li>Creating and managing module information</li>
- *   <li>JSON serialization and deserialization</li>
+ *   <li>JSON serialisation and deserialisation</li>
  *   <li>Filtering and searching modules</li>
  *   <li>Course association management</li>
  * </ul>
