@@ -3,9 +3,15 @@ package business;
 import testframework.*;
 import users.Student;
 import users.Staff;
+
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Test class for the Department entity.
+ * Contains comprehensive unit tests for Department class functionality including
+ * constructors, getters, module management, course management, and department summaries.
+ */
 public class DepartmentTest extends BaseTest
 {
     private Department department;
@@ -16,6 +22,10 @@ public class DepartmentTest extends BaseTest
     private static final Student TEST_STUDENT = new Student();
     private static final Staff TEST_STAFF = new Staff();
 
+    /**
+     * Sets up the test environment before each test method.
+     * Initializes a Department instance and configures test course data.
+     */
     @Override
     protected void setup()
     {
@@ -26,6 +36,10 @@ public class DepartmentTest extends BaseTest
         TEST_COURSE.setDepartmentId(TEST_DEPARTMENT_ID);
     }
 
+    /**
+     * Tests the Department constructor with null DepartmentId.
+     * Verifies that UNKNOWN is returned as the default department ID.
+     */
     public void testNullDepartmentIdConstructor()
     {
         Department nullDepartment = new Department((DepartmentId) null);
@@ -33,6 +47,10 @@ public class DepartmentTest extends BaseTest
                 "Null department should return UNKNOWN");
     }
 
+    /**
+     * Tests the Department constructor with string parameter.
+     * Verifies that the department name is correctly set from the constructor input.
+     */
     public void testStringConstructor()
     {
         Department stringDepartment = new Department(TEST_DEPARTMENT_NAME);
@@ -40,6 +58,10 @@ public class DepartmentTest extends BaseTest
                 "Department name should match constructor input");
     }
 
+    /**
+     * Tests the getter methods of the Department class.
+     * Verifies department ID, name, and initial empty modules list.
+     */
     public void testGetters()
     {
         Assert.assertEquals(TEST_DEPARTMENT_ID, department.getDepartmentId(),
@@ -50,6 +72,10 @@ public class DepartmentTest extends BaseTest
                 "Initial modules list should be empty");
     }
 
+    /**
+     * Tests module management functionality.
+     * Verifies adding modules and retrieving modules by code.
+     */
     public void testModuleManagement()
     {
         department.addModule(TEST_MODULE);
@@ -71,6 +97,10 @@ public class DepartmentTest extends BaseTest
                 "Should contain both CS modules");
     }
 
+    /**
+     * Tests course management functionality.
+     * Verifies filtering of courses by department.
+     */
     public void testCourseManagement()
     {
         Course otherCourse = new Course();
@@ -84,6 +114,10 @@ public class DepartmentTest extends BaseTest
                 "Should contain the test course");
     }
 
+    /**
+     * Tests department summary functionality.
+     * Verifies creation and content of basic and detailed department summaries.
+     */
     public void testDepartmentSummary()
     {
         List<Student> students = Arrays.asList(TEST_STUDENT);
@@ -118,6 +152,10 @@ public class DepartmentTest extends BaseTest
                 "Detailed info should contain course info");
     }
 
+    /**
+     * Tests the object override methods (toString, equals, hashCode).
+     * Verifies proper implementation of object comparison and string representation.
+     */
     public void testObjectOverrides()
     {
         department.addModule(TEST_MODULE);
@@ -148,6 +186,11 @@ public class DepartmentTest extends BaseTest
                 "Equal departments should have same hash code");
     }
 
+    /**
+     * Main method to run the test suite.
+     *
+     * @param args Command line arguments (not used)
+     */
     public static void main(String[] args)
     {
         new DepartmentTest().runTests();

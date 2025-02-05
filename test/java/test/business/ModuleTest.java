@@ -5,6 +5,11 @@ import testframework.*;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Test class for the Module entity.
+ * Contains unit tests to verify the functionality of Module class methods including
+ * getters, course associations, and search/filter operations.
+ */
 public class ModuleTest extends BaseTest
 {
     private Module module;
@@ -13,6 +18,10 @@ public class ModuleTest extends BaseTest
     private static final String TEST_AC_YEAR = "2023";
     private static final List<String> TEST_ASSOCIATED_COURSES = Arrays.asList("BSCS", "BSIT");
 
+    /**
+     * Sets up the test environment before each test method.
+     * Creates a new Module instance with test data.
+     */
     @Override
     protected void setup()
     {
@@ -20,6 +29,10 @@ public class ModuleTest extends BaseTest
         module = new Module(TEST_NAME, TEST_CODE, TEST_AC_YEAR, TEST_ASSOCIATED_COURSES);
     }
 
+    /**
+     * Tests the getter methods of the Module class.
+     * Verifies that all properties are correctly retrieved.
+     */
     public void testGetters()
     {
         Assert.assertEquals(TEST_NAME, module.getName(), "Module name should match");
@@ -28,6 +41,10 @@ public class ModuleTest extends BaseTest
         Assert.assertEquals(TEST_ASSOCIATED_COURSES, module.getAssociatedCourses(), "Associated courses should match");
     }
 
+    /**
+     * Tests the course association checking functionality.
+     * Verifies that the module correctly identifies its associated courses.
+     */
     public void testIsAssociatedWithCourse()
     {
         Assert.assertTrue(module.isAssociatedWithCourse("BSCS"),
@@ -38,6 +55,10 @@ public class ModuleTest extends BaseTest
                 "Module should not be associated with BSEE");
     }
 
+    /**
+     * Tests the static filterByYear method.
+     * Verifies that modules are correctly filtered by academic year.
+     */
     public void testFilterByYear()
     {
         List<Module> modules = Arrays.asList(
@@ -51,6 +72,10 @@ public class ModuleTest extends BaseTest
                 "Should return 2 modules for the year 2023");
     }
 
+    /**
+     * Tests the static searchByName method.
+     * Verifies that modules can be correctly searched by name using case-insensitive partial matching.
+     */
     public void testSearchByName()
     {
         List<Module> modules = Arrays.asList(
@@ -64,6 +89,10 @@ public class ModuleTest extends BaseTest
                 "Should return 1 module with 'programming' in the name");
     }
 
+    /**
+     * Tests the toString method of the Module class.
+     * Verifies that the string representation contains all essential module information.
+     */
     public void testToString()
     {
         String result = module.toString();
@@ -73,6 +102,11 @@ public class ModuleTest extends BaseTest
                 "toString should contain module name, code, and academic year");
     }
 
+    /**
+     * Main method to run the test suite.
+     *
+     * @param args Command line arguments (not used)
+     */
     public static void main(String[] args)
     {
         new ModuleTest().runTests();
