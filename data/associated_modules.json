@@ -36895,6 +36895,16 @@
         "W5C6",
         "3D2X"
       ]
+    },
+    {
+      "module_name": "Fish Welding",
+      "module_code": "e67-25",
+      "ac_year": "25",
+      "associated_courses": [
+        "G400",
+        "698083",
+        "I206"
+      ]
     }
   ],
   "summary": {

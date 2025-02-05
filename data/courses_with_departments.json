@@ -1393,6 +1393,11 @@
       "name": "Node js",
       "code": "698083",
       "department": "Engineering Computing and Design"
+    },
+    {
+      "name": "Underwater Engineering",
+      "code": "009234",
+      "department": "Engineering"
     }
   ]
 }

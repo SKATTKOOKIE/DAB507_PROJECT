@@ -898,5 +898,14 @@
     "last_name": "Alcock",
     "email": "nalcock2r@abc.net.au",
     "course": "PGCE Early Years (3-7)"
+  },
+  {
+    "gender": "Male",
+    "type": "DA",
+    "id": 101,
+    "first_name": "John",
+    "last_name": "Doe",
+    "email": "John.Doe",
+    "course": "BA (Hons) Fine Art"
   }
 ]

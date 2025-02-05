@@ -5,12 +5,14 @@ import gui.templates.ChiUniComboBox;
 
 import java.awt.*;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
  * Specialized combo box for selecting departments.
  * Provides consistent department selection behavior across the application.
+ * Engineering departments are placed at the bottom of the selection list.
  */
 public class DepartmentComboBox extends ChiUniComboBox<DepartmentId>
 {
@@ -32,7 +34,7 @@ public class DepartmentComboBox extends ChiUniComboBox<DepartmentId>
      */
     public DepartmentComboBox(List<DepartmentId> departments)
     {
-        super(departments.toArray(new DepartmentId[0]));
+        super(sortDepartments(departments).toArray(new DepartmentId[0]));
         initialise();
     }
 
@@ -68,10 +70,25 @@ public class DepartmentComboBox extends ChiUniComboBox<DepartmentId>
 
     private static DepartmentId[] getFilteredDepartments()
     {
-        return Arrays.stream(DepartmentId.values())
-                .filter(dept -> dept != DepartmentId.UNKNOWN)
-                .collect(Collectors.toList())
-                .toArray(new DepartmentId[0]);
+        return sortDepartments(
+                Arrays.stream(DepartmentId.values())
+                        .filter(dept -> dept != DepartmentId.UNKNOWN)
+                        .collect(Collectors.toList())
+        ).toArray(new DepartmentId[0]);
+    }
+
+    /**
+     * Sorts departments with engineering departments at the bottom.
+     * Non-engineering departments are sorted alphabetically.
+     */
+    private static List<DepartmentId> sortDepartments(List<DepartmentId> departments)
+    {
+        return departments.stream()
+                .sorted(Comparator
+                        .<DepartmentId, Boolean>comparing(dept ->
+                                dept.getDepartmentName().toLowerCase().contains("engineering"))
+                        .thenComparing(DepartmentId::getDepartmentName))
+                .collect(Collectors.toList());
     }
 
     @Override
