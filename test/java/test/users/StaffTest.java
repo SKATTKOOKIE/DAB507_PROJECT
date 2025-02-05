@@ -6,10 +6,26 @@ import testframework.*;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Test class for the Staff entity.
+ * Tests functionality specific to Staff objects including:
+ * - Basic property getters and setters
+ * - Department ID handling
+ * - Staff queries by department
+ * - Information display formatting
+ * <p>
+ * Extends BaseTest to utilise the custom testing framework.
+ */
 public class StaffTest extends BaseTest
 {
+    /**
+     * The staff instance used for testing
+     */
     private Staff staff;
 
+    /**
+     * Constants used for test data
+     */
     private static final int TEST_ID = 1;
     private static final String TEST_FIRST_NAME = "John";
     private static final String TEST_LAST_NAME = "Smith";
@@ -20,6 +36,10 @@ public class StaffTest extends BaseTest
     private static final String TEST_AVATAR = "avatar.png";
     private static final DepartmentId TEST_DEPARTMENT = DepartmentId.ECD;
 
+    /**
+     * Sets up the test environment before each test.
+     * Creates a new Staff instance and initialises it with test data.
+     */
     @Override
     protected void setup()
     {
@@ -36,7 +56,10 @@ public class StaffTest extends BaseTest
         staff.setDepartmentId(TEST_DEPARTMENT);
     }
 
-    // Basic Properties Tests
+    /**
+     * Tests the getter methods of the Staff class.
+     * Verifies that all staff-specific properties return their expected values.
+     */
     public void testGetters()
     {
         Assert.assertEquals(TEST_GUID, staff.getGuid(), "GUID should match");
@@ -47,6 +70,10 @@ public class StaffTest extends BaseTest
         Assert.assertEquals(TEST_DEPARTMENT.getDepartmentName(), staff.getDepartment(), "Department name should match");
     }
 
+    /**
+     * Tests the setter methods of the Staff class.
+     * Creates a new Staff instance and verifies that all properties can be correctly set.
+     */
     public void testSetters()
     {
         Staff newStaff = new Staff();
@@ -67,13 +94,20 @@ public class StaffTest extends BaseTest
         Assert.assertEquals(TEST_DEPARTMENT, newStaff.getDepartmentId(), "Department should be updated");
     }
 
-    // Department Tests
+    /**
+     * Tests department ID handling when department is null.
+     * Verifies that UNKNOWN is returned as the default department.
+     */
     public void testGetDepartmentIdWithNull()
     {
         Staff nullDeptStaff = new Staff();
         Assert.assertEquals(DepartmentId.UNKNOWN, nullDeptStaff.getDepartmentId(), "Null department should return UNKNOWN");
     }
 
+    /**
+     * Tests department ID handling when department is empty.
+     * Verifies that UNKNOWN is returned for empty department strings.
+     */
     public void testGetDepartmentIdWithEmpty()
     {
         Staff emptyDeptStaff = new Staff();
@@ -81,6 +115,10 @@ public class StaffTest extends BaseTest
         Assert.assertEquals(DepartmentId.UNKNOWN, emptyDeptStaff.getDepartmentId(), "Empty department should return UNKNOWN");
     }
 
+    /**
+     * Tests department ID handling with invalid department names.
+     * Verifies that UNKNOWN is returned for invalid department strings.
+     */
     public void testGetDepartmentIdWithInvalid()
     {
         Staff invalidDeptStaff = new Staff();
@@ -88,26 +126,43 @@ public class StaffTest extends BaseTest
         Assert.assertEquals(DepartmentId.UNKNOWN, invalidDeptStaff.getDepartmentId(), "Invalid department should return UNKNOWN");
     }
 
-    // Data Retrieval Tests
+    /**
+     * Tests retrieving staff with a null department parameter.
+     *
+     * @throws IOException if there is an error accessing the data source
+     */
     public void testGetByNullDepartment() throws IOException
     {
         List<Staff> staffList = Staff.getByDepartment(null);
         Assert.assertNotNull(staffList, "Staff list should not be null");
     }
 
+    /**
+     * Tests retrieving staff with an empty department parameter.
+     *
+     * @throws IOException if there is an error accessing the data source
+     */
     public void testGetByEmptyDepartment() throws IOException
     {
         List<Staff> staffList = Staff.getByDepartment("");
         Assert.assertNotNull(staffList, "Staff list should not be null");
     }
 
+    /**
+     * Tests retrieving staff with the UNKNOWN department ID.
+     *
+     * @throws IOException if there is an error accessing the data source
+     */
     public void testGetByUnknownDepartment() throws IOException
     {
         List<Staff> staffList = Staff.getByDepartmentId(DepartmentId.UNKNOWN);
         Assert.assertNotNull(staffList, "Staff list should not be null");
     }
 
-    // Output Format Tests
+    /**
+     * Tests the toString method of the Staff class.
+     * Verifies that all relevant staff information is included in the string representation.
+     */
     public void testToString()
     {
         String result = staff.toString();
@@ -123,6 +178,10 @@ public class StaffTest extends BaseTest
                 "toString should contain max modules");
     }
 
+    /**
+     * Tests the printDetailedInfo method of the Staff class.
+     * Verifies that all relevant staff information is included in the printed output.
+     */
     public void testPrintDetailedInfo()
     {
         outputStream.reset();
@@ -141,6 +200,11 @@ public class StaffTest extends BaseTest
         Assert.assertTrue(output.contains(TEST_EMAIL), "Output should contain email");
     }
 
+    /**
+     * Main method to run the test suite.
+     *
+     * @param args Command line arguments (not used)
+     */
     public static void main(String[] args)
     {
         new StaffTest().runTests();

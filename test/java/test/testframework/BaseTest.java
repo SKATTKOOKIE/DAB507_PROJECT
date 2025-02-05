@@ -28,7 +28,7 @@ public abstract class BaseTest
      * Setup method to be called before each test.
      * This method redirects system output to a captured stream for test isolation.
      * Test classes should override this method to add specific setup logic by calling
-     * super.setup() first, then adding their own initialization code.
+     * super.setup() first, then adding their own initialisation code.
      */
     protected void setup()
     {

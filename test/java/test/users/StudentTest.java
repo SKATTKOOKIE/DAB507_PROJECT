@@ -6,13 +6,25 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Refactored Student test class using the custom testing framework
+ * Test class for the Student entity.
+ * Tests functionality specific to Student objects including:
+ * - Basic property getters and setters
+ * - String representation
+ * - Course-based queries
+ * - Information display formatting
+ * <p>
+ * Extends BaseTest to utilise the custom testing framework.
  */
 public class StudentTest extends BaseTest
 {
+    /**
+     * The student instance used for testing
+     */
     private Student student;
 
-    // Test constants
+    /**
+     * Constants used for test data
+     */
     private static final int TEST_ID = 1;
     private static final String TEST_FIRST_NAME = "John";
     private static final String TEST_LAST_NAME = "Doe";
@@ -21,6 +33,10 @@ public class StudentTest extends BaseTest
     private static final String TEST_TYPE = "Full-Time";
     private static final String TEST_COURSE = "Computer Science";
 
+    /**
+     * Sets up the test environment before each test.
+     * Creates a new Student instance and initialises it with test data.
+     */
     @Override
     protected void setup()
     {
@@ -35,7 +51,10 @@ public class StudentTest extends BaseTest
         student.setCourse(TEST_COURSE);
     }
 
-    // Basic Properties Tests
+    /**
+     * Tests the getter methods of the Student class.
+     * Verifies that all properties return their expected values.
+     */
     public void testGetters()
     {
         Assert.assertEquals(TEST_ID, student.getId(), "ID should match");
@@ -47,6 +66,10 @@ public class StudentTest extends BaseTest
         Assert.assertEquals(TEST_COURSE, student.getCourse(), "Course should match");
     }
 
+    /**
+     * Tests the setter methods of the Student class.
+     * Creates a new Student instance and verifies that properties can be correctly set.
+     */
     public void testSetters()
     {
         Student newStudent = new Student();
@@ -73,7 +96,10 @@ public class StudentTest extends BaseTest
         Assert.assertEquals(TEST_COURSE, newStudent.getCourse(), "Course should be updated");
     }
 
-    // ToString Tests
+    /**
+     * Tests the toString method with a fully populated Student object.
+     * Verifies that all fields are properly included in the string representation.
+     */
     public void testToStringComplete()
     {
         String result = student.toString();
@@ -86,6 +112,10 @@ public class StudentTest extends BaseTest
         Assert.assertTrue(result.contains("Type: " + TEST_TYPE), "toString should contain type");
     }
 
+    /**
+     * Tests the toString method with a Student object containing null values.
+     * Verifies that null fields are properly handled in the string representation.
+     */
     public void testToStringWithNulls()
     {
         Student nullStudent = new Student();
@@ -101,19 +131,34 @@ public class StudentTest extends BaseTest
         Assert.assertTrue(result.contains("Type: null"), "toString should display null for missing type");
     }
 
-    // Data Retrieval Tests
+    /**
+     * Tests retrieving students with a null course parameter.
+     *
+     * @throws IOException if there is an error accessing the data source
+     */
     public void testGetByNullCourse() throws IOException
     {
         List<Student> students = Student.getByCourse(null);
         Assert.assertNotNull(students, "Student list should not be null");
     }
 
+    /**
+     * Tests retrieving students with an empty course parameter.
+     *
+     * @throws IOException if there is an error accessing the data source
+     */
     public void testGetByEmptyCourse() throws IOException
     {
         List<Student> students = Student.getByCourse("");
         Assert.assertNotNull(students, "Student list should not be null");
     }
 
+    /**
+     * Tests retrieving students with a valid course parameter.
+     * Verifies that all returned students are from the specified course.
+     *
+     * @throws IOException if there is an error accessing the data source
+     */
     public void testGetByValidCourse() throws IOException
     {
         List<Student> students = Student.getByCourse(TEST_COURSE);
@@ -124,7 +169,10 @@ public class StudentTest extends BaseTest
         }
     }
 
-    // Print Methods Tests
+    /**
+     * Tests the printDetailedInfo method with a fully populated Student object.
+     * Verifies that all relevant information is included in the output.
+     */
     public void testPrintDetailedInfo()
     {
         outputStream.reset();
@@ -138,6 +186,10 @@ public class StudentTest extends BaseTest
         Assert.assertTrue(output.contains(TEST_EMAIL), "Output should contain email");
     }
 
+    /**
+     * Tests the printDetailedInfo method with a Student object containing null values.
+     * Verifies that null fields are properly handled in the output.
+     */
     public void testPrintDetailedInfoWithNulls()
     {
         outputStream.reset();
@@ -157,6 +209,11 @@ public class StudentTest extends BaseTest
         Assert.assertTrue(lines[2].contains("Email:"), "Third line should contain Email label");
     }
 
+    /**
+     * Main method to run the test suite.
+     *
+     * @param args Command line arguments (not used)
+     */
     public static void main(String[] args)
     {
         new StudentTest().runTests();

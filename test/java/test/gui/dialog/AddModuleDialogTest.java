@@ -9,10 +9,22 @@ import javax.swing.*;
 import java.awt.*;
 import java.lang.reflect.Field;
 
+/**
+ * Test class for the AddModuleDialog GUI component.
+ * Tests the functionality of the module creation dialog including field validation,
+ * module code generation, and overall dialog behavior.
+ */
 public class AddModuleDialogTest extends BaseTest
 {
+    /**
+     * Test data for module creation
+     */
     private static final String TEST_MODULE_NAME = "Test Module";
     private static final String TEST_YEAR = "25";
+
+    /**
+     * Dialog components under test
+     */
     private AddModuleDialog dialog;
     private GuiMainScreen mainScreen;
     private JTextField nameField;
@@ -20,6 +32,10 @@ public class AddModuleDialogTest extends BaseTest
     private JTextField acYearField;
     private JComboBox<DepartmentId> departmentCombo;
 
+    /**
+     * Cleans up resources after each test.
+     * Disposes of the dialog and main screen on the EDT.
+     */
     @Override
     protected void cleanup()
     {
@@ -40,6 +56,10 @@ public class AddModuleDialogTest extends BaseTest
         }
     }
 
+    /**
+     * Sets up the test environment before each test.
+     * Creates the main screen and dialog, and initialises all fields.
+     */
     @Override
     protected void setup()
     {
@@ -67,6 +87,12 @@ public class AddModuleDialogTest extends BaseTest
         }
     }
 
+    /**
+     * Initialises the dialog fields using reflection.
+     * Provides access to private fields for testing purposes.
+     *
+     * @throws Exception if field access fails
+     */
     private void initialiseFields() throws Exception
     {
         Class<AddModuleDialog> dialogClass = AddModuleDialog.class;
@@ -87,6 +113,15 @@ public class AddModuleDialogTest extends BaseTest
         departmentCombo = (JComboBox<DepartmentId>) deptComboRef.get(dialog);
     }
 
+    /**
+     * Tests the academic year field validation.
+     * Verifies that the field:
+     * - Accepts valid years (18-99)
+     * - Rejects invalid input (letters, symbols)
+     * - Handles single digits correctly
+     *
+     * @throws Exception if the test fails
+     */
     public void testAcademicYearValidation() throws Exception
     {
         SwingUtilities.invokeAndWait(() ->
@@ -115,6 +150,12 @@ public class AddModuleDialogTest extends BaseTest
         });
     }
 
+    /**
+     * Tests the module creation functionality.
+     * Verifies that all fields can be set correctly and retain their values.
+     *
+     * @throws Exception if the test fails
+     */
     public void testModuleCreation() throws Exception
     {
         SwingUtilities.invokeAndWait(() ->
@@ -132,6 +173,15 @@ public class AddModuleDialogTest extends BaseTest
         });
     }
 
+    /**
+     * Tests the automatic module code generation.
+     * Verifies that the code field:
+     * - Is automatically populated
+     * - Contains expected formatting
+     * - Is not editable
+     *
+     * @throws Exception if the test fails
+     */
     public void testModuleCodeGeneration() throws Exception
     {
         SwingUtilities.invokeAndWait(() ->
@@ -145,6 +195,11 @@ public class AddModuleDialogTest extends BaseTest
         });
     }
 
+    /**
+     * Main method to run the test suite.
+     *
+     * @param args Command line arguments (not used)
+     */
     public static void main(String[] args)
     {
         new AddModuleDialogTest().runTests();

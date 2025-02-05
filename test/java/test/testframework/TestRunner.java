@@ -182,7 +182,7 @@ public class TestRunner
     /**
      * Gets the root cause of an exception by traversing the cause chain.
      *
-     * @param e The exception to analyze
+     * @param e The exception to analyse
      * @return The root cause throwable
      */
     private Throwable getRootCause(Exception e)

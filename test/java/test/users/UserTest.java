@@ -4,10 +4,21 @@ import testframework.*;
 import business.DepartmentId;
 
 /**
- * Refactored User test class using the custom testing framework
+ * Test class for the abstract User class.
+ * Tests base functionality shared by all user types including:
+ * - Common property getters and setters
+ * - Interface implementation
+ * - Null value handling
+ * - String representation
+ * <p>
+ * Uses a concrete TestUser implementation to test the abstract class.
  */
 public class UserTest extends BaseTest
 {
+    /**
+     * Concrete implementation of the abstract User class for testing purposes.
+     * Implements the required abstract method with a simple implementation.
+     */
     private static class TestUser extends User
     {
         @Override
@@ -17,9 +28,14 @@ public class UserTest extends BaseTest
         }
     }
 
+    /**
+     * The test user instance used for testing
+     */
     private TestUser user;
 
-    // Test constants
+    /**
+     * Constants used for test data
+     */
     private static final int TEST_ID = 1;
     private static final String TEST_FIRST_NAME = "Jane";
     private static final String TEST_LAST_NAME = "Doe";
@@ -27,6 +43,10 @@ public class UserTest extends BaseTest
     private static final String TEST_DEPARTMENT = String.valueOf(DepartmentId.ECD);
     private static final String TEST_COURSE = "Software Engineering";
 
+    /**
+     * Sets up the test environment before each test.
+     * Creates a new TestUser instance and initialises it with test data.
+     */
     @Override
     protected void setup()
     {
@@ -40,6 +60,10 @@ public class UserTest extends BaseTest
         user.setCourse(TEST_COURSE);
     }
 
+    /**
+     * Tests the getter methods of the User class.
+     * Verifies that all base properties return their expected values.
+     */
     public void testGetters()
     {
         Assert.assertEquals(TEST_ID, user.getId(), "ID should match");
@@ -50,6 +74,10 @@ public class UserTest extends BaseTest
         Assert.assertEquals(TEST_COURSE, user.getCourse(), "Course should match");
     }
 
+    /**
+     * Tests the setter methods of the User class.
+     * Creates a new TestUser instance and verifies that properties can be correctly set.
+     */
     public void testSetters()
     {
         TestUser newUser = new TestUser();
@@ -61,6 +89,10 @@ public class UserTest extends BaseTest
         Assert.assertEquals(TEST_FIRST_NAME, newUser.getFirstName(), "First name should be updated");
     }
 
+    /**
+     * Tests handling of null values in a new User instance.
+     * Verifies that unset fields return null by default.
+     */
     public void testNullHandling()
     {
         TestUser nullUser = new TestUser();
@@ -71,6 +103,10 @@ public class UserTest extends BaseTest
         Assert.assertNull(nullUser.getEmail(), "Email should be null by default");
     }
 
+    /**
+     * Tests the toString method of the User class.
+     * Verifies that basic user information is included in the string representation.
+     */
     public void testToString()
     {
         String result = user.toString();
@@ -82,6 +118,11 @@ public class UserTest extends BaseTest
         );
     }
 
+    /**
+     * Tests the IUser interface implementation.
+     * Verifies that the User class properly implements the IUser interface
+     * and that interface methods return expected values.
+     */
     public void testInterfaceImplementation()
     {
         Assert.assertTrue(user instanceof IUser, "User should implement IUser interface");
@@ -91,7 +132,11 @@ public class UserTest extends BaseTest
         Assert.assertEquals(TEST_FIRST_NAME, iUser.getFirstName(), "Interface getFirstName should work");
     }
 
-    // Main method to run the tests
+    /**
+     * Main method to run the test suite.
+     *
+     * @param args Command line arguments (not used)
+     */
     public static void main(String[] args)
     {
         new UserTest().runTests();

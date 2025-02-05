@@ -12,33 +12,57 @@ import javax.swing.*;
 import java.awt.*;
 import java.lang.reflect.Field;
 
+/**
+ * Test class for the AddUserDialog GUI component.
+ * Tests the functionality of the user creation dialog including:
+ * - Common user fields
+ * - Student-specific fields and validation
+ * - Staff-specific fields and validation
+ * - Dynamic panel switching between user types
+ */
 public class AddUserDialogTest extends BaseTest
 {
+    /**
+     * Test data for user creation
+     */
     private static final String TEST_FIRST_NAME = "John";
     private static final String TEST_LAST_NAME = "Doe";
     private static final String TEST_EMAIL = "john.doe@test.com";
 
+    /**
+     * Dialog components under test
+     */
     private AddUserDialog dialog;
     private GuiMainScreen mainScreen;
     private JPanel dynamicFieldsPanel;
     private CardLayout cardLayout;
 
-    // Common fields
+    /**
+     * Common user input fields
+     */
     private JTextField firstNameField;
     private JTextField lastNameField;
     private JTextField emailField;
     private ChiUniStringComboBox userTypeCombo;
 
-    // Student fields
+    /**
+     * Student-specific fields
+     */
     private StudentTypeComboBox studentTypeCombo;
     private ChiUniStringComboBox genderCombo;
     private CourseComboBox courseCombo;
 
-    // Staff fields
+    /**
+     * Staff-specific fields
+     */
     private JSpinner weeklyHoursSpinner;
     private JSpinner maxModulesSpinner;
     private DepartmentComboBox departmentCombo;
 
+    /**
+     * Cleans up resources after each test.
+     * Disposes of the dialog and main screen on the EDT.
+     */
     @Override
     protected void cleanup()
     {
@@ -59,6 +83,10 @@ public class AddUserDialogTest extends BaseTest
         }
     }
 
+    /**
+     * Sets up the test environment before each test.
+     * Creates the main screen and dialog, and initializes all fields.
+     */
     @Override
     protected void setup()
     {
@@ -86,6 +114,11 @@ public class AddUserDialogTest extends BaseTest
         }
     }
 
+    /**
+     * Initializes all dialog fields using reflection.
+     *
+     * @throws Exception if field access fails
+     */
     private void initialiseFields() throws Exception
     {
         Class<AddUserDialog> dialogClass = AddUserDialog.class;
@@ -109,6 +142,14 @@ public class AddUserDialogTest extends BaseTest
         departmentCombo = getField(dialogClass, "departmentCombo");
     }
 
+    /**
+     * Helper method to get a field value using reflection.
+     *
+     * @param clazz     The class containing the field
+     * @param fieldName The name of the field to access
+     * @return The field value cast to the expected type
+     * @throws Exception if field access fails
+     */
     private <T> T getField(Class<?> clazz, String fieldName) throws Exception
     {
         Field field = clazz.getDeclaredField(fieldName);
@@ -116,6 +157,12 @@ public class AddUserDialogTest extends BaseTest
         return (T) field.get(dialog);
     }
 
+    /**
+     * Checks if a specific card panel is currently visible.
+     *
+     * @param cardName The name of the card to check
+     * @return true if the specified card is visible
+     */
     private boolean isPanelVisible(String cardName)
     {
         for (Component comp : dynamicFieldsPanel.getComponents())
@@ -136,6 +183,13 @@ public class AddUserDialogTest extends BaseTest
         return false;
     }
 
+    /**
+     * Recursively searches for a component within a container.
+     *
+     * @param container The container to search
+     * @param target    The component to find
+     * @return true if the target component is found
+     */
     private boolean containsComponent(Container container, Component target)
     {
         for (Component comp : container.getComponents())
@@ -152,6 +206,12 @@ public class AddUserDialogTest extends BaseTest
         return false;
     }
 
+    /**
+     * Tests the common fields shared between student and staff users.
+     * Verifies initialization and default values.
+     *
+     * @throws Exception if the test fails
+     */
     public void testCommonFields() throws Exception
     {
         SwingUtilities.invokeAndWait(() ->
@@ -166,6 +226,12 @@ public class AddUserDialogTest extends BaseTest
         });
     }
 
+    /**
+     * Tests the student mode of the dialog.
+     * Verifies student-specific fields and their behavior.
+     *
+     * @throws Exception if the test fails
+     */
     public void testStudentMode() throws Exception
     {
         SwingUtilities.invokeAndWait(() ->
@@ -194,6 +260,12 @@ public class AddUserDialogTest extends BaseTest
         });
     }
 
+    /**
+     * Tests the staff mode of the dialog.
+     * Verifies staff-specific fields and their behavior including spinner limits.
+     *
+     * @throws Exception if the test fails
+     */
     public void testStaffMode() throws Exception
     {
         SwingUtilities.invokeAndWait(() ->
@@ -220,6 +292,7 @@ public class AddUserDialogTest extends BaseTest
             Assert.assertEquals(4, maxModulesSpinner.getValue(), "Max modules should be set to default");
             Assert.assertNotNull(departmentCombo.getSelectedItem(), "Department should be selected");
 
+            // Test spinner limits
             SpinnerNumberModel weeklyModel = (SpinnerNumberModel) weeklyHoursSpinner.getModel();
             SpinnerNumberModel modulesModel = (SpinnerNumberModel) maxModulesSpinner.getModel();
             Assert.assertEquals(0, weeklyModel.getMinimum(), "Weekly hours minimum should be 0");
@@ -229,6 +302,12 @@ public class AddUserDialogTest extends BaseTest
         });
     }
 
+    /**
+     * Tests switching between student and staff modes.
+     * Verifies that the correct panels are displayed when switching user types.
+     *
+     * @throws Exception if the test fails
+     */
     public void testUserTypeSwitching() throws Exception
     {
         SwingUtilities.invokeAndWait(() ->
@@ -247,6 +326,11 @@ public class AddUserDialogTest extends BaseTest
         });
     }
 
+    /**
+     * Main method to run the test suite.
+     *
+     * @param args Command line arguments (not used)
+     */
     public static void main(String[] args)
     {
         new AddUserDialogTest().runTests();
